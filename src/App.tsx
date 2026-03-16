@@ -7,9 +7,9 @@ export default function App() {
   const [stage, setStage] = useState('boot')
   return (
     <div>
-      {stage == 'boot' && <Boot onComplete={() => setStage('login')} />}
-      {stage == 'login' && <Login onComplete={() => setStage('desktop')} />}
-      {stage == 'desktop' && <Desktop />}
+      {stage === 'boot' && <Boot onComplete={() => setStage('login')} />}
+      {stage === 'login' && <Login onComplete={() => setStage('desktop')} />}
+      {stage === 'desktop' && <Desktop />}
     </div>
   )
 }
