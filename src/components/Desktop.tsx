@@ -19,7 +19,10 @@ export default function Desktop() {
             display: 'flex',
             flexDirection: 'column',
         }}>
-        <div style={{ flex : 1 }}>
+        <div style={{ 
+            flex : 1,
+            background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
+            }}>
             </div>
             <div style = {{
                 height : '40px',

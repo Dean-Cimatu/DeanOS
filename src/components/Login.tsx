@@ -14,7 +14,6 @@ export default function Login({ onComplete }: { onComplete: () => void }) {
     }}>
         <div style = {{
             width: '45vw',
-            height: '300px',
             backgroundColor: '#1a1a1a',
             borderRadius: '8px',
             padding: '24px',
