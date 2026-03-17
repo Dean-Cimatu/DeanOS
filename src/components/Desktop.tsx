@@ -1,4 +1,5 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect} from "react"
+import  StartMenu from './StartMenu'
 
 export default function Desktop() {
 
@@ -9,7 +10,7 @@ export default function Desktop() {
     }, 1000)
     return() => clearInterval(interval)
 },[])
-
+    const [menuOpen, setMenuOpen] = useState(false)
 
      return <div>
      <div style={{
@@ -19,11 +20,13 @@ export default function Desktop() {
             display: 'flex',
             flexDirection: 'column',
         }}>
+            
         <div style={{ 
             flex : 1,
             background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
             }}>
             </div>
+            {menuOpen && <StartMenu />}
             <div style = {{
                 height : '40px',
                 backgroundColor: '#1a1a1a',
@@ -32,7 +35,9 @@ export default function Desktop() {
                 justifyContent: 'space-between',
                 padding: ' 0 12px',
             }}>
-                <button>Start</button>
+                <button onClick={() => {
+                    setMenuOpen(!menuOpen)
+                }}>Start</button>
                 <p style={{ color: 'white'}}>{currentTime}</p>
                 </div>
             </div>
