@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState } from "react"
+import { useSessionStore } from "../store/sessionStore"
 
 export default function Login({ onComplete }: { onComplete: () => void }) {
-  const [username, setUsername] = useState("");
+  const {setUsername:  saveUsername}= useSessionStore()
+  const [username, setUsername] = useState('')
 
       return(
     <div style = {{
@@ -27,7 +29,10 @@ export default function Login({ onComplete }: { onComplete: () => void }) {
                     onChange={e => setUsername(e.target.value)}
                 />
                 <br />
-                <button onClick={() => onComplete()}>
+                <button onClick={() => {
+                    saveUsername(username)
+                    onComplete()
+                }}>
                     Login
                 </button>
             </div>
