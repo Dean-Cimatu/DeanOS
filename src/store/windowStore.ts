@@ -33,9 +33,16 @@ export const useWindowStore = create<StoreType>((set) => ({
     }),
     focusWindow: (id) => set((state) => ({
         windows: {
-            ...state.windows
-            [id]: {...state.windows[id], zIndex: state.nextZindex }
-        }
-        nextZindex: state.nextZindex + 1,
+            ...state.windows,
+            [id]: { ...state.windows[id], zIndex: state.nextZIndex }
+        },
+        nextZIndex: state.nextZIndex + 1
     })),
+    moveWindow: (id, x, y) => set((state) => ({
+        windows: {
+            ...state.windows,
+            [id]: { ...state.windows[id],x, y } },
+        }
+    }))
+    
 }))
