@@ -24,6 +24,7 @@ export const useWindowStore = create<StoreType>((set) => ({
     windows: {} as Record<string, WindowState>,
     nextZIndex: 1,
 
+
     openWindow: (window) => set((state) => ({
         windows: {...state.windows, [window.id]: window}
     })),
@@ -41,8 +42,13 @@ export const useWindowStore = create<StoreType>((set) => ({
     moveWindow: (id, x, y) => set((state) => ({
         windows: {
             ...state.windows,
-            [id]: { ...state.windows[id],x, y } },
+            [id]: { ...state.windows[id],x, y },
+        },
+    })),
+    minimiseWindow: (id) => set((state) => ({
+        windows: {
+            ...state.windows,
+            [id]: {...state.windows[id], minimised: !state.windows[id].minimised,}
         }
-    }))
-    
+    })),
 }))
