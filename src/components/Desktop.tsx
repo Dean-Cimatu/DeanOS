@@ -31,7 +31,7 @@ export default function Desktop() {
             background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
             position: 'relative',
             }}>
-                {Object.entries(windows).map(([id, windowData]) => (
+        {Object.entries(windows).map(([id, windowData]) => (
                 <Window key={id} id={id} windowData={windowData} />
             ))}
             </div>
