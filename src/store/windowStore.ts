@@ -1,31 +1,34 @@
 import { create } from "zustand"
 
-type AppWindow ={
-    id : string
-    title : string
+type WindowState ={
+    id: string
+    title: string
     x: number
     y: number
-    isMinimised: boolean
+    width: number
+    height: number
+    zIndex: number
+    minimised: boolean
 }
 type StoreType ={
- windows: AppWindow[]
- openWindow: (window: AppWindow) => void
- closeWindow: (id: string) => void
- minimiseWindow: (id: string) => void
+    windows: Record<string, WindowState>
+    nextZIndex: number
+    openWindow (window : windowState): void
+    closeWindow (id: string): void
+    focusWindow(id: string): void
+    moveWindow(id: string, x: number, y: number): void
+    minimiseWindow(id: string): void
 }
 
-export const useWindowStore = create<StoreType>((set) =>({
-    windows: [] as AppWindow[],
+export const useWindowStore = create<StoreType>((set) => ({
+    windows: {} as Record<string, WindowState>,
+    nextZIndex: 1,
+
     openWindow: (window) => set((state) => ({
-        windows: [...state.windows, window]
+        windows: {...state.windows, [window.id]: window}
     })),
     closeWindow: (id) => set((state) => ({
-        windows: state.windows.filter( w => w.id !==id)
+        const { [id]: _, ...rest } = state.windows
+        return { windows: rest }
     })),
-    minimiseWindow: (id) => set((state) => ({
-        windows: state.windows.map(w=>
-            w.id === id? { ...w, isMinimised: true} :w
-        )
-    })),
-
 }))
