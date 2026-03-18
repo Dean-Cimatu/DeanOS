@@ -1,4 +1,23 @@
+import { useWindowStore } from "../store/windowStore"
+
+
 export default function StartMenu(){
+    const { openWindow } = useWindowStore()
+
+    const handleAboutMe= ()=> {
+        openWindow({
+            id: "about-me",
+            title: "About Me",
+            x: 50,
+            y: 50,
+            width: 400,
+            height: 300,
+            zIndex: 1,
+            minimised: false,
+
+        })
+    }
+
     return<div style ={{
         width: '25vw',
         height: '50vh',
@@ -9,7 +28,10 @@ export default function StartMenu(){
         bottom: '40px',
         left: '0',
     }}>
-        <button style={{ display: 'block' }}>About Me!</button>
+        <button 
+        onClick={handleAboutMe}
+        
+        style={{ display: 'block' }}>About Me!</button>
         <button style={{ display: 'block' }}>Projects</button>
         <button style={{ display: 'block' }}>Terminal</button>
         <button style={{ display: 'block' }}>Contact</button>

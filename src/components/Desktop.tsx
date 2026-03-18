@@ -1,7 +1,13 @@
 import {useState, useEffect} from "react"
+import { useWindowStore } from "../store/windowStore"
+import { WindowState } from '../store/windowStore'
+import Window from './Window'
 import  StartMenu from './StartMenu'
+import { relative } from "path"
 
 export default function Desktop() {
+
+    const windows = useWindowStore((state) => state.windows)
 
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
     useEffect(()=> {
@@ -20,11 +26,14 @@ export default function Desktop() {
             display: 'flex',
             flexDirection: 'column',
         }}>
-            
         <div style={{ 
             flex : 1,
             background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
+            position: 'relative',
             }}>
+                {Object.entries(windows).map(([id, windowData]) => (
+                <Window key={id} id={id} windowData={windowData} />
+            ))}
             </div>
             {menuOpen && <StartMenu />}
             <div style = {{

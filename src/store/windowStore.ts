@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-type WindowState ={
+export type WindowState ={
     id: string
     title: string
     x: number
@@ -13,7 +13,7 @@ type WindowState ={
 type StoreType ={
     windows: Record<string, WindowState>
     nextZIndex: number
-    openWindow (window : windowState): void
+    openWindow (window : WindowState): void
     closeWindow (id: string): void
     focusWindow(id: string): void
     moveWindow(id: string, x: number, y: number): void

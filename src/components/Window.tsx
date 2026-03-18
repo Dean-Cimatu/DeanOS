@@ -1,7 +1,12 @@
 import { useWindowStore } from "../store/windowStore"
-import  StartMenu from "./StartMenu"
+import type { WindowState } from "../store/windowStore"
 
-export default function Window(){
+interface WindowProps{
+    id: string
+    windowData: WindowState
+}
+
+export default function Window({id, windowData}: WindowProps){
     const { closeWindow, focusWindow, moveWindow, minimiseWindow, openWindow } = useWindowStore()
     return(<div>
     <div style={{
