@@ -14,34 +14,36 @@ export default function Window({id, windowData}: WindowProps){
 
     const isDragging = useRef<boolean>(false)
     const dragStart= useRef<({mouseX: number, mouseY: number, winX: number, winY:number})>({mouseX:0,mouseY:0,winX:0, winY:0})
-
+    
     const handleMouseDown =(e: React.MouseEvent) => {
         
         isDragging.current = true
         dragStart.current = {mouseX:e.clientX, mouseY: e.clientY, winX: windowData.x, winY: windowData.y}
     }
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging.current) return
 
+    
+   useEffect(() => {
+    const handleDocumentMouseMove = (e: MouseEvent) => {
+        if (!isDragging.current) return
+        
         const newX = dragStart.current.winX + (e.clientX - dragStart.current.mouseX)
         const newY = dragStart.current.winY + (e.clientY - dragStart.current.mouseY)
-
+        
         moveWindow(id, newX, newY)
-    
     }
-    const handleMouseUp =() =>{
+    
+    const handleDocumentMouseUp = () => {
         isDragging.current = false
     }
-    
-    useEffect(()=> {
-        const handleDocumentMouseUp = () => {
-            isDragging.current = false
-        }
 
-        document.addEventListener('mouseup', handleDocumentMouseUp)
+    document.addEventListener('mousemove', handleDocumentMouseMove)
+    document.addEventListener('mouseup', handleDocumentMouseUp)
 
-        return ()=> document.removeEventListener('mouseup', handleDocumentMouseUp)
-    },[])
+    return () => {
+        document.removeEventListener('mousemove', handleDocumentMouseMove)
+        document.removeEventListener('mouseup', handleDocumentMouseUp)
+    }
+}, [])
 
     return(<div style={{
         position: 'absolute',
@@ -49,8 +51,6 @@ export default function Window({id, windowData}: WindowProps){
         top: windowData.y,
     zIndex: windowData.zIndex,
     }}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
     >
     <div style={{
         flex: 1,
