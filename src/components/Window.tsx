@@ -58,6 +58,7 @@ export default function Window({id, windowData}: WindowProps){
         height: "40px",
         backgroundColor: "gray",
         display: "flex",
+        userSelect: 'none',
         alignItems: 'center',
         justifyContent: "space-between",
         
