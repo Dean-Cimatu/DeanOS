@@ -63,4 +63,62 @@ export default function Terminal(){
 
         }
     }
-}
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter"){
+            const {command, args} =parseCommand(input)
+            const result = processCommand(command, args, currentDir)
+
+            setOutput([...output, "> " +input,...result ])
+            setHistory([...history, input])
+            setInput("")
+
+            if (command === "cd" && args[0]) {
+                if (args[0] === "/home" || args[0] === "/projects" || args[0] === "/about")
+                    setCurrentDir(args[0])
+            }
+
+        }
+        if (e.key === "ArrowUp"){
+
+            if (historyIndex === -1) {
+                const newIndex = history.length - 1
+                setHistoryIndex(newIndex)
+                setInput(history[newIndex])
+            } else {
+                const newIndex = historyIndex - 1
+                setHistoryIndex(newIndex)
+                setInput(history[newIndex])
+            }
+        }
+
+        if (e.key === "ArrowDown"){
+            const newIndex = historyIndex +1
+            if (newIndex >= history.length) {
+                setHistoryIndex(-1)
+                setInput("")
+            } else {
+                setHistoryIndex(newIndex)
+                setInput(history[newIndex])
+            }
+        }
+
+    }
+   return(
+        <div style={{
+            backgroundColor: "black",
+            color: "cyan",
+            fontFamily: "monospace",
+            padding: "30px"
+        }}>
+            {output.map((line, i) => <div key={i}>{line}</div>)}
+            <div>user@deanos:{currentDir}$</div>
+            <input 
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                style={{backgroundColor: "black", color: "cyan", border: "none", outline: "none"}}
+            />
+        </div>
+        ) 
+    }
+
