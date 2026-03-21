@@ -8,7 +8,7 @@ export default function Terminal(){
     const [history, setHistory]= useState<string[]>([])
     const [historyIndex, setHistoryIndex]= useState<number>(-1)
 
-    const parseCommand = (input: string): {command: string, args: string[]} {
+    const parseCommand = (input: string): {command: string, args: string[]} => {
         const parts= input.split(" ")
         const command = parts[0]
         const args = parts.slice(1)
@@ -103,21 +103,35 @@ export default function Terminal(){
         }
 
     }
-   return(
-        <div style={{
-            backgroundColor: "black",
-            color: "cyan",
-            fontFamily: "monospace",
-            padding: "30px"
-        }}>
+  return(
+    <div style={{
+        backgroundColor: "black",
+        color: "cyan",
+        fontFamily: "monospace",
+        padding: "10px",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "auto"
+    }}>
             {output.map((line, i) => <div key={i}>{line}</div>)}
             <div>user@deanos:{currentDir}$</div>
-            <input 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                style={{backgroundColor: "black", color: "cyan", border: "none", outline: "none"}}
-            />
+           <input 
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    onKeyDown={handleKeyDown}
+    style={{
+        backgroundColor: "black", 
+        color: "cyan", 
+        border: "1px solid cyan",
+        outline: "none",
+        fontFamily: "monospace",
+        padding: "5px",
+        width: "100%"
+    }}
+    autoFocus
+/>
         </div>
         ) 
     }

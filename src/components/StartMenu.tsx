@@ -21,6 +21,23 @@ export default function StartMenu(){
             preMaxHeight: 300,
         })
     }
+    const handleTerminal = () => {
+        openWindow({
+            id: "terminal",
+            title: "Terminal",
+            x: 100,
+            y: 100,
+            width: 800,
+            height: 500,
+            zIndex: 1,
+            minimised: false,
+            maximised: false,
+            preMaxX: 100,
+            preMaxY: 100,
+            preMaxWidth: 800,
+            preMaxHeight: 500,
+        })
+    }
 
     return<div style ={{
         width: '25vw',
@@ -36,8 +53,13 @@ export default function StartMenu(){
         onClick={handleAboutMe}
         
         style={{ display: 'block' }}>About Me!</button>
+
         <button style={{ display: 'block' }}>Projects</button>
-        <button style={{ display: 'block' }}>Terminal</button>
+
+        <button 
+        onClick={handleTerminal} 
+        style={{ display: 'block' }}>Terminal</button>
+        
         <button style={{ display: 'block' }}>Contact</button>
     </div>
 }

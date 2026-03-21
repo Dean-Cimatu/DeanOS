@@ -3,6 +3,11 @@ import type { WindowState } from "../store/windowStore"
 import { useRef } from 'react'
 import type { MouseEvent } from 'react'
 import { useEffect } from 'react'
+import Terminal from './Terminal'
+
+const AboutMe = () => <div style={{ padding: '20px' }}>About Me - Coming soon</div>
+const Projects = () => <div style={{ padding: '20px' }}>Projects - Coming soon</div>
+const Contact = () => <div style={{ padding: '20px' }}>Contact - Coming soon</div>
 
 interface WindowProps{
     id: string
@@ -76,13 +81,16 @@ export default function Window({id, windowData}: WindowProps){
         </div>
     </div>
     <div style={{
+        
         width: "100%",
         height: "calc(100% - 40px)",
         backgroundColor: "white",
         display: "flex",
-    }}
-    
-    >
+    }}>
+        {id === "terminal" && <Terminal />}
+        {id === "about-me" && <AboutMe />}
+        {id === "projects" && <Projects />}
+        {id === "contact" && <Contact />}
         </div>
     </div>)
 }
