@@ -20,42 +20,55 @@ export default function Desktop() {
     const [menuOpen, setMenuOpen] = useState(false)
 
      return <div>
-     <div style={{
-            width: '100vw',
-            height: '100vh',
-            backgroundColor:'black',
-            display: 'flex',
-            flexDirection: 'column',
-        }}>
-            <div style={{ display: 'flex', gap: '20px', padding: '20px' }}>
-                {desktopFiles.map((file) => (
-                <FileIcon key={file.id} file={file} />
-                ))}
-            </div>
-        <div style={{ 
-            flex : 1,
-            background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
-            position: 'relative',
-            }}>
-                {Object.entries(windows).map(([id, windowData]) => (
-                <Window key={id} id={id} windowData={windowData} />
-            ))}
-               
-            </div>
-            {menuOpen && <StartMenu />}
-            <div style = {{
-                height : '40px',
-                backgroundColor: '#1a1a1a',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: ' 0 12px',
-            }}>
-                <button onClick={() => {
-                    setMenuOpen(!menuOpen)
-                }}>Start</button>
-                <p style={{ color: 'white'}}>{currentTime}</p>
-                </div>
-            </div>
-        </div>
-    }
+  <div style={{
+    width: '100vw',
+    height: '100vh',
+    backgroundColor:'black',
+    display: 'flex',
+    flexDirection: 'column',
+  }}>
+    {/* Desktop Icons */}
+   <div style={{ 
+  display: 'flex', 
+  gap: '20px', 
+  padding: '20px', 
+  flexWrap: 'wrap', 
+  alignItems: 'flex-start',
+  zIndex: 10,
+  position: 'relative'
+}}>
+  {desktopFiles.map((file) => (
+    <div key={file.id} style={{ color: "white" }}>
+      {file.icon} {file.name}
+    </div>
+  ))}
+</div>
+
+    {/* Gradient background with windows */}
+    <div style={{ 
+      flex: 1,
+      background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
+      position: 'relative',
+    }}>
+      {Object.entries(windows).map(([id, windowData]) => (
+        <Window key={id} id={id} windowData={windowData} />
+      ))}
+    </div>
+
+    {menuOpen && <StartMenu />}
+    
+    {/* Taskbar */}
+    <div style={{
+      height: '40px',
+      backgroundColor: '#1a1a1a',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '0 12px',
+    }}>
+      <button onClick={() => setMenuOpen(!menuOpen)}>Start</button>
+      <p style={{ color: 'white' }}>{currentTime}</p>
+    </div>
+  </div>
+</div>
+}

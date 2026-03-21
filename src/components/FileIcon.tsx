@@ -5,5 +5,5 @@ interface Props{
 }
 
 export default function FileIcon({file}: Props){
-    return <div> {file.icon} {file.name}</div>
+    return <div style={{ color: "white" }}>TEST {file.name}</div>
 }
