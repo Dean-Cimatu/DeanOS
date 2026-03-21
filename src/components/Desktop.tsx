@@ -37,11 +37,9 @@ export default function Desktop() {
   zIndex: 10,
   position: 'relative'
 }}>
-  {desktopFiles.map((file) => (
-    <div key={file.id} style={{ color: "white" }}>
-      {file.icon} {file.name}
-    </div>
-  ))}
+ {desktopFiles.map((file) => (
+  <FileIcon key={file.id} file={file} />
+))}
 </div>
 
     {/* Gradient background with windows */}
