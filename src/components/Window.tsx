@@ -10,7 +10,7 @@ interface WindowProps{
 }
 
 export default function Window({id, windowData}: WindowProps){
-    const { closeWindow, focusWindow, moveWindow, minimiseWindow, openWindow } = useWindowStore()
+    const { closeWindow, focusWindow, moveWindow, minimiseWindow, openWindow,maximiseWindow } = useWindowStore()
 
     const isDragging = useRef<boolean>(false)
     const dragStart= useRef<({mouseX: number, mouseY: number, winX: number, winY:number})>({mouseX:0,mouseY:0,winX:0, winY:0})
@@ -46,15 +46,17 @@ export default function Window({id, windowData}: WindowProps){
 }, [])
 
     return(<div style={{
-        position: 'absolute',
-        left: windowData.x,
-        top: windowData.y,
+    position: 'absolute',
+    left: windowData.x,
+    top: windowData.y,
+    width: windowData.width,
+    height: windowData.height,
     zIndex: windowData.zIndex,
-    }}
+}}
     >
     <div style={{
         flex: 1,
-        width: "40vw",
+        width: "100%",
         height: "40px",
         backgroundColor: "gray",
         display: "flex",
@@ -67,12 +69,15 @@ export default function Window({id, windowData}: WindowProps){
     
     onMouseDown={handleMouseDown}
     >
-        <span>{windowData.title}</span>
-        <button onClick={() => closeWindow(id)}>×</button>
+        <div style={{ display: 'flex', gap: '5px' }}>
+            <button onClick={() => minimiseWindow(id)} onMouseDown={(e) => e.stopPropagation()}>_</button>
+            <button onClick={() => maximiseWindow(id)} onMouseDown={(e) => e.stopPropagation()}>+</button>
+            <button onClick={() => closeWindow(id)} onMouseDown={(e) => e.stopPropagation()}>×</button>
+        </div>
     </div>
     <div style={{
-        width: "40vw",
-        height: "60vh",
+        width: "100%",
+        height: "calc(100% - 40px)",
         backgroundColor: "white",
         display: "flex",
     }}

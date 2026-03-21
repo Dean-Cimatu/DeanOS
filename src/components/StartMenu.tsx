@@ -14,7 +14,11 @@ export default function StartMenu(){
             height: 300,
             zIndex: 1,
             minimised: false,
-
+            maximised:false,
+            preMaxX: 50,
+            preMaxY: 50,
+            preMaxWidth: 400,
+            preMaxHeight: 300,
         })
     }
 
