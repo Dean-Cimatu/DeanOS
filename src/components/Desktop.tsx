@@ -3,7 +3,8 @@ import { useWindowStore } from "../store/windowStore"
 import { WindowState } from '../store/windowStore'
 import Window from './Window'
 import  StartMenu from './StartMenu'
-import { relative } from "path"
+import { desktopFiles } from '../data/desktopFiles'
+import FileIcon from './FileIcon'
 
 export default function Desktop() {
 
@@ -26,14 +27,20 @@ export default function Desktop() {
             display: 'flex',
             flexDirection: 'column',
         }}>
+            <div style={{ display: 'flex', gap: '20px', padding: '20px' }}>
+                {desktopFiles.map((file) => (
+                <FileIcon key={file.id} file={file} />
+                ))}
+            </div>
         <div style={{ 
             flex : 1,
             background: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
             position: 'relative',
             }}>
-        {Object.entries(windows).map(([id, windowData]) => (
+                {Object.entries(windows).map(([id, windowData]) => (
                 <Window key={id} id={id} windowData={windowData} />
             ))}
+               
             </div>
             {menuOpen && <StartMenu />}
             <div style = {{
