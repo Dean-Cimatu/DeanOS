@@ -29,13 +29,13 @@ export default function Terminal(){
                 return [
                     "█████████████████████████",
                     "█████████████████████████",
-                    "▀▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀  ▀▀▀▀",
-                    "███    █ DeanOS ███  ███",
-                    "▀▀               ▀▀▀  ▀▀",
-                    "|                       |",
-                    "|                       |",
-                    "|                       |",
-                    "________________________",
+                    "▀▀▀▀▀ ͞ ͞ ͞▀▀▀▀  ͞▀▀▀▀▀ ͞ ▀▀▀▀",
+                    "███ ͞ ͞ █ DeanOS ͞ ͞███ ͞ ͞ ͞███",
+                    "▀▀ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞▀ ͞ ͞ ͞ ͞ ▀▀",
+                    "| ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞|",
+                    "| ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞|",
+                    "| ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞|",
+                    "|_______________________|",
                     "",
                     "OS: DeanOS Linux",
                     "Kernel: 5.15.0",
@@ -116,23 +116,24 @@ export default function Terminal(){
         overflow: "auto"
     }}>
             {output.map((line, i) => <div key={i}>{line}</div>)}
-            <div>user@deanos:{currentDir}$</div>
-           <input 
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    onKeyDown={handleKeyDown}
-    style={{
-        backgroundColor: "black", 
-        color: "cyan", 
-        border: "1px solid cyan",
-        outline: "none",
-        fontFamily: "monospace",
-        padding: "5px",
-        width: "100%"
-    }}
+           <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+  <div>user@deanos:{currentDir}$</div>
+        <input 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleKeyDown}
+        style={{
+            backgroundColor: "black", 
+            color: "cyan", 
+            border: "1px solid cyan",
+            outline: "none",
+            fontFamily: "monospace",
+            padding: "5px",
+            flex: 1
+        }}
     autoFocus
-/>
-        </div>
+    /></div>
+    </div>
         ) 
     }
 
