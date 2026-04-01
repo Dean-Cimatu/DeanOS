@@ -51,9 +51,8 @@ function BatteryPopover({ level, onClose }: { level: number; onClose: () => void
   )
 }
 
-export function BatteryWidget() {
+export function BatteryWidget({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const batteryLevel = useSystemStore(s => s.batteryLevel)
-  const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
   const color = batteryColor(batteryLevel)
   const critical = batteryLevel <= 10
@@ -62,7 +61,7 @@ export function BatteryWidget() {
     <div
       style={{ position: 'relative' }}
       onMouseDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); setOpen(o => !o) }}
+      onClick={e => { e.stopPropagation(); onToggle() }}
     >
       <div
         onMouseEnter={() => setHovered(true)}
@@ -70,7 +69,7 @@ export function BatteryWidget() {
         style={{
           display: 'flex', alignItems: 'center', gap: '5px',
           padding: '3px 7px', borderRadius: '5px', cursor: 'pointer', height: '30px',
-          backgroundColor: hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
+          backgroundColor: open || hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
         }}
       >
         <div style={critical ? { animation: 'battPulse 1s ease-in-out infinite' } : undefined}>
@@ -81,7 +80,7 @@ export function BatteryWidget() {
         </span>
       </div>
       <AnimatePresence>
-        {open && <BatteryPopover level={batteryLevel} onClose={() => setOpen(false)} />}
+        {open && <BatteryPopover level={batteryLevel} onClose={onToggle} />}
       </AnimatePresence>
       <style>{`@keyframes battPulse { 0%,100%{opacity:1} 50%{opacity:0.35} }`}</style>
     </div>

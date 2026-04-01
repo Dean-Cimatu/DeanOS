@@ -36,7 +36,10 @@ export function NotificationBell({ open, onToggle }: NotificationBellProps) {
           backgroundColor: open || hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
         }}
       >
-        <span style={{ fontSize: '14px' }}>🔔</span>
+        <svg width="16" height="17" viewBox="0 0 16 17" fill="none">
+          <path d="M8 1C5.515 1 3.5 3.015 3.5 5.5V9.5L2 11.5h12L12.5 9.5V5.5C12.5 3.015 10.485 1 8 1z" fill="#8899AA" />
+          <path d="M6.5 13.5a1.5 1.5 0 0 0 3 0" stroke="#8899AA" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
         {unreadCount > 0 && (
           <span style={{
             position: 'absolute', top: '2px', right: '2px',

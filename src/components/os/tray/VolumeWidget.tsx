@@ -86,11 +86,10 @@ function VolumePopover({ onClose }: { onClose: () => void }) {
   )
 }
 
-export function VolumeWidget() {
+export function VolumeWidget({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const volume = useSystemStore(s => s.volume)
   const isMuted = useSystemStore(s => s.isMuted)
   const setVolume = useSystemStore(s => s.setVolume)
-  const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -103,7 +102,7 @@ export function VolumeWidget() {
     <div
       style={{ position: 'relative' }}
       onMouseDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); setOpen(o => !o) }}
+      onClick={e => { e.stopPropagation(); onToggle() }}
       onWheel={handleWheel}
     >
       <div
@@ -112,13 +111,13 @@ export function VolumeWidget() {
         style={{
           display: 'flex', alignItems: 'center', padding: '3px 7px', borderRadius: '5px',
           cursor: 'pointer', height: '30px',
-          backgroundColor: hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
+          backgroundColor: open || hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
         }}
       >
         <VolumeIcon volume={volume} muted={isMuted} />
       </div>
       <AnimatePresence>
-        {open && <VolumePopover onClose={() => setOpen(false)} />}
+        {open && <VolumePopover onClose={onToggle} />}
       </AnimatePresence>
     </div>
   )

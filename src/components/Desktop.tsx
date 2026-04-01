@@ -27,8 +27,11 @@ export default function Desktop() {
   const loggedIn = useSystemStore(s => s.loggedIn)
   const addNotification = useSystemStore(s => s.addNotification)
 
+  type TrayPanel = 'notif' | 'wifi' | 'volume' | 'battery' | 'clock' | null
   const [menuOpen, setMenuOpen] = useState(false)
-  const [notifOpen, setNotifOpen] = useState(false)
+  const [activeTray, setActiveTray] = useState<TrayPanel>(null)
+  const toggleTray = (key: Exclude<TrayPanel, null>) =>
+    setActiveTray(a => a === key ? null : key)
 
   useEffect(() => {
     if (!loggedIn) return
@@ -46,7 +49,7 @@ export default function Desktop() {
           flex: 1, background: WALLPAPERS[wallpaper] ?? WALLPAPERS.aurora,
           position: 'relative', overflow: 'hidden',
         }}
-        onClick={() => { setMenuOpen(false); setNotifOpen(false) }}
+        onClick={() => { setMenuOpen(false); setActiveTray(null) }}
       >
         {/* Desktop Icons */}
         <div
@@ -74,7 +77,7 @@ export default function Desktop() {
 
         {/* Notification Centre */}
         <AnimatePresence>
-          {notifOpen && <NotificationCentre onClose={() => setNotifOpen(false)} />}
+          {activeTray === 'notif' && <NotificationCentre onClose={() => setActiveTray(null)} />}
         </AnimatePresence>
       </div>
 
@@ -91,7 +94,7 @@ export default function Desktop() {
       >
         {/* Left: Start button */}
         <button
-          onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); setNotifOpen(false) }}
+          onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
           style={{
             backgroundColor: menuOpen ? '#00D4FF' : '#1E2D45', color: menuOpen ? '#0A0F1E' : '#E8F4F8',
             border: '1px solid #2A3F5F', borderRadius: '6px', padding: '4px 14px',
@@ -104,11 +107,11 @@ export default function Desktop() {
 
         {/* Right: System Tray */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <NotificationBell open={notifOpen} onToggle={() => setNotifOpen(o => !o)} />
-          <WiFiWidget />
-          <VolumeWidget />
-          <BatteryWidget />
-          <ClockWidget />
+          <NotificationBell open={activeTray === 'notif'} onToggle={() => toggleTray('notif')} />
+          <WiFiWidget open={activeTray === 'wifi'} onToggle={() => toggleTray('wifi')} />
+          <VolumeWidget open={activeTray === 'volume'} onToggle={() => toggleTray('volume')} />
+          <BatteryWidget open={activeTray === 'battery'} onToggle={() => toggleTray('battery')} />
+          <ClockWidget open={activeTray === 'clock'} onToggle={() => toggleTray('clock')} />
         </div>
       </div>
     </div>

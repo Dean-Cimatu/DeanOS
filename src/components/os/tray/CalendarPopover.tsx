@@ -57,6 +57,13 @@ export function CalendarPopover({ date, onClose }: CalendarPopoverProps) {
         fontFamily: '"JetBrains Mono", monospace',
       }}
     >
+      {/* Digital clock */}
+      <div style={{ textAlign: 'center', marginBottom: '14px', paddingBottom: '12px', borderBottom: '1px solid #2A3F5F' }}>
+        <span style={{ color: '#00D4FF', fontSize: '22px', fontWeight: 700, letterSpacing: '0.05em' }}>
+          {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+        </span>
+      </div>
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
         <button

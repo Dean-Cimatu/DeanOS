@@ -3,9 +3,8 @@ import { AnimatePresence } from 'framer-motion'
 import { useSystemStore } from '../../../store/systemStore'
 import { CalendarPopover } from './CalendarPopover'
 
-export function ClockWidget() {
+export function ClockWidget({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const currentTime = useSystemStore((state) => state.currentTime)
-  const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -20,13 +19,13 @@ export function ClockWidget() {
   const timeStr = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
   const dateStr = currentTime.toLocaleDateString([], { weekday: 'short', day: '2-digit' })
 
-  const handleClose = useCallback(() => setOpen(false), [])
+  const handleClose = useCallback(() => onToggle(), [onToggle])
 
   return (
     <div
       ref={containerRef}
       style={{ position: 'relative' }}
-      onClick={(e) => { e.stopPropagation(); setOpen((o) => !o) }}
+      onClick={(e) => { e.stopPropagation(); onToggle() }}
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div
@@ -40,7 +39,7 @@ export function ClockWidget() {
           borderLeft: '1px solid #1E2D45',
           marginLeft: '4px',
           borderRadius: '5px',
-          backgroundColor: hovered ? '#1E2D45' : 'transparent',
+          backgroundColor: open || hovered ? '#1E2D45' : 'transparent',
           cursor: 'pointer',
           transition: 'background-color 0.12s',
           height: '30px',

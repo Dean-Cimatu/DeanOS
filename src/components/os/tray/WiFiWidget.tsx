@@ -64,14 +64,13 @@ function WiFiPopover({ onClose }: { onClose: () => void }) {
   )
 }
 
-export function WiFiWidget() {
-  const [open, setOpen] = useState(false)
+export function WiFiWidget({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const [hovered, setHovered] = useState(false)
   return (
     <div
       style={{ position: 'relative' }}
       onMouseDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); setOpen(o => !o) }}
+      onClick={e => { e.stopPropagation(); onToggle() }}
     >
       <div
         onMouseEnter={() => setHovered(true)}
@@ -79,13 +78,13 @@ export function WiFiWidget() {
         style={{
           display: 'flex', alignItems: 'center', padding: '3px 7px', borderRadius: '5px',
           cursor: 'pointer', height: '30px',
-          backgroundColor: hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
+          backgroundColor: open || hovered ? '#1E2D45' : 'transparent', transition: 'background-color 0.12s',
         }}
       >
         <WiFiIcon />
       </div>
       <AnimatePresence>
-        {open && <WiFiPopover onClose={() => setOpen(false)} />}
+        {open && <WiFiPopover onClose={onToggle} />}
       </AnimatePresence>
     </div>
   )

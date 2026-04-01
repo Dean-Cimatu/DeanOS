@@ -11,59 +11,59 @@ interface PostEntry {
 const POST_LINES: PostEntry[] = [
   // ── UEFI header ──────────────────────────────────────────────────────────
   { text: 'DeanOS UEFI Firmware v2.1.0  Copyright (C) 2026 Dean Cimatu', gap: 0 },
-  { text: 'Build: x86_64  ACPI 6.4  SMBIOS 3.3  Secure Boot: OFF', gap: 28 },
-  { text: '', gap: 35 },
+  { text: 'Build: x86_64  ACPI 6.4  SMBIOS 3.3  Secure Boot: OFF', gap: 42 },
+  { text: '', gap: 53 },
   // ── CPU ──────────────────────────────────────────────────────────────────
-  { text: 'CPU: Dean Cimatu Processing Unit @ 4.20 GHz', gap: 28 },
-  { text: 'Cores: 8C / 16T   L3 Cache: 32 MB   TDP: 125 W', gap: 28 },
-  { text: 'Microcode: 0x2c   Features: SSE4.2  AVX2  AES-NI  VMX', gap: 28 },
-  { text: '', gap: 28 },
+  { text: 'CPU: Dean Cimatu Processing Unit @ 4.20 GHz', gap: 42 },
+  { text: 'Cores: 8C / 16T   L3 Cache: 32 MB   TDP: 125 W', gap: 42 },
+  { text: 'Microcode: 0x2c   Features: SSE4.2  AVX2  AES-NI  VMX', gap: 42 },
+  { text: '', gap: 42 },
   // ── Memory test ──────────────────────────────────────────────────────────
-  { text: 'Memory: 16384 MB DDR5-6000 @ 3000 MHz (Dual Channel)', gap: 35 },
-  { text: 'Memory Test: Initialising...', gap: 28 },
-  { text: 'Memory Test:  4096 MB', gap: 22 },
-  { text: 'Memory Test:  8192 MB', gap: 24 },
-  { text: 'Memory Test: 12288 MB', gap: 24 },
-  { text: 'Memory Test: 16384 MB  PASS', gap: 26 },
-  { text: '', gap: 28 },
+  { text: 'Memory: 16384 MB DDR5-6000 @ 3000 MHz (Dual Channel)', gap: 53 },
+  { text: 'Memory Test: Initialising...', gap: 42 },
+  { text: 'Memory Test:  4096 MB', gap: 33 },
+  { text: 'Memory Test:  8192 MB', gap: 36 },
+  { text: 'Memory Test: 12288 MB', gap: 36 },
+  { text: 'Memory Test: 16384 MB  PASS', gap: 39 },
+  { text: '', gap: 42 },
   // ── PCI bus scan ─────────────────────────────────────────────────────────
-  { text: 'Scanning PCI Express bus...', gap: 42 },
-  { text: '  [00:00.0] Host Bridge      — Intel 12th Gen Memory Controller  [OK]', gap: 28 },
-  { text: '  [00:02.0] VGA Controller   — NVIDIA RTX Projects 4070 [16 GB VRAM]  [OK]', gap: 28 },
-  { text: '  [00:08.0] Co-Processor     — Creativity Engine v3.1  [OK]', gap: 28 },
-  { text: '  [00:1f.2] SATA Controller  — Creative Drive AHCI  [OK]', gap: 28 },
-  { text: '  [00:1f.6] Network          — Portfolio Network Interface  [OK]', gap: 28 },
-  { text: '  [01:00.0] NVMe Controller  — SAMSUNG DeanOS SSD 256 GB  [OK]', gap: 28 },
-  { text: '', gap: 28 },
+  { text: 'Scanning PCI Express bus...', gap: 63 },
+  { text: '  [00:00.0] Host Bridge      — Intel 12th Gen Memory Controller  [OK]', gap: 42 },
+  { text: '  [00:02.0] VGA Controller   — NVIDIA RTX Projects 4070 [16 GB VRAM]  [OK]', gap: 42 },
+  { text: '  [00:08.0] Co-Processor     — Creativity Engine v3.1  [OK]', gap: 42 },
+  { text: '  [00:1f.2] SATA Controller  — Creative Drive AHCI  [OK]', gap: 42 },
+  { text: '  [00:1f.6] Network          — Portfolio Network Interface  [OK]', gap: 42 },
+  { text: '  [01:00.0] NVMe Controller  — SAMSUNG DeanOS SSD 256 GB  [OK]', gap: 42 },
+  { text: '', gap: 42 },
   // ── Storage ──────────────────────────────────────────────────────────────
-  { text: 'SATA: Enabling AHCI native mode ... [OK]', gap: 63 },
-  { text: 'NVMe: SAMSUNG DeanOS 256 GB — SMART status ... [OK]', gap: 70 },
-  { text: 'Filesystem: Checking integrity ... PASS', gap: 98 },
-  { text: '', gap: 28 },
+  { text: 'SATA: Enabling AHCI native mode ... [OK]', gap: 95 },
+  { text: 'NVMe: SAMSUNG DeanOS 256 GB — SMART status ... [OK]', gap: 105 },
+  { text: 'Filesystem: Checking integrity ... PASS', gap: 147 },
+  { text: '', gap: 42 },
   // ── Kernel ───────────────────────────────────────────────────────────────
-  { text: 'Loading kernel image: vmlinuz-6.1.0-deanos ... [OK]', gap: 70 },
-  { text: 'Unpacking initramfs: 42 MB ... [OK]', gap: 98 },
-  { text: 'Kernel parameters: quiet splash loglevel=3 resume=/dev/nvme0n1p2', gap: 35 },
-  { text: '', gap: 28 },
+  { text: 'Loading kernel image: vmlinuz-6.1.0-deanos ... [OK]', gap: 105 },
+  { text: 'Unpacking initramfs: 42 MB ... [OK]', gap: 147 },
+  { text: 'Kernel parameters: quiet splash loglevel=3 resume=/dev/nvme0n1p2', gap: 53 },
+  { text: '', gap: 42 },
   // ── Modules ──────────────────────────────────────────────────────────────
-  { text: 'Initialising device manager...', gap: 42 },
-  { text: '  [OK] dm-crypt   [OK] ext4      [OK] xfs       [OK] btrfs', gap: 28 },
-  { text: '  [OK] virtio     [OK] i915      [OK] nvidia    [OK] drm', gap: 28 },
-  { text: '  [OK] snd-hda    [OK] usbhid    [OK] bluetooth [OK] iwlwifi', gap: 28 },
-  { text: 'Mounting root filesystem (ext4, rw, relatime) ... [OK]', gap: 70 },
-  { text: '', gap: 28 },
+  { text: 'Initialising device manager...', gap: 63 },
+  { text: '  [OK] dm-crypt   [OK] ext4      [OK] xfs       [OK] btrfs', gap: 42 },
+  { text: '  [OK] virtio     [OK] i915      [OK] nvidia    [OK] drm', gap: 42 },
+  { text: '  [OK] snd-hda    [OK] usbhid    [OK] bluetooth [OK] iwlwifi', gap: 42 },
+  { text: 'Mounting root filesystem (ext4, rw, relatime) ... [OK]', gap: 105 },
+  { text: '', gap: 42 },
   // ── Init system ──────────────────────────────────────────────────────────
-  { text: 'Starting DeanOS init system (PID 1)...', gap: 35 },
-  { text: '  [OK] Reached target: Local File Systems', gap: 35 },
-  { text: '  [OK] Started: systemd-journald.service', gap: 28 },
-  { text: '  [OK] Started: systemd-udevd.service', gap: 28 },
-  { text: '  [OK] Started: NetworkManager.service', gap: 28 },
-  { text: '  [OK] Started: creativity-engine.service', gap: 28 },
-  { text: '  [OK] Started: portfolio-daemon.service', gap: 28 },
-  { text: '  [OK] Started: window-compositor.service', gap: 28 },
-  { text: '  [OK] Reached target: Graphical Interface', gap: 35 },
-  { text: '', gap: 28 },
-  { text: 'DeanOS v2.1.0 — Kernel 6.1.0-deanos — All systems nominal.', gap: 70 },
+  { text: 'Starting DeanOS init system (PID 1)...', gap: 53 },
+  { text: '  [OK] Reached target: Local File Systems', gap: 53 },
+  { text: '  [OK] Started: systemd-journald.service', gap: 42 },
+  { text: '  [OK] Started: systemd-udevd.service', gap: 42 },
+  { text: '  [OK] Started: NetworkManager.service', gap: 42 },
+  { text: '  [OK] Started: creativity-engine.service', gap: 42 },
+  { text: '  [OK] Started: portfolio-daemon.service', gap: 42 },
+  { text: '  [OK] Started: window-compositor.service', gap: 42 },
+  { text: '  [OK] Reached target: Graphical Interface', gap: 53 },
+  { text: '', gap: 42 },
+  { text: 'DeanOS v2.1.0 — Kernel 6.1.0-deanos — All systems nominal.', gap: 105 },
 ]
 
 // ── Line renderer ─────────────────────────────────────────────────────────
@@ -123,18 +123,18 @@ export default function Boot() {
   useEffect(() => {
     cancelledRef.current = false
     const advance = async () => {
-      await delay(100)
+      await delay(200)
       if (cancelledRef.current) return
-      setBootPhase(1); await delay(1700)
+      setBootPhase(1); await delay(2800)
       if (cancelledRef.current) return
       playPostBeep()
-      setBootPhase(2); await delay(250)
+      setBootPhase(2); await delay(400)
       if (cancelledRef.current) return
       setBootPhase(3); await delay(800)
       if (cancelledRef.current) return
-      setBootPhase(4); await delay(150)
+      setBootPhase(4); await delay(200)
       if (cancelledRef.current) return
-      setBootPhase(5); await delay(250)
+      setBootPhase(5); await delay(350)
       if (cancelledRef.current) return
       setBootPhase(6); setBootComplete(true)
     }

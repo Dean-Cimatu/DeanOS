@@ -1,0 +1,37 @@
+Dean Cimatu
+Software Engineer
+------------------------------------------------------------
+
+EXPERIENCE
+------------------------------------------------------------
+
+Software Engineer — Personal Projects                2023 - Present
+  - Built DeanOS, a browser-based desktop environment using React
+    and TypeScript, simulating a full OS UI with a taskbar, windows,
+    and tray widgets
+  - Developed interactive web applications with a focus on UX and
+    component architecture
+
+Junior Frontend Developer — Freelance               2022 - 2023
+  - Delivered responsive web interfaces for small business clients
+  - Worked with React, Tailwind CSS, and REST APIs
+  - Maintained version control workflows using Git and GitHub
+
+Web Development Intern                              2021 - 2022
+  - Assisted in building and maintaining internal tools
+  - Wrote HTML, CSS, and vanilla JavaScript for UI components
+
+------------------------------------------------------------
+EDUCATION
+------------------------------------------------------------
+
+BSc Computer Science                                2018 - 2022
+
+------------------------------------------------------------
+SKILLS
+------------------------------------------------------------
+
+Languages:   TypeScript, JavaScript, HTML, CSS, Python
+Frameworks:  React, Tailwind CSS, Node.js
+Tools:       Git, GitHub, Vite, VS Code
+Other:       REST APIs, responsive design, component architecture

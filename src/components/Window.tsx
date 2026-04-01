@@ -142,10 +142,10 @@ export default function Window({ id, windowData }: WindowProps) {
       {/* Content */}
       <div style={{
         flex: 1, overflow: 'hidden',
-        backgroundColor: id.startsWith('browser') ? '#121929' : id === 'terminal' ? '#0A0F1E' : 'white',
+        backgroundColor: id.startsWith('browser') ? '#121929' : id.startsWith('terminal') ? '#0A0F1E' : 'white',
         display: 'flex',
       }}>
-        {id === 'terminal' && <Terminal />}
+        {id.startsWith('terminal') && <Terminal />}
         {id.startsWith('browser') && <BrowserApp initialPage={windowData.initialPage} />}
       </div>
     </div>
