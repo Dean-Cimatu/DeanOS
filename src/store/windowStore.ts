@@ -32,7 +32,8 @@ export const useWindowStore = create<StoreType>((set) => ({
     nextZIndex: 1,
 
     openWindow: (window) => set((state) => ({
-        windows: {...state.windows, [window.id]: window}
+        windows: { ...state.windows, [window.id]: { ...window, zIndex: state.nextZIndex } },
+        nextZIndex: state.nextZIndex + 1,
     })),
     closeWindow: (id) => set((state) => {
         const { [id]: _, ...rest } = state.windows

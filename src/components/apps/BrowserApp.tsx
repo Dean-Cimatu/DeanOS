@@ -113,7 +113,7 @@ export default function BrowserApp({ initialPage = '/' }: { initialPage?: string
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: direction.current === 'back' ? 16 : -16 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            style={{ height: '100%', overflowY: 'auto' }}
+            style={{ height: '100%', width: '100%', overflowY: 'auto' }}
           >
             <PageRouter currentPage={currentPage} onNavigate={navigate} />
           </motion.div>

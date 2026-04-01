@@ -46,7 +46,9 @@ export default function Window({id, windowData}: WindowProps){
     }
 }, [])
 
-    return(<div style={{
+    return(<div
+    onMouseDown={() => focusWindow(id)}
+    style={{
     position: 'absolute',
     left: windowData.x,
     top: windowData.y,

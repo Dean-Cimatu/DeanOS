@@ -48,7 +48,7 @@ export default function StartMenu() {
       border: '1px solid #2A3F5F',
       borderRadius: '8px',
       position: 'absolute',
-      bottom: '44px',
+      bottom: '4px',
       left: '8px',
       padding: '8px',
       display: 'flex',
