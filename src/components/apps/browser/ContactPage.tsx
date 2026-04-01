@@ -1,16 +1,15 @@
 import { useRef } from 'react'
 
 interface ContactLink {
-  icon: string
   label: string
   value: string
   href: string
 }
 
 const LINKS: ContactLink[] = [
-  { icon: '📧', label: 'Email', value: 'deancimatu@example.com', href: 'mailto:deancimatu@example.com' },
-  { icon: '💻', label: 'GitHub', value: 'github.com/deancimatu', href: 'https://github.com/deancimatu' },
-  { icon: '🔗', label: 'LinkedIn', value: 'linkedin.com/in/deancimatu', href: 'https://linkedin.com/in/deancimatu' },
+  { label: 'Email', value: 'deancimatu@example.com', href: 'mailto:deancimatu@example.com' },
+  { label: 'GitHub', value: 'github.com/deancimatu', href: 'https://github.com/deancimatu' },
+  { label: 'LinkedIn', value: 'linkedin.com/in/deancimatu', href: 'https://linkedin.com/in/deancimatu' },
 ]
 
 function ContactRow({ link }: { link: ContactLink }) {
@@ -38,7 +37,6 @@ function ContactRow({ link }: { link: ContactLink }) {
       onMouseEnter={e => (e.currentTarget.style.borderColor = '#00D4FF')}
       onMouseLeave={e => (e.currentTarget.style.borderColor = '#2A3F5F')}
     >
-      <span style={{ fontSize: '1.5rem' }}>{link.icon}</span>
       <div>
         <div style={{ fontSize: '0.75rem', color: '#8899AA', marginBottom: '2px', fontFamily: 'Inter, sans-serif' }}>
           {link.label}
@@ -75,7 +73,7 @@ export const ContactPage = () => (
     </div>
 
     <p style={{ color: '#8899AA', fontSize: '0.75rem', marginTop: '24px' }}>
-      Response time: usually within 24 hours 🕐
+      Response time: usually within 24 hours
     </p>
   </div>
 )

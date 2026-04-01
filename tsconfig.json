@@ -3,7 +3,8 @@
     "jsx": "react-jsx",
     "strict": true,
     "moduleResolution": "node",
-    "target": "ESNext"
+    "target": "ESNext",
+    "noEmit": true
   },
   "exclude": ["vite.config.ts"]
 }

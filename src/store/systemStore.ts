@@ -41,6 +41,8 @@ interface SystemState {
   addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void
   markAllRead: () => void
   clearNotifications: () => void
+  dismissNotification: (id: string) => void
+  drainBattery: () => void
 }
 
 export const useSystemStore = create<SystemState>((set) => ({
@@ -48,8 +50,8 @@ export const useSystemStore = create<SystemState>((set) => ({
   bootComplete: false,
   bootProgress: 0,
   loggedIn: false,
-  batteryLevel: 87,
-  batteryLastTick: Date.now(),
+  batteryLevel: (() => { const s = localStorage.getItem('deans_battery_level'); return s !== null ? Math.max(0, Math.min(100, parseInt(s, 10))) : 87 })(),
+  batteryLastTick: (() => { const s = localStorage.getItem('deans_battery_last_tick'); return s !== null ? parseInt(s, 10) : Date.now() })(),
   wifiConnected: true,
   volume: 75,
   isMuted: false,
@@ -91,4 +93,18 @@ export const useSystemStore = create<SystemState>((set) => ({
       unreadCount: 0,
     })),
   clearNotifications: () => set({ notifications: [], unreadCount: 0 }),
+  drainBattery: () => set((state) => {
+    const newLevel = Math.max(0, state.batteryLevel - 1)
+    const newTick = Date.now()
+    localStorage.setItem('deans_battery_level', String(newLevel))
+    localStorage.setItem('deans_battery_last_tick', String(newTick))
+    return { batteryLevel: newLevel, batteryLastTick: newTick }
+  }),
+  dismissNotification: (id) => set((state) => {
+    const notif = state.notifications.find(n => n.id === id)
+    return {
+      notifications: state.notifications.filter(n => n.id !== id),
+      unreadCount: notif && !notif.read ? Math.max(0, state.unreadCount - 1) : state.unreadCount,
+    }
+  }),
 }))

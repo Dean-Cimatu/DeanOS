@@ -11,19 +11,16 @@ const TICKER_TEXT =
 
 const cards = [
   {
-    icon: '🧑',
     title: 'About Me',
     desc: 'Background, skills & what drives me',
     path: '/about',
   },
   {
-    icon: '💼',
     title: 'My Projects',
     desc: "Things I've built and shipped",
     path: '/projects',
   },
   {
-    icon: '📄',
     title: 'View CV',
     desc: 'Education, experience & skills',
     path: '/cv',
@@ -195,14 +192,13 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
 }
 
 interface CtaCardProps {
-  icon: string
   title: string
   desc: string
   path: string
   onNavigate: (path: string) => void
 }
 
-function CtaCard({ icon, title, desc, path, onNavigate }: CtaCardProps) {
+function CtaCard({ title, desc, path, onNavigate }: CtaCardProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleMouseEnter = () => {
@@ -235,7 +231,6 @@ function CtaCard({ icon, title, desc, path, onNavigate }: CtaCardProps) {
         textAlign: 'center',
       }}
     >
-      <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{icon}</div>
       <div
         style={{
           color: '#E0E8F0',
