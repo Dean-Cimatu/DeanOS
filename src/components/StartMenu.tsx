@@ -1,43 +1,66 @@
 import { useWindowStore } from "../store/windowStore"
+import { APP_REGISTRY } from "../data/appRegistry"
 
-const BROWSER_SIZE = { width: 900, height: 580 }
+const NAV_PAGES = [
+  { label: 'About Me',  page: '/about' },
+  { label: 'Projects',  page: '/projects' },
+  { label: 'View CV',   page: '/cv' },
+  { label: 'Contact',   page: '/contact' },
+]
+
+const btnStyle: React.CSSProperties = {
+  display: 'block',
+  width: '100%',
+  textAlign: 'left',
+  padding: '8px 12px',
+  background: 'transparent',
+  border: 'none',
+  borderRadius: '6px',
+  color: '#E8F4F8',
+  fontFamily: '"JetBrains Mono", monospace',
+  fontSize: '13px',
+  cursor: 'pointer',
+}
 
 export default function StartMenu() {
   const { openWindow } = useWindowStore()
 
-  const openBrowser = (title: string, initialPage: string, offsetX = 0) => {
+  const openBrowser = (initialPage: string, title: string, offsetX = 0) => {
+    const def = APP_REGISTRY.find(a => a.id === 'browser')!
     openWindow({
-      id: `browser-${initialPage.replace('/', '') || 'home'}-${Date.now()}`,
+      id: `browser-${initialPage.replace(/\//g, '') || 'home'}-${Date.now()}`,
       title,
       x: 80 + offsetX,
       y: 60,
-      ...BROWSER_SIZE,
+      width: def.defaultSize.width,
+      height: def.defaultSize.height,
       zIndex: 10,
       minimised: false,
       maximised: false,
       preMaxX: 80 + offsetX,
       preMaxY: 60,
-      preMaxWidth: BROWSER_SIZE.width,
-      preMaxHeight: BROWSER_SIZE.height,
+      preMaxWidth: def.defaultSize.width,
+      preMaxHeight: def.defaultSize.height,
       initialPage,
     })
   }
 
   const openTerminal = () => {
+    const def = APP_REGISTRY.find(a => a.id === 'terminal')!
     openWindow({
-      id: "terminal",
-      title: "Terminal",
+      id: 'terminal',
+      title: 'Terminal',
       x: 100,
       y: 100,
-      width: 800,
-      height: 500,
+      width: def.defaultSize.width,
+      height: def.defaultSize.height,
       zIndex: 10,
       minimised: false,
       maximised: false,
       preMaxX: 100,
       preMaxY: 100,
-      preMaxWidth: 800,
-      preMaxHeight: 500,
+      preMaxWidth: def.defaultSize.width,
+      preMaxHeight: def.defaultSize.height,
     })
   }
 
@@ -56,28 +79,24 @@ export default function StartMenu() {
       gap: '2px',
       zIndex: 999,
     }}>
-      {[
-        { label: 'About Me', page: '/about' },
-        { label: 'Projects', page: '/projects' },
-        { label: 'View CV', page: '/cv' },
-        { label: 'Contact', page: '/contact' },
-      ].map(({ label, page }) => (
+      {/* Browser shortcut */}
+      <button
+        onClick={() => openBrowser('/', '🌐 Browser')}
+        style={btnStyle}
+        onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#2A3F5F')}
+        onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+      >
+        🌐 Browser
+      </button>
+
+      <div style={{ height: '1px', backgroundColor: '#2A3F5F', margin: '4px 0' }} />
+
+      {/* Portfolio pages */}
+      {NAV_PAGES.map(({ label, page }) => (
         <button
           key={page}
-          onClick={() => openBrowser(label, page)}
-          style={{
-            display: 'block',
-            width: '100%',
-            textAlign: 'left',
-            padding: '8px 12px',
-            background: 'transparent',
-            border: 'none',
-            borderRadius: '6px',
-            color: '#E8F4F8',
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: '13px',
-            cursor: 'pointer',
-          }}
+          onClick={() => openBrowser(page, label)}
+          style={btnStyle}
           onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#2A3F5F')}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
         >
@@ -87,21 +106,10 @@ export default function StartMenu() {
 
       <div style={{ height: '1px', backgroundColor: '#2A3F5F', margin: '4px 0' }} />
 
+      {/* Terminal */}
       <button
         onClick={openTerminal}
-        style={{
-          display: 'block',
-          width: '100%',
-          textAlign: 'left',
-          padding: '8px 12px',
-          background: 'transparent',
-          border: 'none',
-          borderRadius: '6px',
-          color: '#E8F4F8',
-          fontFamily: '"JetBrains Mono", monospace',
-          fontSize: '13px',
-          cursor: 'pointer',
-        }}
+        style={btnStyle}
         onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#2A3F5F')}
         onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
       >

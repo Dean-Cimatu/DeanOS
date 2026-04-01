@@ -23,6 +23,6 @@ export const PageRouter = ({ currentPage, onNavigate }: PageRouterProps) => {
     case '/contact':
       return <ContactPage />
     default:
-      return <NotFoundPage path={currentPage} />
+      return <NotFoundPage path={currentPage} onNavigate={onNavigate} />
   }
 }
