@@ -1,18 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSystemStore } from '../../../store/systemStore'
 import { useClickOutside } from '../../../hooks/useClickOutside'
 
-function useBatteryDrain() {
-  const drainBattery = useSystemStore(s => s.drainBattery)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const { batteryLastTick } = useSystemStore.getState()
-      if (Date.now() - batteryLastTick >= 300_000) drainBattery()
-    }, 60_000)
-    return () => clearInterval(interval)
-  }, [drainBattery])
-}
 
 function batteryColor(level: number) {
   if (level > 60) return '#00FF88'
@@ -62,7 +52,6 @@ function BatteryPopover({ level, onClose }: { level: number; onClose: () => void
 }
 
 export function BatteryWidget() {
-  useBatteryDrain()
   const batteryLevel = useSystemStore(s => s.batteryLevel)
   const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)

@@ -1,33 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useSystemStore } from '../store/systemStore'
 import { unlockAudio, playErrorPing, playStartupChime } from '../lib/sounds'
 
 const PASSWORD = 'password'
 
-interface Particle {
-  x: number
-  y: number
-  speed: number
-  size: number
-  opacity: number
-}
-
-function makeParticle(canvasWidth: number, canvasHeight: number): Particle {
-  return {
-    x: Math.random() * canvasWidth,
-    y: Math.random() * canvasHeight,
-    speed: 0.2 + Math.random() * 0.3,
-    size: 1 + Math.random(),
-    opacity: 0.3 + Math.random() * 0.4,
-  }
-}
-
 export default function Login() {
   const setLoggedIn = useSystemStore(s => s.setLoggedIn)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const particlesRef = useRef<Particle[]>([])
-  const rafRef = useRef<number>(0)
 
   const [password, setPassword] = useState('')
   const [capsLock, setCapsLock] = useState(false)
@@ -40,45 +19,6 @@ export default function Login() {
   // Entry animation
   useEffect(() => {
     cardControls.start({ y: 0, opacity: 1, transition: { type: 'spring', stiffness: 280, damping: 24, delay: 0.2 } })
-  }, [])
-
-  // Particle canvas
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')!
-
-    const resize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      particlesRef.current = Array.from({ length: 40 }, () =>
-        makeParticle(canvas.width, canvas.height)
-      )
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    const tick = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for (const p of particlesRef.current) {
-        p.y -= p.speed
-        if (p.y < 0) {
-          p.y = canvas.height
-          p.x = Math.random() * canvas.width
-        }
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(0, 212, 255, ${p.opacity})`
-        ctx.fill()
-      }
-      rafRef.current = requestAnimationFrame(tick)
-    }
-    rafRef.current = requestAnimationFrame(tick)
-
-    return () => {
-      cancelAnimationFrame(rafRef.current)
-      window.removeEventListener('resize', resize)
-    }
   }, [])
 
   const handleLogin = async () => {
@@ -107,16 +47,16 @@ export default function Login() {
       onKeyDown={unlockAudio}
       style={{
         position: 'fixed', inset: 0,
-        backgroundColor: '#050A14',
+        // Static deep-space background — layered radial gradients
+        background: `
+          radial-gradient(ellipse 80% 60% at 15% 50%, rgba(0,50,80,0.55) 0%, transparent 70%),
+          radial-gradient(ellipse 60% 80% at 85% 30%, rgba(10,30,70,0.5) 0%, transparent 65%),
+          radial-gradient(ellipse 50% 50% at 50% 90%, rgba(0,20,50,0.4) 0%, transparent 60%),
+          #040D1A
+        `,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}
     >
-      {/* Particle canvas */}
-      <canvas
-        ref={canvasRef}
-        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
-      />
-
       {/* Login card */}
       <motion.div
         animate={cardControls}
@@ -193,7 +133,7 @@ export default function Login() {
           </p>
         )}
 
-        {/* Error message + hint after first attempt */}
+        {/* Error message + hint */}
         {error && (
           <motion.div
             initial={{ opacity: 0, y: -4 }}

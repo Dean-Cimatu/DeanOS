@@ -13,6 +13,7 @@ import { WiFiWidget } from './os/tray/WiFiWidget'
 import { VolumeWidget } from './os/tray/VolumeWidget'
 import { NotificationBell } from './os/tray/NotificationBell'
 import { NotificationCentre } from './os/NotificationCentre'
+import ToastContainer from './os/ToastContainer'
 
 const WALLPAPERS: Record<string, string> = {
   aurora: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
@@ -76,6 +77,9 @@ export default function Desktop() {
           {notifOpen && <NotificationCentre onClose={() => setNotifOpen(false)} />}
         </AnimatePresence>
       </div>
+
+      {/* Toast notifications */}
+      <ToastContainer />
 
       {/* Taskbar */}
       <div
