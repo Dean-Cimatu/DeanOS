@@ -44,19 +44,20 @@ const WELCOME: Line[] = [
 
 const GRASS = '#4ADE80'
 const DIRT  = '#92400E'
-const STONE = '#57534E'
 
 const NEOFETCH_LINES: Line[] = [
-  // Minecraft dirt block — grass top
-  [s('  ████████████████████████', GRASS)],
-  [s('  ████████████████████████', GRASS)],
-  [s('  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀', GRASS)],
+  // Grass — solid top row
+  [s('  ███████████████████████', GRASS)],
+  // Grass — texture row (▓ spots for patchy variation)
+  [s('  ██▓████▓███▓████▓██▓███', GRASS)],
+  // Grass — drooping uneven bottom edge
+  [s('  ▀██▀▀ ▀▀▀██▀ ▀▀ ▀ ▀██▀', GRASS)],
   // Dirt body
   [s('  ▒░▒░▒░░▒░▒▒░░▒░▒░▒▒░░▒░', DIRT)],
-  [s('  ░▒░ ▒░▒ ░', DIRT), s('DeanOS', WHITE), s('▒ ░▒░ ▒░▒', DIRT)],
+  [s('  ░▒░ ▒░▒ ░', DIRT), s('DeanOS', WHITE), s('▒ ░▒░ ▒░', DIRT)],
   [s('  ░▒▒░░▒░▒░▒░▒▒░░▒░░▒▒░▒░', DIRT)],
-  // Stone base
-  [s('  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓', STONE)],
+  // Dirt base (replaced stone)
+  [s('  ▒▒░░▒░▒▒░░▒░▒░▒░▒▒░░▒░▒', DIRT)],
   EMPTY,
   // System info
   [s('  '), s('dean', GREEN), s('@', WHITE), s('deanos', GREEN)],
