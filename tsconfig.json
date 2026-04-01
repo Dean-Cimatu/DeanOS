@@ -4,5 +4,6 @@
     "strict": true,
     "moduleResolution": "node",
     "target": "ESNext"
-  }
+  },
+  "exclude": ["vite.config.ts"]
 }

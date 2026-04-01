@@ -7,7 +7,7 @@ interface HomePageProps {
 const FULL_HEADING = "Hi, I'm Dean Cimatu."
 
 const TICKER_TEXT =
-  'DeanOS v2.0  ·  BSc CS @ Middlesex University  ·  Formula Student AI  ·  GSoC 2026 Applicant  ·  Placement Sep 2026  ·  deancimatu.com  ·  '
+  'DeanOS v2.0  ·  BSc CS @ Middlesex University  ·  Formula Student AI   ·  Placement Sep 2026  ·  deancimatu.com  ·  '
 
 const cards = [
   {

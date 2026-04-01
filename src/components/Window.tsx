@@ -1,7 +1,6 @@
 import { useWindowStore } from "../store/windowStore"
 import type { WindowState } from "../store/windowStore"
 import { useRef } from 'react'
-import type { MouseEvent } from 'react'
 import { useEffect } from 'react'
 import Terminal from './Terminal'
 
@@ -28,7 +27,7 @@ export default function Window({id, windowData}: WindowProps){
 
     
    useEffect(() => {
-    const handleDocumentMouseMove = (e: MouseEvent) => {
+    const handleDocumentMouseMove = (e: globalThis.MouseEvent) => {
         if (!isDragging.current) return
         
         const newX = dragStart.current.winX + (e.clientX - dragStart.current.mouseX)
