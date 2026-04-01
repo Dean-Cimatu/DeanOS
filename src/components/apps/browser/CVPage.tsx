@@ -137,7 +137,7 @@ export const CVPage = () => {
       <div style={s.header}>
         <div>
           <h1 style={s.name}>Dean Cimatu</h1>
-          <p style={s.tagline}>Software Engineering Student — Seeking 12-Month Placement (Sep 2026)</p>
+          <p style={s.tagline}>Software Engineering Student</p>
           <div style={s.contactRow}>
             <a href="mailto:deancimatu@example.com" style={s.contactLink}>deancimatu@example.com</a>
             <span style={s.divider}>·</span>

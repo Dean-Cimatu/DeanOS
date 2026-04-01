@@ -150,8 +150,8 @@ export const AboutPage = () => (
         <p style={s.location}>Hampton Hill, London</p>
         <p style={s.bio}>
           I'm a second-year BSc Computer Science student at Middlesex University London, building
-          real software between lectures. Founder of the CS Academic Society, contributor to
-          Formula Student AI, and actively seeking a 12-month placement starting September 2026.
+          real software between lectures. Founder of the CS Academic Society and contributor to
+          Formula Student AI.
         </p>
       </div>
     </div>

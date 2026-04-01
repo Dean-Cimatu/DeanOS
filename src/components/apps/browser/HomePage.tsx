@@ -7,7 +7,7 @@ interface HomePageProps {
 const FULL_HEADING = "Hi, I'm Dean Cimatu."
 
 const TICKER_TEXT =
-  'DeanOS v2.0  ·  BSc CS @ Middlesex University  ·  Formula Student AI   ·  Placement Sep 2026  ·  deancimatu.com  ·  '
+  'DeanOS v2.0  ·  BSc CS @ Middlesex University  ·  Formula Student AI  ·  deancimatu.com  ·  '
 
 const cards = [
   {
@@ -34,7 +34,6 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
   const [displayed, setDisplayed] = useState('')
   const [typingDone, setTypingDone] = useState(false)
   const [showSubtitle, setShowSubtitle] = useState(false)
-  const [showAvailable, setShowAvailable] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
@@ -58,10 +57,8 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
   useEffect(() => {
     if (!typingDone) return
     const t1 = setTimeout(() => setShowSubtitle(true), 400)
-    const t2 = setTimeout(() => setShowAvailable(true), 600)
     return () => {
       clearTimeout(t1)
-      clearTimeout(t2)
     }
   }, [typingDone])
 
@@ -126,20 +123,6 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
             }}
           >
             CS Student · Software Developer · Builder of things
-          </p>
-
-          <p
-            style={{
-              color: '#00D4FF',
-              fontSize: '0.875rem',
-              fontFamily: 'Inter, sans-serif',
-              marginTop: '8px',
-              opacity: showAvailable ? 1 : 0,
-              transform: showAvailable ? 'translateY(0)' : 'translateY(6px)',
-              transition: 'opacity 0.25s ease, transform 0.25s ease',
-            }}
-          >
-            Available for Placement — September 2026
           </p>
 
           {/* CTA Cards */}

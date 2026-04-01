@@ -6,6 +6,7 @@ import { desktopFiles } from '../data/desktopFiles'
 import FileIcon from './FileIcon'
 import { useSystemStore } from '../store/systemStore'
 import { useSettingsStore } from '../store/settingsStore'
+import { ClockWidget } from './os/tray/ClockWidget'
 
 const WALLPAPERS: Record<string, string> = {
   aurora: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
@@ -18,14 +19,12 @@ export default function Desktop() {
   const wallpaper = useSettingsStore((state) => state.wallpaper)
 
   const {
-    currentTime,
     batteryLevel,
     wifiConnected,
     volume,
     isMuted,
     unreadCount,
     notifications,
-    tickClock,
     toggleMute,
     markAllRead,
   } = useSystemStore()
@@ -33,12 +32,6 @@ export default function Desktop() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
   const notifRef = useRef<HTMLDivElement>(null)
-
-  // Tick the clock every second via systemStore
-  useEffect(() => {
-    const interval = setInterval(() => tickClock(), 1000)
-    return () => clearInterval(interval)
-  }, [tickClock])
 
   // Close notification panel when clicking outside
   useEffect(() => {
@@ -50,9 +43,6 @@ export default function Desktop() {
     if (notifOpen) document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [notifOpen])
-
-  const timeStr = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  const dateStr = currentTime.toLocaleDateString([], { month: 'short', day: 'numeric' })
 
   const batteryIcon = batteryLevel > 60 ? '▰▰▰▰' : batteryLevel > 30 ? '▰▰▰░' : batteryLevel > 10 ? '▰▰░░' : '▰░░░'
   const batteryColor = batteryLevel > 30 ? '#4ade80' : batteryLevel > 10 ? '#facc15' : '#f87171'
@@ -243,7 +233,7 @@ export default function Desktop() {
           </TrayItem>
 
           {/* Bell / Notifications */}
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative' }} onMouseDown={(e) => e.stopPropagation()}>
             <TrayItem
               title={`${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}`}
               onClick={(e) => {
@@ -279,23 +269,7 @@ export default function Desktop() {
           </div>
 
           {/* Clock */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-              padding: '0 6px',
-              borderLeft: '1px solid #1E2D45',
-              marginLeft: '4px',
-            }}
-          >
-            <span style={{ color: '#E8F4F8', fontSize: '12px', fontFamily: '"JetBrains Mono", monospace', lineHeight: 1.2 }}>
-              {timeStr}
-            </span>
-            <span style={{ color: '#8899AA', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace', lineHeight: 1.2 }}>
-              {dateStr}
-            </span>
-          </div>
+          <ClockWidget />
         </div>
       </div>
     </div>

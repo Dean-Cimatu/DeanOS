@@ -54,7 +54,7 @@ export default function BrowserApp({ initialPage = '/' }: { initialPage?: string
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
       {/* Toolbar */}
       <div
         style={{
