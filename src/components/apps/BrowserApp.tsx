@@ -4,8 +4,8 @@ import { PageRouter } from './browser/PageRouter'
 
 const VALID_PATHS = new Set(['/', '/about', '/projects', '/cv', '/contact'])
 
-export default function BrowserApp() {
-  const [history, setHistory] = useState<string[]>(['/'])
+export default function BrowserApp({ initialPage = '/' }: { initialPage?: string }) {
+  const [history, setHistory] = useState<string[]>([initialPage])
   const [historyIndex, setHistoryIndex] = useState(0)
   const [addressInput, setAddressInput] = useState('deanos://')
   const direction = useRef<'forward' | 'back'>('forward')

@@ -1,5 +1,3 @@
-import { StatementSync } from "node:sqlite"
-import { isInternalThread } from "worker_threads"
 import { create } from "zustand"
 
 export type WindowState ={
@@ -16,6 +14,7 @@ export type WindowState ={
     preMaxY: number,
     preMaxWidth: number,
     preMaxHeight: number,
+    initialPage?: string
 }
 type StoreType ={
     windows: Record<string, WindowState>

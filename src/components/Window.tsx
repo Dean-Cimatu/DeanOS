@@ -3,10 +3,7 @@ import type { WindowState } from "../store/windowStore"
 import { useRef } from 'react'
 import { useEffect } from 'react'
 import Terminal from './Terminal'
-
-const AboutMe = () => <div style={{ padding: '20px' }}>About Me - Coming soon</div>
-const Projects = () => <div style={{ padding: '20px' }}>Projects - Coming soon</div>
-const Contact = () => <div style={{ padding: '20px' }}>Contact - Coming soon</div>
+import BrowserApp from './apps/BrowserApp'
 
 interface WindowProps{
     id: string
@@ -80,16 +77,14 @@ export default function Window({id, windowData}: WindowProps){
         </div>
     </div>
     <div style={{
-        
         width: "100%",
         height: "calc(100% - 40px)",
-        backgroundColor: "white",
+        backgroundColor: id.startsWith("browser") ? "#121929" : id === "terminal" ? "#0A0F1E" : "white",
         display: "flex",
+        overflow: "hidden",
     }}>
         {id === "terminal" && <Terminal />}
-        {id === "about-me" && <AboutMe />}
-        {id === "projects" && <Projects />}
-        {id === "contact" && <Contact />}
+        {id.startsWith("browser") && <BrowserApp initialPage={windowData.initialPage} />}
         </div>
     </div>)
 }
