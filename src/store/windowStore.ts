@@ -23,6 +23,7 @@ type StoreType ={
     closeWindow (id: string): void
     focusWindow(id: string): void
     moveWindow(id: string, x: number, y: number): void
+    updateWindowSize(id: string, width: number, height: number): void
     minimiseWindow(id: string): void
     maximiseWindow(id: string):void
 }
@@ -50,6 +51,12 @@ export const useWindowStore = create<StoreType>((set) => ({
         windows: {
             ...state.windows,
             [id]: { ...state.windows[id],x, y },
+        },
+    })),
+    updateWindowSize: (id, width, height) => set((state) => ({
+        windows: {
+            ...state.windows,
+            [id]: { ...state.windows[id], width, height },
         },
     })),
     minimiseWindow: (id) => set((state) => ({

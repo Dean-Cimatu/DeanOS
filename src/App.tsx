@@ -1,15 +1,17 @@
-import { useState } from "react";
-import Boot from "./components/Boot";
-import Login from "./components/Login";
-import Desktop from "./components/Desktop";
+import Boot from './components/Boot'
+import Login from './components/Login'
+import Desktop from './components/Desktop'
+import { useSystemStore } from './store/systemStore'
 
 export default function App() {
-  const [stage, setStage] = useState('boot')
+  const bootComplete = useSystemStore(s => s.bootComplete)
+  const loggedIn = useSystemStore(s => s.loggedIn)
+
   return (
     <div>
-      {stage === 'boot' && <Boot onComplete={() => setStage('login')} />}
-      {stage === 'login' && <Login onComplete={() => setStage('desktop')} />}
-      {stage === 'desktop' && <Desktop />}
+      {!bootComplete && <Boot />}
+      {bootComplete && !loggedIn && <Login />}
+      {loggedIn && <Desktop />}
     </div>
   )
 }

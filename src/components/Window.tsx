@@ -3,14 +3,21 @@ import type { WindowState } from "../store/windowStore"
 import { useRef, useEffect } from 'react'
 import Terminal from './Terminal'
 import BrowserApp from './apps/BrowserApp'
+import ResizeHandle from './ResizeHandle'
+import type { ResizeDirection } from './ResizeHandle'
 
 interface WindowProps {
   id: string
   windowData: WindowState
 }
 
+const MIN_W = 320
+const MIN_H = 240
+
+const DIRECTIONS: ResizeDirection[] = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+
 export default function Window({ id, windowData }: WindowProps) {
-  const { closeWindow, focusWindow, moveWindow, minimiseWindow, maximiseWindow } = useWindowStore()
+  const { closeWindow, focusWindow, moveWindow, minimiseWindow, maximiseWindow, updateWindowSize } = useWindowStore()
 
   const isDragging = useRef(false)
   const dragStart = useRef({ mouseX: 0, mouseY: 0, winX: 0, winY: 0 })
@@ -31,6 +38,47 @@ export default function Window({ id, windowData }: WindowProps) {
     return () => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp) }
   }, [])
 
+  const handleResizeStart = (e: React.MouseEvent, direction: ResizeDirection) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const startX = e.clientX
+    const startY = e.clientY
+    const startW = windowData.width
+    const startH = windowData.height
+    const startLeft = windowData.x
+    const startTop = windowData.y
+
+    const maxW = window.innerWidth - 40
+    const maxH = window.innerHeight - 64
+
+    const onMouseMove = (ev: MouseEvent) => {
+      const dx = ev.clientX - startX
+      const dy = ev.clientY - startY
+
+      let newW = startW, newH = startH, newX = startLeft, newY = startTop
+
+      if (direction.includes('e')) newW = Math.max(MIN_W, Math.min(maxW, startW + dx))
+      if (direction.includes('s')) newH = Math.max(MIN_H, Math.min(maxH, startH + dy))
+      if (direction.includes('w')) { newW = Math.max(MIN_W, startW - dx); newX = startLeft + (startW - newW) }
+      if (direction.includes('n')) { newH = Math.max(MIN_H, startH - dy); newY = startTop + (startH - newH) }
+
+      newW = Math.round(newW / 8) * 8
+      newH = Math.round(newH / 8) * 8
+
+      updateWindowSize(id, newW, newH)
+      moveWindow(id, newX, newY)
+    }
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+    }
+
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
+  }
+
   return (
     <div
       onMouseDown={() => focusWindow(id)}
@@ -45,6 +93,11 @@ export default function Window({ id, windowData }: WindowProps) {
         boxShadow: '0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)',
       }}
     >
+      {/* Resize handles — hidden when maximised */}
+      {!windowData.maximised && DIRECTIONS.map(dir => (
+        <ResizeHandle key={dir} direction={dir} onResizeStart={handleResizeStart} />
+      ))}
+
       {/* Titlebar */}
       <div
         onMouseDown={handleTitleMouseDown}
