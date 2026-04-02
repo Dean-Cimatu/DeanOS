@@ -108,7 +108,6 @@ function renderPostLine(text: string) {
 // ── Scroll constants ──────────────────────────────────────────────────────
 
 const LINE_H = 22       // px per line (12px font × 1.5 lh + margin)
-const MAX_LINES = 30    // lines visible at once in the scrolling viewport
 
 const delay = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
 
@@ -118,6 +117,9 @@ export default function Boot() {
   const { bootPhase, bootProgress, setBootPhase, setBootComplete, setBootProgress } = useSystemStore()
   const [visibleLines, setVisibleLines] = useState(0)
   const cancelledRef = useRef(false)
+
+  // Fill 80% of screen height with text lines
+  const MAX_LINES = Math.floor((window.innerHeight * 0.8) / LINE_H)
 
   // Main phase sequencer
   useEffect(() => {
@@ -196,7 +198,7 @@ export default function Boot() {
       {bootPhase === 1 && (
         <div style={{
           position: 'absolute',
-          top: '4%', left: '5%', right: '5%',
+          top: '10%', left: '5%', right: '5%',
           height: `${MAX_LINES * LINE_H}px`,
           overflow: 'hidden',
         }}>
