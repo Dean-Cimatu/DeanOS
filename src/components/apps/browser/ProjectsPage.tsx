@@ -27,7 +27,7 @@ const PROJECTS: Project[] = [
     tech: ['C#', 'ASP.NET Core', 'Azure SQL', 'Google OAuth', 'Stripe', 'NUnit'],
     status: 'Live',
     links: [
-      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/carhire' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/CST2550-Car-Hire-System' },
       { label: 'Live ↗', href: 'https://carhire.deancimatu.com' },
     ],
   },
@@ -37,7 +37,7 @@ const PROJECTS: Project[] = [
     tech: ['React', 'Node.js', 'Claude API', 'OpenAI API', 'MongoDB'],
     status: 'In Progress',
     links: [
-      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/studybuddy' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/Hackathon' },
     ],
   },
   {
@@ -46,36 +46,9 @@ const PROJECTS: Project[] = [
     tech: ['Java', 'Maven'],
     status: 'Complete',
     links: [
-      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/designpatterncli' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/DesignPatterns' },
     ],
-  },
-  {
-    name: 'AutoKart',
-    description: 'Autonomous go-kart using LiDAR, SLAM, and a Draw-a-Track interface. Powered by Raspberry Pi 5.',
-    tech: ['Python', 'Raspberry Pi 5', 'LiDAR', 'SLAM', 'OpenCV'],
-    status: 'In Progress',
-    links: [
-      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/autokart' },
-    ],
-  },
-  {
-    name: 'Formula Student AI',
-    description: 'Cone detection system for the MDX Formula Student racing car using computer vision.',
-    tech: ['Python', 'OpenCV', 'YOLO'],
-    status: 'In Progress',
-    links: [
-      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/formula-student-ai' },
-    ],
-  },
-  {
-    name: 'SchoolBase',
-    description: 'Full-stack school management platform built to explore Next.js and PostgreSQL production patterns.',
-    tech: ['Next.js', 'PostgreSQL', 'Prisma', 'TypeScript'],
-    status: 'In Progress',
-    links: [
-      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/schoolbase' },
-    ],
-  },
+  }
 ]
 
 const STATUS_CONFIG: Record<Status, { label: string; color: string; bg: string; border: string; dot: string }> = {
