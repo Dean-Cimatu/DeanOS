@@ -4,7 +4,7 @@ export interface AppDefinition {
   iconId: string
   defaultSize: { width: number; height: number }
   minSize: { width: number; height: number }
-  category: 'internet' | 'system' | 'portfolio' | 'accessories'
+  category: 'internet' | 'system' | 'portfolio' | 'accessories' | 'media'
   description: string
   initialPage?: string
 }
@@ -46,6 +46,15 @@ export const APP_REGISTRY: AppDefinition[] = [
     minSize: { width: 600, height: 420 },
     category: 'system',
     description: 'Customise your desktop',
+  },
+  {
+    id: 'music',
+    name: 'Music',
+    iconId: 'music',
+    defaultSize: { width: 400, height: 600 },
+    minSize: { width: 360, height: 500 },
+    category: 'media',
+    description: 'Spotify music player',
   },
   {
     id: 'fileviewer',

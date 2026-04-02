@@ -11,7 +11,7 @@ interface AppEntry {
   name: string
   iconId: string
   appId: string
-  category: 'internet' | 'system' | 'portfolio'
+  category: 'internet' | 'system' | 'portfolio' | 'media'
   description: string
   initialPage?: string
   singleton?: boolean
@@ -25,15 +25,17 @@ const ALL_APPS: AppEntry[] = [
   { id: 'about',    name: 'About Me',        iconId: 'about',    appId: 'browser',   category: 'portfolio', description: 'Personal background and bio', initialPage: '/about' },
   { id: 'projects', name: 'Projects',        iconId: 'projects', appId: 'browser',   category: 'portfolio', description: 'Portfolio project showcase', initialPage: '/projects' },
   { id: 'resume',   name: 'Resume / CV',     iconId: 'resume',   appId: 'browser',   category: 'portfolio', description: 'View and download CV', initialPage: '/cv' },
+  { id: 'music',    name: 'Music',           iconId: 'music',    appId: 'music',     category: 'media',     description: 'Spotify music player', singleton: true },
 ]
 
-const FAVOURITES = ['browser', 'terminal', 'files', 'settings']
+const FAVOURITES = ['browser', 'terminal', 'files', 'music']
 
 const CATEGORIES: { id: 'all' | AppEntry['category']; label: string; icon: string }[] = [
   { id: 'all',       label: 'All Applications', icon: '⊞' },
   { id: 'internet',  label: 'Internet',          icon: '🌐' },
   { id: 'system',    label: 'System Tools',      icon: '🛠' },
   { id: 'portfolio', label: 'Portfolio',          icon: '💼' },
+  { id: 'media',     label: 'Media',              icon: '🎵' },
 ]
 
 // ── Open window helper ────────────────────────────────────────────────────
@@ -50,6 +52,7 @@ function launchApp(app: AppEntry, openWindow: (w: WindowState) => void, windows:
     terminal: { w: 800, h: 500, x: 100, y: 80, title: 'Terminal' },
     files:    { w: 860, h: 540, x: 120, y: 70, title: 'Files' },
     settings: { w: 760, h: 520, x: 160, y: 80, title: 'System Settings' },
+    music:    { w: 400, h: 600, x: 200, y: 60, title: 'Music' },
   }
   const cfg = configs[app.appId] ?? configs.browser
   openWindow({
