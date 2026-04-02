@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useSystemStore } from '../store/systemStore'
 import { unlockAudio, playErrorPing, playStartupChime } from '../lib/sounds'
@@ -102,6 +102,8 @@ export default function Login() {
   const [error, setError] = useState(false)
   const [loggingIn, setLoggingIn] = useState(false)
   const [focused, setFocused] = useState(false)
+  const [autoTyping, setAutoTyping] = useState(false)
+  const autoTypingRef = useRef(false)
 
   const now = useClock()
   const formControls = useAnimation()
@@ -113,8 +115,35 @@ export default function Login() {
     formControls.start({ opacity: 1, y: 0, transition: { type: 'spring', stiffness: 240, damping: 22, delay: 0.2 } })
   }, [])
 
+  const startAutoType = () => {
+    autoTypingRef.current = true
+    setAutoTyping(true)
+    setError(false)
+    setPassword('')
+
+    let i = 0
+    const typeNext = () => {
+      if (i < PASSWORD.length) {
+        setPassword(PASSWORD.slice(0, i + 1))
+        i++
+        setTimeout(typeNext, 120)
+      } else {
+        // Small pause after last char, then submit
+        setTimeout(async () => {
+          setLoggingIn(true)
+          playStartupChime()
+          await formControls.start({ opacity: 0, scale: 1.03, transition: { duration: 0.3 } })
+          setLoggedIn(true)
+        }, 400)
+      }
+    }
+
+    // Brief pause before starting to type
+    setTimeout(typeNext, 600)
+  }
+
   const handleLogin = async () => {
-    if (loggingIn) return
+    if (loggingIn || autoTypingRef.current) return
     if (password === PASSWORD) {
       setLoggingIn(true)
       playStartupChime()
@@ -122,11 +151,16 @@ export default function Login() {
       setLoggedIn(true)
     } else {
       playErrorPing()
-      setAttempts(a => a + 1)
+      const newAttempts = attempts + 1
+      setAttempts(newAttempts)
       setError(true)
       await formControls.start({ x: [-10, 10, -6, 6, -2, 2, 0], transition: { duration: 0.4 } })
       formControls.set({ x: 0 })
-      setTimeout(() => setError(false), 3500)
+      if (newAttempts >= 3) {
+        setTimeout(() => startAutoType(), 800)
+      } else {
+        setTimeout(() => setError(false), 3500)
+      }
     }
   }
 
@@ -239,9 +273,11 @@ export default function Login() {
             type="password"
             placeholder="Password"
             autoFocus
+            readOnly={autoTyping}
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={e => { if (!autoTyping) setPassword(e.target.value) }}
             onKeyDown={e => {
+              if (autoTyping) return
               setCapsLock(e.getModifierState('CapsLock'))
               if (e.key === 'Enter') handleLogin()
             }}
@@ -253,10 +289,11 @@ export default function Login() {
               border: 'none',
               outline: 'none',
               padding: '13px 0',
-              color: 'rgba(255,255,255,0.92)',
+              color: autoTyping ? 'rgba(0,212,255,0.85)' : 'rgba(255,255,255,0.92)',
               fontSize: '15px',
               fontFamily: 'Ubuntu, sans-serif',
               caretColor: '#00D4FF',
+              cursor: autoTyping ? 'default' : 'text',
             }}
           />
 
@@ -278,12 +315,19 @@ export default function Login() {
 
         {/* Caps lock + error */}
         <div style={{ width: '100%', minHeight: '20px', textAlign: 'center' }}>
-          {capsLock && (
+          {!autoTyping && capsLock && (
             <div style={{ color: '#FFD700', fontSize: '12px' }}>
               Caps Lock is on
             </div>
           )}
-          {error && (
+          {autoTyping && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div style={{ color: 'rgba(0,212,255,0.7)', fontSize: '12px', fontFamily: '"JetBrains Mono", monospace' }}>
+                entering password automatically…
+              </div>
+            </motion.div>
+          )}
+          {!autoTyping && error && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <div style={{ color: 'rgba(255,100,100,0.9)', fontSize: '12px' }}>
                 Incorrect password
