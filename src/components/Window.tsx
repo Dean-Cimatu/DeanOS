@@ -3,6 +3,8 @@ import type { WindowState } from "../store/windowStore"
 import { useRef, useEffect } from 'react'
 import Terminal from './Terminal'
 import BrowserApp from './apps/BrowserApp'
+import Settings from './apps/Settings'
+import FileManager from './apps/FileManager'
 import ResizeHandle from './ResizeHandle'
 import type { ResizeDirection } from './ResizeHandle'
 
@@ -142,11 +144,18 @@ export default function Window({ id, windowData }: WindowProps) {
       {/* Content */}
       <div style={{
         flex: 1, overflow: 'hidden',
-        backgroundColor: id.startsWith('browser') ? '#121929' : id.startsWith('terminal') ? '#0A0F1E' : 'white',
+        backgroundColor:
+          id.startsWith('browser')  ? '#121929' :
+          id.startsWith('terminal') ? '#0A0F1E' :
+          id.startsWith('settings') ? '#0D1828' :
+          id.startsWith('files')    ? '#0D1828' :
+          'white',
         display: 'flex',
       }}>
         {id.startsWith('terminal') && <Terminal />}
-        {id.startsWith('browser') && <BrowserApp initialPage={windowData.initialPage} />}
+        {id.startsWith('browser')  && <BrowserApp initialPage={windowData.initialPage} />}
+        {id.startsWith('settings') && <Settings />}
+        {id.startsWith('files')    && <FileManager />}
       </div>
     </div>
   )

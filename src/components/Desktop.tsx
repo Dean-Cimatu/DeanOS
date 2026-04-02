@@ -14,6 +14,7 @@ import { VolumeWidget } from './os/tray/VolumeWidget'
 import { NotificationBell } from './os/tray/NotificationBell'
 import { NotificationCentre } from './os/NotificationCentre'
 import ToastContainer from './os/ToastContainer'
+import { ContextMenu } from './os/ContextMenu'
 
 const WALLPAPERS: Record<string, string> = {
   aurora: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
@@ -33,6 +34,8 @@ export default function Desktop() {
   const toggleTray = (key: Exclude<TrayPanel, null>) =>
     setActiveTray(a => a === key ? null : key)
 
+  const [desktopCtx, setDesktopCtx] = useState<{ x: number; y: number } | null>(null)
+
   useEffect(() => {
     if (!loggedIn) return
     const t1 = setTimeout(() => addNotification({ type: 'info', title: 'Welcome back, dean.', message: 'DeanOS v2.0 loaded successfully.' }), 1000)
@@ -50,13 +53,24 @@ export default function Desktop() {
           position: 'relative', overflow: 'hidden',
         }}
         onClick={() => { setMenuOpen(false); setActiveTray(null) }}
+        onContextMenu={e => {
+          if (e.target !== e.currentTarget) return
+          e.preventDefault()
+          setDesktopCtx({ x: e.clientX, y: e.clientY })
+        }}
       >
         {/* Desktop Icons */}
         <div
           style={{
-            position: 'absolute', top: 0, left: 0,
-            display: 'flex', gap: '20px', padding: '20px',
-            flexWrap: 'wrap', alignItems: 'flex-start', zIndex: 0,
+            position: 'absolute', top: 0, left: 0, bottom: 40,
+            display: 'grid',
+            gridAutoFlow: 'column',
+            gridTemplateRows: 'repeat(auto-fill, 100px)',
+            gridAutoColumns: '96px',
+            gap: '4px',
+            padding: '16px 12px',
+            alignContent: 'start',
+            zIndex: 0,
           }}
           onClick={e => e.stopPropagation()}
         >
@@ -79,6 +93,37 @@ export default function Desktop() {
         <AnimatePresence>
           {activeTray === 'notif' && <NotificationCentre onClose={() => setActiveTray(null)} />}
         </AnimatePresence>
+
+        {/* Desktop context menu */}
+        {desktopCtx && (
+          <ContextMenu
+            position={desktopCtx}
+            onClose={() => setDesktopCtx(null)}
+            items={[
+              {
+                label: 'Change Wallpaper', icon: '🖼️',
+                onClick: () => addNotification({
+                  type: 'info', title: 'Wallpaper',
+                  message: 'Open Settings to change the wallpaper.',
+                }),
+              },
+              {
+                label: 'Refresh Desktop', icon: '↺',
+                onClick: () => addNotification({
+                  type: 'success', title: 'Desktop refreshed', message: '',
+                }),
+              },
+              { label: '', divider: true },
+              {
+                label: 'About DeanOS', icon: 'ℹ️',
+                onClick: () => addNotification({
+                  type: 'info', title: 'DeanOS v2.1.0',
+                  message: 'Built with React + TypeScript.',
+                }),
+              },
+            ]}
+          />
+        )}
       </div>
 
       {/* Toast notifications */}
