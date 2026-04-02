@@ -7,36 +7,39 @@ interface HomePageProps {
 const FULL_HEADING = "Hi, I'm Dean Cimatu."
 
 const TICKER_TEXT =
-  'DeanOS v2.0  ·  BSc CS @ Middlesex University  ·  Formula Student AI  ·  deancimatu.com  ·  '
+  'DeanOS v2.0  ·  BSc CS @ Middlesex University  ·  Formula Student AI  ·  Open to placement  ·  '
 
 const cards = [
   {
     title: 'About Me',
     desc: 'Background, skills & what drives me',
     path: '/about',
+    accent: '#4dba8c',
   },
   {
     title: 'My Projects',
     desc: "Things I've built and shipped",
     path: '/projects',
+    accent: '#00D4FF',
   },
   {
     title: 'View CV',
     desc: 'Education, experience & skills',
     path: '/cv',
+    accent: '#8a78e8',
   },
 ]
 
 export const HomePage = ({ onNavigate }: HomePageProps) => {
   const [displayed, setDisplayed] = useState('')
   const [typingDone, setTypingDone] = useState(false)
-  const [showSubtitle, setShowSubtitle] = useState(false)
+  const [showSub, setShowSub] = useState(false)
+  const [showCards, setShowCards] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     let index = 0
-    const charInterval = 1200 / FULL_HEADING.length
-
+    const delay = 1100 / FULL_HEADING.length
     intervalRef.current = setInterval(() => {
       index += 1
       setDisplayed(FULL_HEADING.slice(0, index))
@@ -44,96 +47,65 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
         clearInterval(intervalRef.current!)
         setTypingDone(true)
       }
-    }, charInterval)
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
+    }, delay)
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [])
 
   useEffect(() => {
     if (!typingDone) return
-    const t1 = setTimeout(() => setShowSubtitle(true), 400)
-    return () => {
-      clearTimeout(t1)
-    }
+    const t1 = setTimeout(() => setShowSub(true), 300)
+    const t2 = setTimeout(() => setShowCards(true), 700)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [typingDone])
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100%',
-        backgroundColor: '#121929',
-      }}
-    >
-      {/* Scrollable content */}
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', backgroundColor: '#0f1520' }}>
       <div style={{ flex: 1 }}>
         {/* Hero */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            paddingTop: '80px',
-            paddingBottom: '40px',
-            textAlign: 'center',
-            paddingLeft: '24px',
-            paddingRight: '24px',
-          }}
-        >
-          <h1
-            style={{
-              color: '#FFFFFF',
-              fontSize: '3rem',
-              fontWeight: 700,
-              fontFamily: 'Ubuntu, sans-serif',
-              lineHeight: 1.15,
-              minHeight: '1.2em',
-            }}
-          >
+        <div style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          paddingTop: '88px', paddingBottom: '48px', textAlign: 'center',
+          padding: '88px 32px 48px',
+        }}>
+          <h1 style={{
+            color: '#dce8f6',
+            fontSize: '2.75rem',
+            fontWeight: 700,
+            fontFamily: 'Ubuntu, sans-serif',
+            lineHeight: 1.15,
+            minHeight: '1.2em',
+            letterSpacing: '-0.02em',
+          }}>
             {displayed}
-            <span
-              style={{
-                display: 'inline-block',
-                width: '2px',
-                height: '0.9em',
-                backgroundColor: '#00D4FF',
-                marginLeft: '2px',
-                verticalAlign: 'middle',
-                animation: typingDone ? 'blink 1s step-end infinite' : 'none',
-                opacity: typingDone ? undefined : 1,
-              }}
-            />
+            <span style={{
+              display: 'inline-block', width: '2px', height: '0.85em',
+              backgroundColor: '#00D4FF', marginLeft: '3px', verticalAlign: 'middle',
+              animation: typingDone ? 'blink 1s step-end infinite' : 'none',
+              opacity: typingDone ? undefined : 1,
+            }} />
           </h1>
 
-          <p
-            style={{
-              color: '#8899AA',
-              fontSize: '1.25rem',
-              fontFamily: 'Ubuntu, sans-serif',
-              marginTop: '16px',
-              opacity: showSubtitle ? 1 : 0,
-              transform: showSubtitle ? 'translateY(0)' : 'translateY(6px)',
-              transition: 'opacity 0.35s ease, transform 0.35s ease',
-            }}
-          >
-            CS Student · Software Developer · Builder of things
+          <p style={{
+            color: '#7d95af',
+            fontSize: '1.1rem',
+            fontFamily: 'Ubuntu, sans-serif',
+            marginTop: '14px',
+            fontWeight: 400,
+            opacity: showSub ? 1 : 0,
+            transform: showSub ? 'translateY(0)' : 'translateY(8px)',
+            transition: 'opacity 0.4s ease, transform 0.4s ease',
+          }}>
+            CS Student&nbsp;&nbsp;·&nbsp;&nbsp;Software Developer&nbsp;&nbsp;·&nbsp;&nbsp;Builder of things
           </p>
 
           {/* CTA Cards */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '16px',
-              marginTop: '64px',
-              maxWidth: '672px',
-              width: '100%',
-              justifyContent: 'center',
-            }}
-          >
+          <div style={{
+            display: 'flex', flexDirection: 'row', gap: '14px',
+            marginTop: '56px', maxWidth: '660px', width: '100%', justifyContent: 'center',
+            opacity: showCards ? 1 : 0,
+            transform: showCards ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.45s ease, transform 0.45s ease',
+          }}>
             {cards.map((card) => (
               <CtaCard key={card.path} {...card} onNavigate={onNavigate} />
             ))}
@@ -142,35 +114,18 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
       </div>
 
       {/* Ticker */}
-      <div
-        style={{
-          position: 'sticky',
-          bottom: 0,
-          height: '32px',
-          backgroundColor: '#0A0F1E',
-          borderTop: '1px solid #2A3F5F',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            whiteSpace: 'nowrap',
-            animation: 'ticker 30s linear infinite',
-          }}
-        >
+      <div style={{
+        position: 'sticky', bottom: 0, height: '30px',
+        backgroundColor: '#0a0f1a',
+        borderTop: '1px solid #1e2d40',
+        overflow: 'hidden', display: 'flex', alignItems: 'center',
+      }}>
+        <div style={{ display: 'flex', whiteSpace: 'nowrap', animation: 'ticker 32s linear infinite' }}>
           {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              style={{
-                color: '#8899AA',
-                fontSize: '0.75rem',
-                fontFamily: '"JetBrains Mono", monospace',
-                paddingRight: '0',
-              }}
-            >
+            <span key={i} style={{
+              color: '#4d6580', fontSize: '0.72rem',
+              fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.04em',
+            }}>
               {TICKER_TEXT}
             </span>
           ))}
@@ -178,14 +133,8 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
       </div>
 
       <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        @keyframes ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
       `}</style>
     </div>
   )
@@ -195,61 +144,52 @@ interface CtaCardProps {
   title: string
   desc: string
   path: string
+  accent: string
   onNavigate: (path: string) => void
 }
 
-function CtaCard({ title, desc, path, onNavigate }: CtaCardProps) {
+function CtaCard({ title, desc, path, accent, onNavigate }: CtaCardProps) {
   const ref = useRef<HTMLDivElement>(null)
-
-  const handleMouseEnter = () => {
-    if (!ref.current) return
-    ref.current.style.transform = 'translateY(-4px)'
-    ref.current.style.borderColor = '#00D4FF'
-    ref.current.style.boxShadow = '0 8px 24px rgba(0,212,255,0.12)'
-  }
-  const handleMouseLeave = () => {
-    if (!ref.current) return
-    ref.current.style.transform = 'translateY(0)'
-    ref.current.style.borderColor = '#2A3F5F'
-    ref.current.style.boxShadow = 'none'
-  }
 
   return (
     <div
       ref={ref}
       onClick={() => onNavigate(path)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => {
+        if (!ref.current) return
+        ref.current.style.transform = 'translateY(-3px)'
+        ref.current.style.borderColor = accent
+        ref.current.style.boxShadow = `0 8px 28px rgba(0,0,0,0.3)`
+      }}
+      onMouseLeave={() => {
+        if (!ref.current) return
+        ref.current.style.transform = 'translateY(0)'
+        ref.current.style.borderColor = '#253a55'
+        ref.current.style.boxShadow = 'none'
+      }}
       style={{
-        flex: 1,
-        backgroundColor: '#1E2D45',
-        border: '1px solid #2A3F5F',
-        borderRadius: '12px',
-        padding: '24px',
+        flex: 1, backgroundColor: '#18243a',
+        border: '1px solid #253a55',
+        borderRadius: '10px', padding: '22px 20px',
         cursor: 'pointer',
         transition: 'transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
-        textAlign: 'center',
+        textAlign: 'left',
       }}
     >
-      <div
-        style={{
-          color: '#E0E8F0',
-          fontWeight: 600,
-          fontFamily: 'Ubuntu, sans-serif',
-          fontSize: '1rem',
-          marginBottom: '6px',
-        }}
-      >
+      <div style={{
+        width: 28, height: 3, borderRadius: '2px',
+        backgroundColor: accent, marginBottom: '14px', opacity: 0.85,
+      }} />
+      <div style={{
+        color: '#d8e8f5', fontWeight: 600,
+        fontFamily: 'Ubuntu, sans-serif', fontSize: '0.95rem', marginBottom: '6px',
+      }}>
         {title}
       </div>
-      <div
-        style={{
-          color: '#8899AA',
-          fontFamily: 'Ubuntu, sans-serif',
-          fontSize: '0.8rem',
-          lineHeight: 1.4,
-        }}
-      >
+      <div style={{
+        color: '#7d95af', fontFamily: 'Ubuntu, sans-serif',
+        fontSize: '0.78rem', lineHeight: 1.5,
+      }}>
         {desc}
       </div>
     </div>

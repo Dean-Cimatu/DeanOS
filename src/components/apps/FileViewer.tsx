@@ -75,7 +75,7 @@ export default function FileViewer({ filename }: FileViewerProps) {
   )
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#0D1828', fontFamily: 'Ubuntu, sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', backgroundColor: '#0D1828', fontFamily: 'Ubuntu, sans-serif' }}>
       {/* Toolbar */}
       <div style={{
         height: 40, flexShrink: 0,

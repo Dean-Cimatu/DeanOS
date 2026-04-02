@@ -18,9 +18,18 @@ import { ContextMenu } from './os/ContextMenu'
 import Screensaver from './os/Screensaver'
 
 const WALLPAPERS: Record<string, string> = {
-  aurora: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
-  grid: 'repeating-linear-gradient(0deg, transparent, transparent 39px, #1a1a2e 39px, #1a1a2e 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #1a1a2e 39px, #1a1a2e 40px), #0a0a14',
-  minimal: '#0A0F1E',
+  aurora: [
+    'radial-gradient(ellipse 80% 50% at 16% 24%, rgba(58,80,185,0.22) 0%, transparent 55%)',
+    'radial-gradient(ellipse 60% 44% at 83% 72%, rgba(105,42,175,0.18) 0%, transparent 50%)',
+    'radial-gradient(ellipse 50% 35% at 50% 105%, rgba(18,38,115,0.25) 0%, transparent 40%)',
+    'linear-gradient(165deg, #07090e 0%, #0b1120 48%, #08091a 100%)',
+  ].join(', '),
+  grid: [
+    'repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(38,58,100,0.22) 39px, rgba(38,58,100,0.22) 40px)',
+    'repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(38,58,100,0.22) 39px, rgba(38,58,100,0.22) 40px)',
+    'linear-gradient(155deg, #06080e 0%, #09101c 100%)',
+  ].join(', '),
+  minimal: 'linear-gradient(160deg, #0a0c14 0%, #0d1320 55%, #0a0e18 100%)',
 }
 
 export default function Desktop() {

@@ -171,12 +171,12 @@ export default function Login() {
       style={{
         position: 'fixed', inset: 0,
         // Mint-like wallpaper: deep, atmospheric, slightly colourful
-        background: `
-          radial-gradient(ellipse 140% 90% at 50% 110%, rgba(0,40,70,0.9) 0%, transparent 55%),
-          radial-gradient(ellipse 80% 60% at 15% 40%, rgba(0,80,60,0.35) 0%, transparent 50%),
-          radial-gradient(ellipse 60% 70% at 85% 25%, rgba(30,0,80,0.4) 0%, transparent 55%),
-          linear-gradient(170deg, #050D1A 0%, #081420 40%, #0A1628 100%)
-        `,
+        background: [
+          'radial-gradient(ellipse 130% 70% at 50% 110%, rgba(12,50,105,0.55) 0%, transparent 55%)',
+          'radial-gradient(ellipse 90% 60% at 8% 30%, rgba(50,15,110,0.2) 0%, transparent 50%)',
+          'radial-gradient(ellipse 70% 60% at 92% 18%, rgba(60,12,120,0.15) 0%, transparent 55%)',
+          'linear-gradient(170deg, #06080e 0%, #080e1a 42%, #07091a 100%)',
+        ].join(', '),
         display: 'flex', flexDirection: 'column',
         alignItems: 'center',
         fontFamily: 'Ubuntu, sans-serif',
@@ -226,7 +226,7 @@ export default function Login() {
         {/* Avatar */}
         <div style={{
           width: 96, height: 96, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #0EA5E9 0%, #7C3AED 100%)',
+          background: 'linear-gradient(145deg, #1b5c9e 0%, #2d1878 100%)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '30px', fontWeight: 700, color: 'white',
           fontFamily: '"JetBrains Mono", monospace',

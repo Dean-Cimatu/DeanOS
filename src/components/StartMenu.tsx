@@ -98,8 +98,8 @@ export default function StartMenu() {
       style={{
         position: 'absolute', bottom: '0', left: 0,
         width: 540, height: menuH,
-        backgroundColor: '#111C2E',
-        border: '1px solid #1E3050',
+        backgroundColor: '#0e1828',
+        border: '1px solid #1a2d44',
         borderRadius: '12px 12px 0 0',
         boxShadow: '0 -12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)',
         display: 'flex', flexDirection: 'column',
@@ -111,8 +111,8 @@ export default function StartMenu() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: '14px',
         padding: '16px 18px 12px',
-        background: 'linear-gradient(180deg, #152035 0%, #111C2E 100%)',
-        borderBottom: '1px solid #1A2D45',
+        background: 'linear-gradient(180deg, #121f33 0%, #0e1828 100%)',
+        borderBottom: '1px solid #182840',
         flexShrink: 0,
       }}>
         <div style={{
@@ -313,8 +313,8 @@ function BottomBar({ onLaunch, openWindow, windows, focusWindow }: {
 
   return (
     <div style={{
-      borderTop: '1px solid #1A2D45', padding: '6px 12px',
-      backgroundColor: '#0C1625',
+      borderTop: '1px solid #182840', padding: '6px 12px',
+      backgroundColor: '#0b1420',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       flexShrink: 0,
     }}>
