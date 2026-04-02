@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useWindowStore } from '../store/windowStore'
 import Window from './Window'
@@ -37,7 +37,7 @@ export default function Desktop() {
   const wallpaper = useSettingsStore(s => s.wallpaper)
   const loggedIn = useSystemStore(s => s.loggedIn)
   const screensaver = useSystemStore(s => s.screensaver)
-  const { addNotification, lock, logout, shutdown, restart, activateScreensaver } = useSystemStore()
+  const { addNotification, lock, logout, shutdown, restart } = useSystemStore()
 
   type TrayPanel = 'notif' | 'wifi' | 'volume' | 'battery' | 'clock' | null
   const [menuOpen, setMenuOpen] = useState(false)
@@ -46,6 +46,22 @@ export default function Desktop() {
     setActiveTray(a => a === key ? null : key)
 
   const [desktopCtx, setDesktopCtx] = useState<{ x: number; y: number } | null>(null)
+
+  const menuRef = useRef<HTMLDivElement>(null)
+  const startBtnRef = useRef<HTMLButtonElement>(null)
+
+  // Close start menu on any mousedown outside it (capture phase so stopPropagation
+  // in child components doesn't interfere)
+  useEffect(() => {
+    if (!menuOpen) return
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current?.contains(e.target as Node)) return
+      if (startBtnRef.current?.contains(e.target as Node)) return
+      setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', handler, true)
+    return () => document.removeEventListener('mousedown', handler, true)
+  }, [menuOpen])
 
   useEffect(() => {
     if (!loggedIn) return
@@ -58,7 +74,7 @@ export default function Desktop() {
   return (
     <div
       style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}
-      onMouseDown={() => { setMenuOpen(false); setActiveTray(null) }}
+      onMouseDown={() => setActiveTray(null)}
     >
       {/* Desktop area */}
       <div
@@ -98,7 +114,7 @@ export default function Desktop() {
 
         {/* Start Menu */}
         {menuOpen && (
-          <div onClick={e => e.stopPropagation()}>
+          <div ref={menuRef} onClick={e => e.stopPropagation()}>
             <StartMenu />
           </div>
         )}
@@ -149,36 +165,19 @@ export default function Desktop() {
           padding: '0 8px', backdropFilter: 'blur(8px)', zIndex: 1000, flexShrink: 0,
         }}
       >
-        {/* Left: Start button + lock */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <button
-            onMouseDown={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
-            style={{
-              backgroundColor: menuOpen ? '#00D4FF' : '#1E2D45', color: menuOpen ? '#0A0F1E' : '#E8F4F8',
-              border: '1px solid #2A3F5F', borderRadius: '6px', padding: '4px 14px',
-              fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', fontWeight: 600,
-              cursor: 'pointer', transition: 'background-color 0.15s, color 0.15s',
-            }}
-          >
-            DeanOS
-          </button>
-          <button
-            title="Screensaver"
-            onClick={e => { e.stopPropagation(); activateScreensaver() }}
-            style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px',
-              background: 'none', border: 'none', color: '#8899AA',
-              cursor: 'pointer', padding: '4px 8px', borderRadius: '6px',
-              fontSize: '10px', fontFamily: '"JetBrains Mono", monospace',
-              transition: 'background 0.1s, color 0.1s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#1E2D45'; e.currentTarget.style.color = '#E8F4F8' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#8899AA' }}
-          >
-            <span style={{ fontSize: '14px', lineHeight: 1 }}>🔒</span>
-            Lock
-          </button>
-        </div>
+        {/* Left: Start button */}
+        <button
+          ref={startBtnRef}
+          onMouseDown={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
+          style={{
+            backgroundColor: menuOpen ? '#00D4FF' : '#1E2D45', color: menuOpen ? '#0A0F1E' : '#E8F4F8',
+            border: '1px solid #2A3F5F', borderRadius: '6px', padding: '4px 14px',
+            fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', fontWeight: 600,
+            cursor: 'pointer', transition: 'background-color 0.15s, color 0.15s',
+          }}
+        >
+          DeanOS
+        </button>
 
         {/* Right: System Tray */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
