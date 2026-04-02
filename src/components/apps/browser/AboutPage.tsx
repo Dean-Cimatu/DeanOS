@@ -104,7 +104,7 @@ export const AboutPage = () => (
           BSc Computer Science
         </p>
         <p style={{ fontSize: '0.78rem', color: '#c8894a', marginTop: '4px' }}>
-          Jan 2025 – Jul 2027 · Expected 2:1
+          Jan 2025 – Jul 2027 · Expected 1
         </p>
       </div>
     </div>
