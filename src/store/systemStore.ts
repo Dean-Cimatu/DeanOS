@@ -16,6 +16,8 @@ interface SystemState {
   bootProgress: number
   // Auth
   loggedIn: boolean
+  locked: boolean
+  systemAction: null | 'shutdown' | 'restart'
   // System tray
   batteryLevel: number
   batteryLastTick: number
@@ -32,6 +34,11 @@ interface SystemState {
   setBootComplete: (complete: boolean) => void
   setBootProgress: (progress: number) => void
   setLoggedIn: (loggedIn: boolean) => void
+  lock: () => void
+  unlock: () => void
+  logout: () => void
+  shutdown: () => void
+  restart: () => void
   setBattery: (level: number) => void
   setWifi: (connected: boolean) => void
   setVolume: (volume: number) => void
@@ -50,6 +57,8 @@ export const useSystemStore = create<SystemState>((set) => ({
   bootComplete: false,
   bootProgress: 0,
   loggedIn: false,
+  locked: false,
+  systemAction: null,
   batteryLevel: (() => { const s = localStorage.getItem('deans_battery_level'); return s !== null ? Math.max(0, Math.min(100, parseInt(s, 10))) : 87 })(),
   batteryLastTick: (() => { const s = localStorage.getItem('deans_battery_last_tick'); return s !== null ? parseInt(s, 10) : Date.now() })(),
   wifiConnected: true,
@@ -64,6 +73,11 @@ export const useSystemStore = create<SystemState>((set) => ({
   setBootComplete: (complete) => set({ bootComplete: complete }),
   setBootProgress: (progress) => set({ bootProgress: progress }),
   setLoggedIn: (loggedIn) => set({ loggedIn }),
+  lock: () => set({ locked: true }),
+  unlock: () => set({ locked: false }),
+  logout: () => set({ loggedIn: false, locked: false, notifications: [], unreadCount: 0 }),
+  shutdown: () => set({ systemAction: 'shutdown' }),
+  restart: () => set({ systemAction: 'restart' }),
   setBattery: (level) => set({ batteryLevel: level, batteryLastTick: Date.now() }),
   setWifi: (connected) => set({ wifiConnected: connected }),
   setVolume: (volume) => set({ volume }),

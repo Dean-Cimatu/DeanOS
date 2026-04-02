@@ -12,7 +12,7 @@ export const NotFoundPage = ({ path, onNavigate }: NotFoundPageProps) => (
       justifyContent: 'center',
       padding: '96px 32px',
       textAlign: 'center',
-      fontFamily: 'Inter, sans-serif',
+      fontFamily: 'Ubuntu, sans-serif',
     }}
   >
     <div
@@ -52,7 +52,7 @@ export const NotFoundPage = ({ path, onNavigate }: NotFoundPageProps) => (
         fontSize: '0.9rem',
         border: 'none',
         cursor: 'pointer',
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: 'Ubuntu, sans-serif',
       }}
       onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
       onMouseLeave={e => (e.currentTarget.style.opacity = '1')}

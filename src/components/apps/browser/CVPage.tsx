@@ -3,7 +3,7 @@ const s = {
     maxWidth: '672px',
     margin: '0 auto',
     padding: '48px 32px',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'Ubuntu, sans-serif',
     color: '#E8F4F8',
   } as React.CSSProperties,
   header: {
@@ -141,7 +141,7 @@ export const CVPage = () => {
           <div style={s.contactRow}>
             <a href="mailto:deancimatu@example.com" style={s.contactLink}>deancimatu@example.com</a>
             <span style={s.divider}>·</span>
-            <a href="https://github.com/deancimatu" target="_blank" rel="noopener noreferrer" style={s.contactLink}>github.com/deancimatu</a>
+            <a href="https://github.com/Dean-Cimatu" target="_blank" rel="noopener noreferrer" style={s.contactLink}>github.com/deancimatu</a>
             <span style={s.divider}>·</span>
             <a href="https://linkedin.com/in/deancimatu" target="_blank" rel="noopener noreferrer" style={s.contactLink}>linkedin.com/in/deancimatu</a>
             <span style={s.divider}>·</span>
@@ -214,7 +214,7 @@ export const CVPage = () => {
       <div style={s.entryBlock}>
         <div style={s.entryRow}>
           <span style={s.entryTitle}>DeanOS</span>
-          <a href="https://github.com/deancimatu/deanos" target="_blank" rel="noopener noreferrer" style={{ ...s.entryDate, color: '#00D4FF', textDecoration: 'none' }}>github ↗</a>
+          <a href="https://github.com/Dean-Cimatu/deanos" target="_blank" rel="noopener noreferrer" style={{ ...s.entryDate, color: '#00D4FF', textDecoration: 'none' }}>github ↗</a>
         </div>
         <ul style={s.bullets}>
           <li>Browser-based OS simulation built as a portfolio piece with a full desktop experience</li>
@@ -226,7 +226,7 @@ export const CVPage = () => {
       <div style={s.entryBlock}>
         <div style={s.entryRow}>
           <span style={s.entryTitle}>Car Hire System</span>
-          <a href="https://github.com/deancimatu/carhire" target="_blank" rel="noopener noreferrer" style={{ ...s.entryDate, color: '#00D4FF', textDecoration: 'none' }}>github ↗</a>
+          <a href="https://github.com/Dean-Cimatu/carhire" target="_blank" rel="noopener noreferrer" style={{ ...s.entryDate, color: '#00D4FF', textDecoration: 'none' }}>github ↗</a>
         </div>
         <ul style={s.bullets}>
           <li>Full-stack car hire platform with custom BST &amp; HashTable data structures</li>
@@ -238,7 +238,7 @@ export const CVPage = () => {
       <div style={s.entryBlock}>
         <div style={s.entryRow}>
           <span style={s.entryTitle}>StudyBuddy</span>
-          <a href="https://github.com/deancimatu/studybuddy" target="_blank" rel="noopener noreferrer" style={{ ...s.entryDate, color: '#00D4FF', textDecoration: 'none' }}>github ↗</a>
+          <a href="https://github.com/Dean-Cimatu/studybuddy" target="_blank" rel="noopener noreferrer" style={{ ...s.entryDate, color: '#00D4FF', textDecoration: 'none' }}>github ↗</a>
         </div>
         <ul style={s.bullets}>
           <li>AI-powered study assistant built in 5 hours at a hackathon</li>

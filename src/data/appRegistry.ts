@@ -47,4 +47,13 @@ export const APP_REGISTRY: AppDefinition[] = [
     category: 'system',
     description: 'Customise your desktop',
   },
+  {
+    id: 'fileviewer',
+    name: 'File Viewer',
+    iconId: 'document',
+    defaultSize: { width: 600, height: 500 },
+    minSize: { width: 400, height: 320 },
+    category: 'accessories',
+    description: 'View text and markdown files',
+  },
 ]

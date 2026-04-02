@@ -88,7 +88,7 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
               color: '#FFFFFF',
               fontSize: '3rem',
               fontWeight: 700,
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'Ubuntu, sans-serif',
               lineHeight: 1.15,
               minHeight: '1.2em',
             }}
@@ -112,7 +112,7 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
             style={{
               color: '#8899AA',
               fontSize: '1.25rem',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'Ubuntu, sans-serif',
               marginTop: '16px',
               opacity: showSubtitle ? 1 : 0,
               transform: showSubtitle ? 'translateY(0)' : 'translateY(6px)',
@@ -235,7 +235,7 @@ function CtaCard({ title, desc, path, onNavigate }: CtaCardProps) {
         style={{
           color: '#E0E8F0',
           fontWeight: 600,
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'Ubuntu, sans-serif',
           fontSize: '1rem',
           marginBottom: '6px',
         }}
@@ -245,7 +245,7 @@ function CtaCard({ title, desc, path, onNavigate }: CtaCardProps) {
       <div
         style={{
           color: '#8899AA',
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'Ubuntu, sans-serif',
           fontSize: '0.8rem',
           lineHeight: 1.4,
         }}

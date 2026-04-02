@@ -2,23 +2,115 @@ import { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useSystemStore } from '../store/systemStore'
 import { unlockAudio, playErrorPing, playStartupChime } from '../lib/sounds'
+import React from 'react'
 
 const PASSWORD = 'password'
 
+function useClock() {
+  const [now, setNow] = useState(new Date())
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  return now
+}
+
+// ── Icons ──────────────────────────────────────────────────────────────────────
+
+function LockIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+  )
+}
+
+function ArrowIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"/>
+      <polyline points="12 5 19 12 12 19"/>
+    </svg>
+  )
+}
+
+function PowerIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
+      <line x1="12" y1="2" x2="12" y2="12"/>
+    </svg>
+  )
+}
+
+function KeyboardIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="6" width="20" height="12" rx="2"/>
+      <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h12"/>
+    </svg>
+  )
+}
+
+function A11yIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="7" r="2"/>
+      <path d="M12 22V13M8 13l-2 4M16 13l2 4M8 10l4 3 4-3"/>
+    </svg>
+  )
+}
+
+// ── Bottom bar button ──────────────────────────────────────────────────────────
+
+function BarBtn({ children, title, danger = false, onClick }: {
+  children: React.ReactNode
+  title: string
+  danger?: boolean
+  onClick?: () => void
+}) {
+  const [hov, setHov] = useState(false)
+  return (
+    <button
+      title={title}
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: '6px',
+        padding: '6px 12px', borderRadius: '6px', border: 'none',
+        background: hov ? 'rgba(255,255,255,0.12)' : 'transparent',
+        color: hov && danger ? '#FF6B6B' : hov ? '#E8F4F8' : 'rgba(255,255,255,0.5)',
+        fontSize: '12px', cursor: 'pointer', fontFamily: 'Ubuntu, sans-serif',
+        transition: 'background 0.12s, color 0.12s',
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+// ── Component ──────────────────────────────────────────────────────────────────
+
 export default function Login() {
-  const setLoggedIn = useSystemStore(s => s.setLoggedIn)
+  const { setLoggedIn, shutdown, restart } = useSystemStore()
 
   const [password, setPassword] = useState('')
   const [capsLock, setCapsLock] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const [error, setError] = useState(false)
   const [loggingIn, setLoggingIn] = useState(false)
+  const [focused, setFocused] = useState(false)
 
-  const cardControls = useAnimation()
+  const now = useClock()
+  const formControls = useAnimation()
 
-  // Entry animation
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+  const dateStr = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
+
   useEffect(() => {
-    cardControls.start({ y: 0, opacity: 1, transition: { type: 'spring', stiffness: 280, damping: 24, delay: 0.2 } })
+    formControls.start({ opacity: 1, y: 0, transition: { type: 'spring', stiffness: 240, damping: 22, delay: 0.2 } })
   }, [])
 
   const handleLogin = async () => {
@@ -26,18 +118,15 @@ export default function Login() {
     if (password === PASSWORD) {
       setLoggingIn(true)
       playStartupChime()
-      await cardControls.start({ opacity: 0, scale: 1.05, transition: { duration: 0.3 } })
+      await formControls.start({ opacity: 0, scale: 1.03, transition: { duration: 0.3 } })
       setLoggedIn(true)
     } else {
       playErrorPing()
       setAttempts(a => a + 1)
       setError(true)
-      await cardControls.start({
-        x: [-8, 8, -4, 4, 0],
-        transition: { duration: 0.4 },
-      })
-      cardControls.set({ x: 0 })
-      setTimeout(() => setError(false), 3000)
+      await formControls.start({ x: [-10, 10, -6, 6, -2, 2, 0], transition: { duration: 0.4 } })
+      formControls.set({ x: 0 })
+      setTimeout(() => setError(false), 3500)
     }
   }
 
@@ -47,147 +136,224 @@ export default function Login() {
       onKeyDown={unlockAudio}
       style={{
         position: 'fixed', inset: 0,
-        // Static deep-space background — layered radial gradients
+        // Mint-like wallpaper: deep, atmospheric, slightly colourful
         background: `
-          radial-gradient(ellipse 80% 60% at 15% 50%, rgba(0,50,80,0.55) 0%, transparent 70%),
-          radial-gradient(ellipse 60% 80% at 85% 30%, rgba(10,30,70,0.5) 0%, transparent 65%),
-          radial-gradient(ellipse 50% 50% at 50% 90%, rgba(0,20,50,0.4) 0%, transparent 60%),
-          #040D1A
+          radial-gradient(ellipse 140% 90% at 50% 110%, rgba(0,40,70,0.9) 0%, transparent 55%),
+          radial-gradient(ellipse 80% 60% at 15% 40%, rgba(0,80,60,0.35) 0%, transparent 50%),
+          radial-gradient(ellipse 60% 70% at 85% 25%, rgba(30,0,80,0.4) 0%, transparent 55%),
+          linear-gradient(170deg, #050D1A 0%, #081420 40%, #0A1628 100%)
         `,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center',
+        fontFamily: 'Ubuntu, sans-serif',
+        overflow: 'hidden',
+        userSelect: 'none',
       }}
     >
-      {/* Login card */}
+      {/* ── Faint vignette ── */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%)',
+      }} />
+
+      {/* ── Top bar: clock (left) ── */}
       <motion.div
-        animate={cardControls}
-        initial={{ y: 24, opacity: 0 }}
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
         style={{
-          position: 'relative', zIndex: 10,
-          width: '380px',
-          background: 'rgba(30, 45, 69, 0.85)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid #2A3F5F',
-          borderRadius: '16px',
-          padding: '48px',
+          position: 'absolute', top: 0, left: 0, right: 0,
+          height: '52px', zIndex: 10,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '0 24px',
+        }}
+      >
+        {/* Clock centred in bar */}
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.75)',
+            fontFamily: 'Ubuntu, sans-serif', letterSpacing: '0.04em',
+          }}>
+            {timeStr} &nbsp;·&nbsp; {dateStr}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── Centre: floating login (no card border) ── */}
+      <motion.div
+        animate={formControls}
+        initial={{ opacity: 0, y: 24 }}
+        style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          flex: 1, justifyContent: 'center',
+          zIndex: 1, width: '320px',
         }}
       >
         {/* Avatar */}
         <div style={{
-          width: 80, height: 80, borderRadius: '50%',
-          backgroundColor: '#1E2D45',
-          border: '2px solid #00D4FF',
+          width: 96, height: 96, borderRadius: '50%',
+          background: 'linear-gradient(135deg, #0EA5E9 0%, #7C3AED 100%)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto',
-          color: '#00D4FF', fontSize: '24px', fontWeight: 'bold',
+          fontSize: '30px', fontWeight: 700, color: 'white',
           fontFamily: '"JetBrains Mono", monospace',
+          boxShadow: '0 4px 32px rgba(0,0,0,0.5), 0 0 0 3px rgba(255,255,255,0.1)',
+          marginBottom: '18px',
         }}>
           DC
         </div>
 
-        {/* Username */}
-        <p style={{
-          color: '#8899AA', fontSize: '13px',
-          fontFamily: '"JetBrains Mono", monospace',
-          textAlign: 'center', marginTop: '12px',
+        {/* Name */}
+        <div style={{
+          fontSize: '20px', fontWeight: 400, color: 'rgba(255,255,255,0.92)',
+          letterSpacing: '0.01em', marginBottom: '4px',
+        }}>
+          Dean Cimatu
+        </div>
+        <div style={{
+          fontSize: '13px', color: 'rgba(255,255,255,0.35)',
+          fontFamily: '"JetBrains Mono", monospace', marginBottom: '28px',
         }}>
           dean
-        </p>
+        </div>
 
-        {/* Password input */}
-        <input
-          type="password"
-          placeholder="Password"
-          autoFocus
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          onKeyDown={e => {
-            setCapsLock(e.getModifierState('CapsLock'))
-            if (e.key === 'Enter') handleLogin()
-          }}
-          style={{
-            marginTop: '24px',
-            width: '100%',
-            backgroundColor: '#0A0F1E',
-            border: `1px solid ${error ? '#FF4444' : '#2A3F5F'}`,
-            borderRadius: '8px',
-            padding: '12px 16px',
-            color: '#E8F4F8',
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: '14px',
-            outline: 'none',
-            boxSizing: 'border-box',
-            transition: 'border-color 0.15s',
-          }}
-          onFocus={e => { if (!error) e.target.style.borderColor = '#00D4FF' }}
-          onBlur={e => { if (!error) e.target.style.borderColor = '#2A3F5F' }}
-        />
-
-        {/* Caps Lock warning */}
-        {capsLock && (
-          <p style={{
-            color: '#FFD700', fontSize: '11px', marginTop: '6px',
-            fontFamily: '"JetBrains Mono", monospace',
-          }}>
-            ⚠ Caps Lock is on
-          </p>
-        )}
-
-        {/* Error message + hint */}
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ marginTop: '8px' }}
-          >
-            <p style={{
-              color: '#FF4444', fontSize: '11px', textAlign: 'center',
-              fontFamily: '"JetBrains Mono", monospace',
-            }}>
-              Incorrect password
-            </p>
-            {attempts >= 1 && (
-              <p style={{
-                color: '#8899AA', fontSize: '11px', textAlign: 'center',
-                fontFamily: '"JetBrains Mono", monospace',
-                marginTop: '4px',
-              }}>
-                Hint: <span style={{ color: '#00D4FF' }}>password</span>
-              </p>
-            )}
-          </motion.div>
-        )}
-
-        {/* Login button */}
-        <motion.button
-          onClick={handleLogin}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          style={{
-            marginTop: '16px',
-            width: '100%',
-            backgroundColor: '#00D4FF',
-            color: '#000',
-            fontWeight: 600,
-            padding: '12px',
-            borderRadius: '8px',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontFamily: '"JetBrains Mono", monospace',
-          }}
-        >
-          Login
-        </motion.button>
-
-        {/* Footer */}
-        <p style={{
-          color: '#556677', fontSize: '10px',
-          fontFamily: '"JetBrains Mono", monospace',
-          textAlign: 'center', marginTop: '24px',
+        {/* Password row — lock icon | input | arrow button */}
+        <div style={{
+          width: '100%', position: 'relative',
+          display: 'flex', alignItems: 'center',
+          backgroundColor: 'rgba(255,255,255,0.1)',
+          border: `1px solid ${error ? 'rgba(255,80,80,0.7)' : focused ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.18)'}`,
+          borderRadius: '8px',
+          backdropFilter: 'blur(12px)',
+          transition: 'border-color 0.15s',
+          marginBottom: '10px',
         }}>
-          DeanOS v2.1.0 — © 2026 Dean Cimatu
-        </p>
+          {/* Lock icon */}
+          <span style={{
+            padding: '0 12px', color: 'rgba(255,255,255,0.35)',
+            display: 'flex', alignItems: 'center', flexShrink: 0,
+          }}>
+            <LockIcon />
+          </span>
+
+          <input
+            type="password"
+            placeholder="Password"
+            autoFocus
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            onKeyDown={e => {
+              setCapsLock(e.getModifierState('CapsLock'))
+              if (e.key === 'Enter') handleLogin()
+            }}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            style={{
+              flex: 1,
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              padding: '13px 0',
+              color: 'rgba(255,255,255,0.92)',
+              fontSize: '15px',
+              fontFamily: 'Ubuntu, sans-serif',
+              caretColor: '#00D4FF',
+            }}
+          />
+
+          {/* Submit arrow */}
+          <button
+            onClick={handleLogin}
+            style={{
+              padding: '0 14px', background: 'none', border: 'none', cursor: 'pointer',
+              color: password.length > 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.2)',
+              display: 'flex', alignItems: 'center', flexShrink: 0,
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={e => { if (password.length > 0) e.currentTarget.style.color = '#00D4FF' }}
+            onMouseLeave={e => { e.currentTarget.style.color = password.length > 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.2)' }}
+          >
+            <ArrowIcon />
+          </button>
+        </div>
+
+        {/* Caps lock + error */}
+        <div style={{ width: '100%', minHeight: '20px', textAlign: 'center' }}>
+          {capsLock && (
+            <div style={{ color: '#FFD700', fontSize: '12px' }}>
+              Caps Lock is on
+            </div>
+          )}
+          {error && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div style={{ color: 'rgba(255,100,100,0.9)', fontSize: '12px' }}>
+                Incorrect password
+                {attempts >= 1 && (
+                  <span style={{ color: 'rgba(255,255,255,0.3)' }}>
+                    {' — '}hint: <span style={{ color: '#00D4FF', fontFamily: '"JetBrains Mono", monospace' }}>password</span>
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
+
+      {/* ── Bottom action bar (Mint Slick Greeter style) ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.3 }}
+        style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          height: '48px', zIndex: 10,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 12px',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          backgroundColor: 'rgba(0,0,0,0.35)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        {/* Left: session / keyboard / accessibility */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+          <BarBtn title="Session">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            DeanOS
+          </BarBtn>
+          <BarBtn title="Keyboard layout">
+            <KeyboardIcon />
+            EN
+          </BarBtn>
+          <BarBtn title="Accessibility">
+            <A11yIcon />
+          </BarBtn>
+        </div>
+
+        {/* Centre: hostname */}
+        <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '11px', fontFamily: '"JetBrains Mono", monospace' }}>
+          deanos-pc
+        </span>
+
+        {/* Right: power buttons */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+          <BarBtn title="Suspend" onClick={() => {}}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            Suspend
+          </BarBtn>
+          <BarBtn title="Restart" onClick={restart}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+            </svg>
+            Restart
+          </BarBtn>
+          <BarBtn title="Shut Down" danger onClick={shutdown}>
+            <PowerIcon />
+            Shut Down
+          </BarBtn>
+        </div>
       </motion.div>
     </div>
   )

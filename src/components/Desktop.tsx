@@ -26,7 +26,7 @@ export default function Desktop() {
   const windows = useWindowStore(s => s.windows)
   const wallpaper = useSettingsStore(s => s.wallpaper)
   const loggedIn = useSystemStore(s => s.loggedIn)
-  const addNotification = useSystemStore(s => s.addNotification)
+  const { addNotification, lock, logout, shutdown, restart } = useSystemStore()
 
   type TrayPanel = 'notif' | 'wifi' | 'volume' | 'battery' | 'clock' | null
   const [menuOpen, setMenuOpen] = useState(false)
@@ -45,14 +45,17 @@ export default function Desktop() {
   }, [loggedIn])
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div
+      style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}
+      onMouseDown={() => { setMenuOpen(false); setActiveTray(null) }}
+    >
       {/* Desktop area */}
       <div
         style={{
           flex: 1, background: WALLPAPERS[wallpaper] ?? WALLPAPERS.aurora,
           position: 'relative', overflow: 'hidden',
         }}
-        onClick={() => { setMenuOpen(false); setActiveTray(null) }}
+        onMouseDown={e => { if (e.target === e.currentTarget) setDesktopCtx(null) }}
         onContextMenu={e => {
           if (e.target !== e.currentTarget) return
           e.preventDefault()
@@ -102,25 +105,18 @@ export default function Desktop() {
             items={[
               {
                 label: 'Change Wallpaper', icon: '🖼️',
-                onClick: () => addNotification({
-                  type: 'info', title: 'Wallpaper',
-                  message: 'Open Settings to change the wallpaper.',
-                }),
+                onClick: () => addNotification({ type: 'info', title: 'Wallpaper', message: 'Open Settings to change the wallpaper.' }),
               },
               {
                 label: 'Refresh Desktop', icon: '↺',
-                onClick: () => addNotification({
-                  type: 'success', title: 'Desktop refreshed', message: '',
-                }),
+                onClick: () => addNotification({ type: 'success', title: 'Desktop refreshed', message: '' }),
               },
               { label: '', divider: true },
-              {
-                label: 'About DeanOS', icon: 'ℹ️',
-                onClick: () => addNotification({
-                  type: 'info', title: 'DeanOS v2.1.0',
-                  message: 'Built with React + TypeScript.',
-                }),
-              },
+              { label: 'Lock Screen', icon: '🔒', onClick: lock },
+              { label: '', divider: true },
+              { label: 'Log Out',      icon: '↩',  onClick: logout,   danger: true },
+              { label: 'Restart',      icon: '↺',  onClick: restart,  danger: false },
+              { label: 'Shut Down',    icon: '⏻',  onClick: shutdown, danger: true },
             ]}
           />
         )}
@@ -139,7 +135,7 @@ export default function Desktop() {
       >
         {/* Left: Start button */}
         <button
-          onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
+          onMouseDown={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
           style={{
             backgroundColor: menuOpen ? '#00D4FF' : '#1E2D45', color: menuOpen ? '#0A0F1E' : '#E8F4F8',
             border: '1px solid #2A3F5F', borderRadius: '6px', padding: '4px 14px',

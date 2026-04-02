@@ -1,7 +1,7 @@
 export const FILE_CONTENTS: Record<string, string> = {
   'resume.txt': `Dean Cimatu
 Software Engineer
-dean@deancimatu.com  |  github.com/Dean-Cimatu  |  deancimatu.com
+deancimatu@gmail.com  |  github.com/Dean-Cimatu  |  deancimatu.com
 ────────────────────────────────────────────────────────────────
 
 ABOUT
@@ -74,75 +74,81 @@ State is split across dedicated Zustand stores: \`systemStore\`,
 
   'StudyBuddy.md': `# StudyBuddy
 
-An AI-powered study assistant that helps students organise their notes,
-generate flashcards, and quiz themselves on any subject.
+An AI-powered study companion web app that helps you plan, track,
+and stay motivated through any subject — from revision to deadlines.
 
 ## Overview
 
-StudyBuddy takes uploaded notes or pasted text and uses AI to extract
-key concepts, generate Q&A pairs, and produce spaced-repetition
-flashcard decks ready for review.
+Tell StudyBuddy what you need to prepare for and it builds a
+personalised task list for you. Say something like:
+
+> "I have a test on data structures next week"
+
+…and it generates 10–15 focused study tasks, each tagged with
+a perceived difficulty and an XP reward. Complete tasks, earn XP,
+and compete with others on the leaderboard.
 
 ## Tech Stack
 
 - **Frontend**: React + TypeScript + Tailwind CSS
-- **Backend**: Node.js + Express
-- **AI**: OpenAI GPT-4 API for concept extraction and Q&A generation
-- **Database**: PostgreSQL (notes, decks, progress)
+- **Backend**: Node.js + Express + MongoDB
+- **AI**: Claude API (Anthropic) + OpenAI GPT API
 - **Auth**: JWT + bcrypt
 
 ## Features
 
-- Upload PDFs, images (OCR), or paste plain text
-- Auto-generate flashcard decks from any content
-- Spaced repetition review algorithm (SM-2)
-- Progress tracking with streaks and statistics
-- Shareable deck links for study groups
-- Dark/light mode, mobile-friendly
+- **AI task generation** — describe a topic or deadline, get a
+  structured study plan with 10–15 scoped tasks
+- **Gamification** — each task has a perceived difficulty score;
+  complete it to earn XP. Track your level and rank
+- **Leaderboard** — global board showing top users by XP
+- **Video digest** — upload a lecture or tutorial video; AI
+  generates structured notes from the content
+- **Calendar view** — tasks laid out across days and times,
+  giving a full schedule overview
+- **Completed tasks** — full history with XP earned per task
+- **Wellbeing hub** — curated links for mental health, focus
+  techniques, and study resources
 
 ## Status
 
-In active development. Core flashcard engine complete.
-AI summarisation and quiz modes in progress.`,
+In active development. Not yet deployed.`,
 
   'DesignPatternCLI.md': `# DesignPatternCLI
 
-A command-line tool that generates boilerplate code for common
-software design patterns in multiple programming languages.
+A Java CLI application demonstrating 6 Gang of Four design patterns
+with interactive, runnable examples straight from the terminal.
 
 ## Overview
 
-Instead of looking up syntax every time, \`dpgen\` scaffolds complete,
-runnable examples of any GoF or common architectural pattern with
-a single command.
+Run the program, pick a pattern from the menu, and see a working
+Java implementation execute in real time — with clear console output
+explaining each step.
 
 \`\`\`bash
-dpgen generate observer --lang typescript --output ./src
-dpgen list patterns --category behavioural
-dpgen explain singleton
+mvn compile exec:java
 \`\`\`
 
 ## Tech Stack
 
-- **Runtime**: Node.js + TypeScript
-- **CLI**: Commander.js
-- **Templates**: Handlebars
-- **Testing**: Vitest
+- **Language**: Java
+- **Build**: Maven
 
-## Supported Patterns
+## Patterns Covered
 
-**Creational**: Singleton, Factory, Abstract Factory, Builder, Prototype
+**Creational**
+- Singleton — single shared config instance
+- Factory Method — shape factory with runtime type selection
 
-**Structural**: Adapter, Bridge, Composite, Decorator, Facade, Proxy
+**Structural**
+- Decorator — runtime behaviour layering (e.g. logging wrappers)
+- Adapter — legacy interface compatibility bridge
 
-**Behavioural**: Observer, Strategy, Command, Iterator, State, Template Method
-
-## Languages
-
-TypeScript · JavaScript · Python · Java · Go
+**Behavioural**
+- Observer — event/listener pub-sub system
+- Strategy — swappable sorting algorithm selection
 
 ## Status
 
-Released on npm as \`design-pattern-cli\`.
-Core patterns complete across TypeScript, JavaScript, and Python.`,
+Complete. All 6 patterns implemented and runnable.`,
 }

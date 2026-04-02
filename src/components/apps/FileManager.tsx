@@ -89,7 +89,7 @@ export default function FileManager() {
   })
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#0D1828', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#0D1828', fontFamily: 'Ubuntu, sans-serif' }}>
       {/* Toolbar */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: '4px',
@@ -161,7 +161,7 @@ export default function FileManager() {
               background: dir === p.path ? '#1E2D45' : 'transparent',
               color: dir === p.path ? '#00D4FF' : '#A0B4C8',
               fontSize: '12px', cursor: 'pointer', width: '100%', textAlign: 'left',
-              fontFamily: 'Inter, sans-serif', transition: 'background 0.1s, color 0.1s',
+              fontFamily: 'Ubuntu, sans-serif', transition: 'background 0.1s, color 0.1s',
             }}
               onMouseEnter={e => { if (dir !== p.path) e.currentTarget.style.background = '#17243A' }}
               onMouseLeave={e => { if (dir !== p.path) e.currentTarget.style.background = 'transparent' }}

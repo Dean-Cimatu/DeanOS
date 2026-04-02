@@ -17,7 +17,7 @@ const PROJECTS: Project[] = [
     tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'Zustand', 'Framer Motion'],
     status: 'Live',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/deanos', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/deanos', icon: '⌥' },
       { label: 'Live', href: 'https://deancimatu.com', icon: '↗' },
     ],
   },
@@ -27,26 +27,26 @@ const PROJECTS: Project[] = [
     tech: ['C#', 'ASP.NET Core', 'Azure SQL', 'Google OAuth', 'Stripe', 'NUnit'],
     status: 'Live',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/carhire', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/carhire', icon: '⌥' },
       { label: 'Live', href: 'https://carhire.deancimatu.com', icon: '↗' },
     ],
   },
   {
     name: 'StudyBuddy',
-    description: 'AI-powered study assistant built in 5 hours at a hackathon. JWT auth, MongoDB, Claude API integration.',
-    tech: ['Express.js', 'MongoDB', 'JWT', 'Claude API'],
-    status: 'Complete',
+    description: 'AI study companion webapp. Chat with Claude to generate personalised study task lists, track XP, climb the leaderboard, digest video content into notes, and manage a wellbeing hub — all in one place.',
+    tech: ['React', 'Node.js', 'Claude API', 'OpenAI API', 'MongoDB'],
+    status: 'In Progress',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/studybuddy', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/studybuddy', icon: '⌥' },
     ],
   },
   {
     name: 'DesignPatternCLI',
-    description: 'Command-line tool demonstrating 6 Gang of Four design patterns with interactive examples.',
+    description: 'Java CLI tool that demonstrates 6 Gang of Four design patterns with interactive, runnable examples from the command line.',
     tech: ['Java', 'Maven'],
     status: 'Complete',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/designpatterncli', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/designpatterncli', icon: '⌥' },
     ],
   },
   {
@@ -55,7 +55,7 @@ const PROJECTS: Project[] = [
     tech: ['Raspberry Pi 5', 'Python', 'LiDAR', 'SLAM', 'OpenCV'],
     status: 'In Progress',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/autokart', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/autokart', icon: '⌥' },
     ],
   },
   {
@@ -64,7 +64,7 @@ const PROJECTS: Project[] = [
     tech: ['Python', 'OpenCV', 'YOLO'],
     status: 'In Progress',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/formula-student-ai', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/formula-student-ai', icon: '⌥' },
     ],
   },
   {
@@ -73,7 +73,7 @@ const PROJECTS: Project[] = [
     tech: ['Next.js', 'PostgreSQL', 'Prisma', 'TypeScript'],
     status: 'In Progress',
     links: [
-      { label: 'GitHub', href: 'https://github.com/deancimatu/schoolbase', icon: '⌥' },
+      { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/schoolbase', icon: '⌥' },
     ],
   },
 ]
@@ -141,7 +141,7 @@ function ProjectCard({ project }: { project: Project }) {
             padding: '2px 8px',
             borderRadius: '9999px',
             fontWeight: 700,
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'Ubuntu, sans-serif',
           }}
         >
           {project.status}

@@ -46,7 +46,7 @@ export function NotificationBell({ open, onToggle }: NotificationBellProps) {
             width: '14px', height: '14px', borderRadius: '50%',
             backgroundColor: '#f87171', fontSize: '9px', color: 'white',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 700, fontFamily: 'Inter, sans-serif',
+            fontWeight: 700, fontFamily: 'Ubuntu, sans-serif',
             animation: pulsing ? 'bellPulse 0.3s ease-out' : 'none',
           }}>
             {unreadCount > 9 ? '9+' : unreadCount}

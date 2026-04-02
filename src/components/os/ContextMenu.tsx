@@ -69,7 +69,7 @@ export function ContextMenu({ items, position, onClose }: ContextMenuProps) {
               padding: '7px 12px', fontSize: '13px',
               color: item.danger ? '#FF4444' : '#E8F4F8',
               cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
-              fontFamily: 'Inter, sans-serif', transition: 'background-color 0.08s',
+              fontFamily: 'Ubuntu, sans-serif', transition: 'background-color 0.08s',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = item.danger ? '#3A1A1A' : '#243355'

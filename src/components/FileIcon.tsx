@@ -44,6 +44,19 @@ function openApp(file: DesktopFile) {
     return
   }
 
+  if (file.appId === 'fileviewer') {
+    const filename = file.initialPage ?? file.name
+    ws.openWindow({
+      id: `fileviewer-${filename}-${Date.now()}`,
+      title: filename,
+      x: 200, y: 100, width: 600, height: 500,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 200, preMaxY: 100, preMaxWidth: 600, preMaxHeight: 500,
+      initialPage: filename,
+    })
+    return
+  }
+
   if (file.appId === 'browser') {
     ws.openWindow({
       id: `browser-${(file.initialPage ?? '/').replace(/\//g, '') || 'home'}-${Date.now()}`,
@@ -102,7 +115,7 @@ export default function FileIcon({ file }: Props) {
         <AppIcon iconId={file.iconId} size={48} />
         <span style={{
           fontSize: '11px', color: '#E8F4F8', textAlign: 'center',
-          fontFamily: 'Inter, sans-serif', lineHeight: 1.3,
+          fontFamily: "'Ubuntu', sans-serif", lineHeight: 1.3,
           wordBreak: 'break-word', maxWidth: '72px',
           textShadow: '0 1px 4px rgba(0,0,0,0.9)',
         }}>

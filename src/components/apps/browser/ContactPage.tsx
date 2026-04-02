@@ -9,7 +9,7 @@ interface ContactLink {
 
 const LINKS: ContactLink[] = [
   { icon: 'X', label: 'Email', value: 'deancimatu@example.com', href: 'mailto:deancimatu@example.com' },
-  { icon: 'X', label: 'GitHub', value: 'github.com/deancimatu', href: 'https://github.com/deancimatu' },
+  { icon: 'X', label: 'GitHub', value: 'github.com/Dean-Cimatu', href: 'https://github.com/Dean-Cimatu' },
   { icon: 'X', label: 'LinkedIn', value: 'linkedin.com/in/deancimatu', href: 'https://linkedin.com/in/deancimatu' },
 ]
 
@@ -40,7 +40,7 @@ function ContactRow({ link }: { link: ContactLink }) {
     >
       <span style={{ fontSize: '1.5rem' }}>{link.icon}</span>
       <div>
-        <div style={{ fontSize: '0.75rem', color: '#8899AA', marginBottom: '2px', fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ fontSize: '0.75rem', color: '#8899AA', marginBottom: '2px', fontFamily: 'Ubuntu, sans-serif' }}>
           {link.label}
         </div>
         <div style={{ fontSize: '0.9rem', color: '#00D4FF', fontFamily: '"JetBrains Mono", monospace' }}>
@@ -58,7 +58,7 @@ export const ContactPage = () => (
       margin: '0 auto',
       padding: '64px 32px',
       textAlign: 'center',
-      fontFamily: 'Inter, sans-serif',
+      fontFamily: 'Ubuntu, sans-serif',
     }}
   >
     <h1 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#E8F4F8', margin: 0 }}>

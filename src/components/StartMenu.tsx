@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { useWindowStore } from '../store/windowStore'
+import { useSystemStore } from '../store/systemStore'
 import { AppIcon } from './os/AppIcon'
 import type { WindowState } from '../store/windowStore'
 
@@ -89,9 +90,10 @@ export default function StartMenu() {
 
   return (
     <div
+      onMouseDown={e => e.stopPropagation()}
       onClick={e => e.stopPropagation()}
       style={{
-        position: 'absolute', bottom: '44px', left: 0,
+        position: 'absolute', bottom: '0', left: 0,
         width: 540, height: menuH,
         backgroundColor: '#111C2E',
         border: '1px solid #1E3050',
@@ -99,7 +101,7 @@ export default function StartMenu() {
         boxShadow: '0 -12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)',
         display: 'flex', flexDirection: 'column',
         overflow: 'hidden', zIndex: 2000,
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: 'Ubuntu, sans-serif',
       }}
     >
       {/* ── Header: user info ── */}
@@ -115,7 +117,7 @@ export default function StartMenu() {
           background: 'linear-gradient(135deg, #00D4FF, #7C3AED)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '15px', fontWeight: 700, color: 'white', flexShrink: 0,
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'Ubuntu, sans-serif',
           boxShadow: '0 2px 8px rgba(0,212,255,0.3)',
         }}>
           DC
@@ -143,7 +145,7 @@ export default function StartMenu() {
               style={{
                 background: 'none', border: 'none', outline: 'none',
                 color: '#E8F4F8', fontSize: '13px', flex: 1, minWidth: 0,
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'Ubuntu, sans-serif',
               }}
             />
             {query && (
@@ -225,7 +227,7 @@ function FavRow({ app, onLaunch }: { app: AppEntry; onLaunch: () => void }) {
       padding: '7px 10px', borderRadius: '7px', border: 'none',
       background: 'transparent', color: '#C0D4E8',
       fontSize: '12px', cursor: 'pointer', width: '100%', textAlign: 'left',
-      fontFamily: 'Inter, sans-serif', transition: 'background 0.1s',
+      fontFamily: 'Ubuntu, sans-serif', transition: 'background 0.1s',
     }}
       onMouseEnter={e => { e.currentTarget.style.background = '#1A2D45' }}
       onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
@@ -246,7 +248,7 @@ function CatRow({ cat, active, onClick }: {
       background: active ? '#1A3050' : 'transparent',
       color: active ? '#00D4FF' : '#8899AA',
       fontSize: '12px', cursor: 'pointer', width: '100%', textAlign: 'left',
-      fontFamily: 'Inter, sans-serif', transition: 'background 0.1s, color 0.1s',
+      fontFamily: 'Ubuntu, sans-serif', transition: 'background 0.1s, color 0.1s',
     }}
       onMouseEnter={e => { if (!active) e.currentTarget.style.background = '#1A2D45' }}
       onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
@@ -264,7 +266,7 @@ function AppRow({ app, onLaunch }: { app: AppEntry; onLaunch: () => void }) {
       padding: '8px 10px', borderRadius: '8px', border: 'none',
       background: 'transparent', color: '#C0D4E8',
       cursor: 'pointer', width: '100%', textAlign: 'left',
-      fontFamily: 'Inter, sans-serif', transition: 'background 0.1s',
+      fontFamily: 'Ubuntu, sans-serif', transition: 'background 0.1s',
     }}
       onMouseEnter={e => { e.currentTarget.style.background = '#1A2D45' }}
       onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
@@ -295,7 +297,7 @@ function BottomBar({ onLaunch, openWindow, windows, focusWindow }: {
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
       background: 'none', border: 'none', color: '#8899AA',
       cursor: 'pointer', padding: '6px 10px', borderRadius: '7px',
-      fontSize: '10px', fontFamily: 'Inter, sans-serif',
+      fontSize: '10px', fontFamily: 'Ubuntu, sans-serif',
       transition: 'background 0.1s, color 0.1s',
     }}
       onMouseEnter={e => { e.currentTarget.style.background = '#1A2D45'; e.currentTarget.style.color = '#E8F4F8' }}
@@ -322,9 +324,9 @@ function BottomBar({ onLaunch, openWindow, windows, focusWindow }: {
 
       {/* Power / session */}
       <div style={{ display: 'flex', gap: '2px' }}>
-        {iconBtn('🔒', () => alert('Lock screen'), 'Lock')}
-        {iconBtn('↩', () => window.location.reload(), 'Log out')}
-        {iconBtn('⏻', () => window.location.reload(), 'Power')}
+        {iconBtn('🔒', () => useSystemStore.getState().lock(), 'Lock')}
+        {iconBtn('↩', () => useSystemStore.getState().logout(), 'Log out')}
+        {iconBtn('⏻', () => useSystemStore.getState().shutdown(), 'Power off')}
       </div>
     </div>
   )
@@ -336,7 +338,7 @@ function PlaceBtn({ app, onLaunch }: { app: AppEntry; onLaunch: () => void }) {
       display: 'flex', alignItems: 'center', gap: '7px',
       background: 'none', border: 'none', color: '#8899AA',
       cursor: 'pointer', padding: '5px 10px', borderRadius: '7px',
-      fontSize: '12px', fontFamily: 'Inter, sans-serif',
+      fontSize: '12px', fontFamily: 'Ubuntu, sans-serif',
       transition: 'background 0.1s, color 0.1s',
     }}
       onMouseEnter={e => { e.currentTarget.style.background = '#1A2D45'; e.currentTarget.style.color = '#E8F4F8' }}
