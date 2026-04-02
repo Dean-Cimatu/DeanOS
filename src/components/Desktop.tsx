@@ -15,6 +15,7 @@ import { NotificationBell } from './os/tray/NotificationBell'
 import { NotificationCentre } from './os/NotificationCentre'
 import ToastContainer from './os/ToastContainer'
 import { ContextMenu } from './os/ContextMenu'
+import Screensaver from './os/Screensaver'
 
 const WALLPAPERS: Record<string, string> = {
   aurora: 'linear-gradient(115deg, #0f0c29, #302b63, #24243e)',
@@ -26,7 +27,8 @@ export default function Desktop() {
   const windows = useWindowStore(s => s.windows)
   const wallpaper = useSettingsStore(s => s.wallpaper)
   const loggedIn = useSystemStore(s => s.loggedIn)
-  const { addNotification, lock, logout, shutdown, restart } = useSystemStore()
+  const screensaver = useSystemStore(s => s.screensaver)
+  const { addNotification, lock, logout, shutdown, restart, activateScreensaver } = useSystemStore()
 
   type TrayPanel = 'notif' | 'wifi' | 'volume' | 'battery' | 'clock' | null
   const [menuOpen, setMenuOpen] = useState(false)
@@ -122,6 +124,11 @@ export default function Desktop() {
         )}
       </div>
 
+      {/* Screensaver overlay */}
+      <AnimatePresence>
+        {screensaver && <Screensaver key="screensaver" />}
+      </AnimatePresence>
+
       {/* Toast notifications */}
       <ToastContainer />
 
@@ -133,18 +140,36 @@ export default function Desktop() {
           padding: '0 8px', backdropFilter: 'blur(8px)', zIndex: 1000, flexShrink: 0,
         }}
       >
-        {/* Left: Start button */}
-        <button
-          onMouseDown={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
-          style={{
-            backgroundColor: menuOpen ? '#00D4FF' : '#1E2D45', color: menuOpen ? '#0A0F1E' : '#E8F4F8',
-            border: '1px solid #2A3F5F', borderRadius: '6px', padding: '4px 14px',
-            fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', fontWeight: 600,
-            cursor: 'pointer', transition: 'background-color 0.15s, color 0.15s',
-          }}
-        >
-          DeanOS
-        </button>
+        {/* Left: Start button + lock */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <button
+            onMouseDown={e => { e.stopPropagation(); setMenuOpen(o => !o); setActiveTray(null) }}
+            style={{
+              backgroundColor: menuOpen ? '#00D4FF' : '#1E2D45', color: menuOpen ? '#0A0F1E' : '#E8F4F8',
+              border: '1px solid #2A3F5F', borderRadius: '6px', padding: '4px 14px',
+              fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', fontWeight: 600,
+              cursor: 'pointer', transition: 'background-color 0.15s, color 0.15s',
+            }}
+          >
+            DeanOS
+          </button>
+          <button
+            title="Screensaver"
+            onClick={e => { e.stopPropagation(); activateScreensaver() }}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px',
+              background: 'none', border: 'none', color: '#8899AA',
+              cursor: 'pointer', padding: '4px 8px', borderRadius: '6px',
+              fontSize: '10px', fontFamily: '"JetBrains Mono", monospace',
+              transition: 'background 0.1s, color 0.1s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#1E2D45'; e.currentTarget.style.color = '#E8F4F8' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#8899AA' }}
+          >
+            <span style={{ fontSize: '14px', lineHeight: 1 }}>🔒</span>
+            Lock
+          </button>
+        </div>
 
         {/* Right: System Tray */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

@@ -57,6 +57,17 @@ function openApp(file: DesktopFile) {
     return
   }
 
+  if (file.appId === 'music') {
+    if (windows['music']) { ws.focusWindow('music'); return }
+    ws.openWindow({
+      id: 'music', title: 'Music',
+      x: 200, y: 60, width: 400, height: 600,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 200, preMaxY: 60, preMaxWidth: 400, preMaxHeight: 600,
+    })
+    return
+  }
+
   if (file.appId === 'browser') {
     ws.openWindow({
       id: `browser-${(file.initialPage ?? '/').replace(/\//g, '') || 'home'}-${Date.now()}`,

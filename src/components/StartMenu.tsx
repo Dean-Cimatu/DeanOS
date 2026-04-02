@@ -327,7 +327,7 @@ function BottomBar({ onLaunch, openWindow, windows, focusWindow }: {
 
       {/* Power / session */}
       <div style={{ display: 'flex', gap: '2px' }}>
-        {iconBtn('🔒', () => useSystemStore.getState().lock(), 'Lock')}
+        {iconBtn('🔒', () => useSystemStore.getState().activateScreensaver(), 'Lock')}
         {iconBtn('↩', () => useSystemStore.getState().logout(), 'Log out')}
         {iconBtn('⏻', () => useSystemStore.getState().shutdown(), 'Power off')}
       </div>

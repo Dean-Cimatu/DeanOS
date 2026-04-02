@@ -17,6 +17,7 @@ interface SystemState {
   // Auth
   loggedIn: boolean
   locked: boolean
+  screensaver: boolean
   systemAction: null | 'shutdown' | 'restart'
   // System tray
   batteryLevel: number
@@ -36,6 +37,8 @@ interface SystemState {
   setLoggedIn: (loggedIn: boolean) => void
   lock: () => void
   unlock: () => void
+  activateScreensaver: () => void
+  dismissScreensaver: () => void
   logout: () => void
   shutdown: () => void
   restart: () => void
@@ -58,6 +61,7 @@ export const useSystemStore = create<SystemState>((set) => ({
   bootProgress: 0,
   loggedIn: false,
   locked: false,
+  screensaver: false,
   systemAction: null,
   batteryLevel: (() => { const s = localStorage.getItem('deans_battery_level'); return s !== null ? Math.max(0, Math.min(100, parseInt(s, 10))) : 87 })(),
   batteryLastTick: (() => { const s = localStorage.getItem('deans_battery_last_tick'); return s !== null ? parseInt(s, 10) : Date.now() })(),
@@ -75,7 +79,9 @@ export const useSystemStore = create<SystemState>((set) => ({
   setLoggedIn: (loggedIn) => set({ loggedIn }),
   lock: () => set({ locked: true }),
   unlock: () => set({ locked: false }),
-  logout: () => set({ loggedIn: false, locked: false, notifications: [], unreadCount: 0 }),
+  activateScreensaver: () => set({ screensaver: true }),
+  dismissScreensaver: () => set({ screensaver: false }),
+  logout: () => set({ loggedIn: false, locked: false, screensaver: false, notifications: [], unreadCount: 0 }),
   shutdown: () => set({ systemAction: 'shutdown' }),
   restart: () => set({ systemAction: 'restart' }),
   setBattery: (level) => set({ batteryLevel: level, batteryLastTick: Date.now() }),
