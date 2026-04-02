@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useSystemStore } from '../store/systemStore'
 import { unlockAudio, playErrorPing, playStartupChime } from '../lib/sounds'
-import React from 'react'
+import { type ReactNode } from 'react'
 
 const PASSWORD = 'password'
 
@@ -65,7 +65,7 @@ function A11yIcon() {
 // ── Bottom bar button ──────────────────────────────────────────────────────────
 
 function BarBtn({ children, title, danger = false, onClick }: {
-  children: React.ReactNode
+  children: ReactNode
   title: string
   danger?: boolean
   onClick?: () => void

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type ReactNode, type CSSProperties } from 'react'
 import { useSettingsStore } from '../../store/settingsStore'
 import { useSystemStore } from '../../store/systemStore'
 
@@ -6,7 +6,7 @@ type Section = 'display' | 'wallpaper' | 'system' | 'about'
 
 // ── Sidebar icons ──────────────────────────────────────────────────────────────
 
-const ICONS: Record<Section, React.ReactNode> = {
+const ICONS: Record<Section, ReactNode> = {
   display: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="4"/>
@@ -79,18 +79,18 @@ const FONT_SIZES: { id: 'small' | 'medium' | 'large'; label: string }[] = [
 
 // ── Shared styles ──────────────────────────────────────────────────────────────
 
-const sectionTitle: React.CSSProperties = {
+const sectionTitle: CSSProperties = {
   color: '#E8F4F8', fontSize: '18px', fontWeight: 700,
   fontFamily: 'Ubuntu, sans-serif', marginBottom: '24px',
 }
 
-const fieldLabel: React.CSSProperties = {
+const fieldLabel: CSSProperties = {
   fontSize: '11px', color: '#8899AA', fontFamily: 'Ubuntu, sans-serif',
   textTransform: 'uppercase', letterSpacing: '0.08em',
   marginBottom: '12px', display: 'block',
 }
 
-const card: React.CSSProperties = {
+const card: CSSProperties = {
   backgroundColor: '#111E30', border: '1px solid #1E2D45',
   borderRadius: '10px', overflow: 'hidden',
 }
