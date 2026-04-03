@@ -45,7 +45,7 @@ const PROJECTS: Project[] = [
     description:
       'AI study companion that turns a topic or deadline into a personalised task list with XP, a leaderboard, and a wellbeing hub. Built in 5 hours, now actively developed.',
     tech: ['React', 'Node.js', 'MongoDB', 'Claude API', 'OpenAI API'],
-    status: 'In Progress',
+    status: 'Complete',
     color: '#86efac',
     links: [
       { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/Hackathon' },
