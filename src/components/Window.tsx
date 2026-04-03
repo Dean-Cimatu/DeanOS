@@ -9,6 +9,10 @@ import FileViewer from './apps/FileViewer'
 import MusicPlayer from './apps/MusicPlayer'
 import PhotoViewer from './apps/PhotoViewer'
 import CodeRunner from './apps/CodeRunner'
+import Calculator from './apps/Calculator'
+import GameLibrary from './apps/GameLibrary'
+import PicoRacer from './apps/PicoRacer'
+import RogueSurvivor from './apps/RogueSurvivor'
 import ResizeHandle from './ResizeHandle'
 import type { ResizeDirection } from './ResizeHandle'
 
@@ -156,7 +160,11 @@ export default function Window({ id, windowData }: WindowProps) {
           id.startsWith('fileviewer')  ? '#0D1828' :
           id.startsWith('music')       ? '#0A0F1E' :
           id.startsWith('photos')      ? '#0A0F1E' :
-          id.startsWith('coderunner')  ? '#0A0F1E' :
+          id.startsWith('coderunner')   ? '#0A0F1E' :
+          id.startsWith('calculator')    ? '#0A0F1E' :
+          id.startsWith('gamelibrary')   ? '#0D1828' :
+          id.startsWith('picoracer')     ? '#0A0F1E' :
+          id.startsWith('roguesurvivor') ? '#0A0F1E' :
           'white',
         display: 'flex',
       }}>
@@ -166,8 +174,12 @@ export default function Window({ id, windowData }: WindowProps) {
         {id.startsWith('files')       && <FileManager />}
         {id.startsWith('fileviewer')  && <FileViewer filename={windowData.initialPage ?? ''} />}
         {id.startsWith('music')       && <MusicPlayer />}
-        {id.startsWith('photos')      && <PhotoViewer />}
-        {id.startsWith('coderunner')  && <CodeRunner />}
+        {id.startsWith('photos')        && <PhotoViewer />}
+        {id.startsWith('coderunner')    && <CodeRunner />}
+        {id.startsWith('calculator')    && <Calculator />}
+        {id.startsWith('gamelibrary')   && <GameLibrary />}
+        {id.startsWith('picoracer')     && <PicoRacer />}
+        {id.startsWith('roguesurvivor') && <RogueSurvivor />}
       </div>
     </div>
   )

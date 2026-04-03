@@ -112,6 +112,62 @@ const configs: Record<string, IconConfig> = {
     ),
   },
 
+  games: {
+    bg: 'linear-gradient(145deg, #1a1040, #2d1b69)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="6" width="20" height="12" rx="4" fill="rgba(255,255,255,0.1)" stroke="white" strokeWidth="1.5"/>
+        <line x1="7" y1="12" x2="11" y2="12" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <line x1="9" y1="10" x2="9" y2="14" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <circle cx="16" cy="11" r="1" fill="white"/>
+        <circle cx="15" cy="13" r="1" fill="#00D4FF"/>
+        <circle cx="17" cy="13" r="1" fill="#FFD700"/>
+      </svg>
+    ),
+  },
+
+  picoracer: {
+    bg: 'linear-gradient(145deg, #7c2d12, #c2410c)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M3 17 Q6 13 12 12 Q18 11 21 14" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+        <path d="M3 19 Q6 15 12 14 Q18 13 21 16" stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeLinecap="round" fill="none"/>
+        <rect x="8" y="8" width="8" height="5" rx="2" fill="white" opacity="0.9"/>
+        <rect x="9" y="9" width="6" height="2" rx="0.5" fill="#c2410c"/>
+        <circle cx="9" cy="16" r="1.5" fill="white"/>
+        <circle cx="15" cy="15.5" r="1.5" fill="white"/>
+      </svg>
+    ),
+  },
+
+  roguesurvivor: {
+    bg: 'linear-gradient(145deg, #1e1040, #4c1d95)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <polygon points="12,3 14,9 20,9 15,13 17,19 12,15 7,19 9,13 4,9 10,9" fill="rgba(255,255,255,0.15)" stroke="#FFD700" strokeWidth="1.4" strokeLinejoin="round"/>
+        <circle cx="12" cy="12" r="3" fill="white" opacity="0.9"/>
+        <line x1="12" y1="9" x2="12" y2="6" stroke="#8a78e8" strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="12" y1="15" x2="12" y2="18" stroke="#8a78e8" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+
+  calculator: {
+    bg: 'linear-gradient(145deg, #2d3a4a, #1a2535)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.08)" stroke="#00D4FF" strokeWidth="1.5"/>
+        <rect x="6" y="6" width="12" height="4" rx="1.5" fill="#00D4FF" opacity="0.9"/>
+        <circle cx="7.5" cy="14" r="1.2" fill="white"/>
+        <circle cx="12" cy="14" r="1.2" fill="white"/>
+        <circle cx="16.5" cy="14" r="1.2" fill="#00D4FF"/>
+        <circle cx="7.5" cy="18" r="1.2" fill="white"/>
+        <circle cx="12" cy="18" r="1.2" fill="white"/>
+        <circle cx="16.5" cy="18" r="1.2" fill="#00D4FF"/>
+      </svg>
+    ),
+  },
+
   photos: {
     bg: 'linear-gradient(145deg, #e74c8b, #9b2d6f)',
     path: (

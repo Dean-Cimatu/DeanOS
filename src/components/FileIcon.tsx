@@ -68,6 +68,50 @@ function openApp(file: DesktopFile) {
     return
   }
 
+  if (file.appId === 'gamelibrary') {
+    if (windows['gamelibrary']) { ws.focusWindow('gamelibrary'); return }
+    ws.openWindow({
+      id: 'gamelibrary', title: 'Games',
+      x: 140, y: 70, width: 600, height: 440,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 140, preMaxY: 70, preMaxWidth: 600, preMaxHeight: 440,
+    })
+    return
+  }
+
+  if (file.appId === 'picoracer') {
+    if (windows['picoracer']) { ws.focusWindow('picoracer'); return }
+    ws.openWindow({
+      id: 'picoracer', title: 'Pico Racer',
+      x: 120, y: 80, width: 640, height: 520,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 120, preMaxY: 80, preMaxWidth: 640, preMaxHeight: 520,
+    })
+    return
+  }
+
+  if (file.appId === 'roguesurvivor') {
+    if (windows['roguesurvivor']) { ws.focusWindow('roguesurvivor'); return }
+    ws.openWindow({
+      id: 'roguesurvivor', title: 'Rogue Survivor',
+      x: 100, y: 60, width: 800, height: 600,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 100, preMaxY: 60, preMaxWidth: 800, preMaxHeight: 600,
+    })
+    return
+  }
+
+  if (file.appId === 'calculator') {
+    if (windows['calculator']) { ws.focusWindow('calculator'); return }
+    ws.openWindow({
+      id: 'calculator', title: 'Calculator',
+      x: 300, y: 100, width: 280, height: 420,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 300, preMaxY: 100, preMaxWidth: 280, preMaxHeight: 420,
+    })
+    return
+  }
+
   if (file.appId === 'photos') {
     if (windows['photos']) { ws.focusWindow('photos'); return }
     ws.openWindow({

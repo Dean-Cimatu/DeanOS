@@ -4,7 +4,7 @@ export interface AppDefinition {
   iconId: string
   defaultSize: { width: number; height: number }
   minSize: { width: number; height: number }
-  category: 'internet' | 'system' | 'portfolio' | 'accessories' | 'media'
+  category: 'internet' | 'system' | 'portfolio' | 'accessories' | 'media' | 'games'
   description: string
   initialPage?: string
 }
@@ -64,5 +64,32 @@ export const APP_REGISTRY: AppDefinition[] = [
     minSize: { width: 400, height: 320 },
     category: 'accessories',
     description: 'View text and markdown files',
+  },
+  {
+    id: 'pico-racer',
+    name: 'Pico Racer',
+    iconId: 'picoracer',
+    defaultSize: { width: 640, height: 520 },
+    minSize: { width: 480, height: 400 },
+    category: 'games',
+    description: 'Pseudo-3D outrun-style racing game (Pico-8)',
+  },
+  {
+    id: 'rogue-survivor',
+    name: 'Rogue Survivor',
+    iconId: 'roguesurvivor',
+    defaultSize: { width: 800, height: 600 },
+    minSize: { width: 600, height: 480 },
+    category: 'games',
+    description: 'Top-down auto-attacking roguelike (Godot 4)',
+  },
+  {
+    id: 'calculator',
+    name: 'Calculator',
+    iconId: 'calculator',
+    defaultSize: { width: 280, height: 420 },
+    minSize: { width: 280, height: 420 },
+    category: 'accessories',
+    description: 'Standard calculator',
   },
 ]
