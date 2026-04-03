@@ -34,7 +34,7 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
         backgroundColor: '#1E2D45', borderLeft: '1px solid #2A3F5F',
         boxShadow: '-20px 0 60px rgba(0,0,0,0.4)', zIndex: 9998,
         display: 'flex', flexDirection: 'column',
-        fontFamily: '"JetBrains Mono", monospace',
+        fontFamily: 'Ubuntu, sans-serif',
       }}
     >
       {/* Header */}
@@ -67,11 +67,11 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
             key={n.id}
             style={{
               padding: '12px 16px 12px 12px', borderBottom: '1px solid #2A3F5F',
-              backgroundColor: n.read ? 'transparent' : 'rgba(0,212,255,0.04)',
+              backgroundColor: n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}0d`,
               display: 'flex', gap: '10px', position: 'relative', transition: 'background-color 0.1s',
             }}
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#243355')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : 'rgba(0,212,255,0.04)')}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}0d`)}
           >
             <div style={{
               width: 8, height: 8, borderRadius: '50%',
@@ -79,7 +79,7 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
               flexShrink: 0, marginTop: '4px',
             }} />
             <div style={{ flex: 1, paddingRight: '16px' }}>
-              <div style={{ color: '#E8F4F8', fontSize: '12px', fontWeight: 600 }}>{n.title}</div>
+              <div style={{ color: TYPE_COLOR[n.type] ?? '#E8F4F8', fontSize: '12px', fontWeight: 600 }}>{n.title}</div>
               <div style={{ color: '#8899AA', fontSize: '11px', marginTop: '2px' }}>{n.message}</div>
               <div style={{ color: '#556677', fontSize: '10px', marginTop: '4px' }}>
                 {n.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

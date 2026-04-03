@@ -199,9 +199,7 @@ export const CVPage = () => {
         {/* Skills */}
         <SectionLabel text="Skills" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {SKILLS_DATA.map(({ label, items }) => {
-            const tc = getTechColor(items[0])
-            return (
+          {SKILLS_DATA.map(({ label, items }) => (
               <div key={label} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
                 <span style={{
                   color: '#6b9470', fontWeight: 600, fontSize: '0.78rem',
@@ -226,8 +224,7 @@ export const CVPage = () => {
                   })}
                 </div>
               </div>
-            )
-          })}
+          ))}
         </div>
 
       </div>
