@@ -1,195 +1,206 @@
 import { useRef } from 'react'
 
-type Status = 'Live' | 'In Progress' | 'Complete'
-
 interface Project {
   name: string
+  tagline: string
   description: string
   tech: string[]
-  status: Status
-  links: { label: string; href: string }[]
+  status: 'Live' | 'In Progress' | 'Complete'
   color: string
+  links: { label: string; href: string }[]
+  featured?: boolean
 }
 
 const PROJECTS: Project[] = [
   {
     name: 'DeanOS',
-    description: 'A browser-based OS simulation built as a portfolio piece. Every interaction feels like a real desktop — draggable windows, terminal, apps, and more.',
-    tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'Zustand', 'Framer Motion'],
+    tagline: "You're inside it right now.",
+    description:
+      "A browser-based OS built as a portfolio. Boot sequence, window manager, terminal, file system, tray widgets, apps — the whole thing. The fact that you're reading this from inside it is the point.",
+    tech: ['React 18', 'TypeScript', 'Vite', 'Zustand', 'Framer Motion'],
     status: 'Live',
-    color: '#00D4FF',
+    color: '#4ade80',
     links: [
       { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/deanos' },
-      { label: 'Live ↗', href: 'https://deancimatu.com' },
+      { label: 'deancimatu.com', href: 'https://deancimatu.com' },
     ],
+    featured: true,
   },
   {
     name: 'Car Hire System',
-    description: 'Full-stack car hire platform with custom BST & HashTable data structures, Google OAuth, Stripe, and an AI chatbot for customer support.',
-    tech: ['C#', 'ASP.NET Core', 'Azure SQL', 'Google OAuth', 'Stripe', 'NUnit'],
+    tagline: 'Full-stack, from scratch.',
+    description:
+      'Built a complete car hire platform solo — custom BST and HashTable data structures, Google OAuth, Stripe payments, Azure SQL, and an AI support chatbot. Deployed and live.',
+    tech: ['C#', 'ASP.NET Core', 'Azure SQL', 'Stripe', 'Google OAuth', 'NUnit'],
     status: 'Live',
-    color: '#00FF88',
+    color: '#22c55e',
     links: [
       { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/CST2550-Car-Hire-System' },
-      { label: 'Live ↗', href: 'https://carhire.deancimatu.com' },
+      { label: 'carhire.deancimatu.com', href: 'https://carhire.deancimatu.com' },
     ],
   },
   {
     name: 'StudyBuddy',
-    description: 'AI study companion webapp. Chat with Claude to generate personalised study task lists, track XP, climb the leaderboard, digest video content into notes, and manage a wellbeing hub.',
-    tech: ['React', 'Node.js', 'Claude API', 'OpenAI API', 'MongoDB'],
+    tagline: '5-hour hackathon → real product.',
+    description:
+      'AI study companion that turns a topic or deadline into a personalised task list with XP, a leaderboard, and a wellbeing hub. Built in 5 hours, now actively developed.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Claude API', 'OpenAI API'],
     status: 'In Progress',
-    color: '#8a78e8',
+    color: '#86efac',
     links: [
       { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/Hackathon' },
     ],
   },
   {
     name: 'DesignPatternCLI',
-    description: 'Java CLI tool demonstrating 6 Gang of Four design patterns with interactive, runnable examples from the command line.',
+    tagline: 'Six patterns, one terminal.',
+    description:
+      'A Java CLI that walks you through six Gang of Four design patterns — pick one from the menu and watch it execute with live output explaining each step.',
     tech: ['Java', 'Maven'],
     status: 'Complete',
-    color: '#FF8C00',
+    color: '#4ade80',
     links: [
       { label: 'GitHub', href: 'https://github.com/Dean-Cimatu/DesignPatterns' },
     ],
   },
 ]
 
-const STATUS_CONFIG: Record<Status, { label: string; color: string; bg: string; border: string }> = {
-  Live:          { label: 'Live',        color: '#00FF88', bg: '#0a2018', border: '#1e4832' },
-  'In Progress': { label: 'In Progress', color: '#c8894a', bg: '#201508', border: '#3d2810' },
-  Complete:      { label: 'Complete',    color: '#8899AA', bg: '#141e2c', border: '#253040' },
-}
-
-// Color-code tech pills by category
-const LANGUAGES = new Set(['TypeScript', 'JavaScript', 'Python', 'Java', 'C#', 'Bash', 'Lua'])
-const FRAMEWORKS = new Set(['React', 'Next.js', 'Express.js', 'ASP.NET', 'ASP.NET Core', 'Tailwind', 'Tailwind CSS', 'Vite', 'Zustand', 'Framer Motion', 'Node.js'])
-const TOOLS = new Set(['Git', 'Docker', 'AWS', 'Azure', 'Azure SQL', 'MongoDB', 'PostgreSQL', 'NUnit', 'Maven', 'Stripe', 'Google OAuth', 'OAuth', 'Claude API', 'OpenAI API'])
-
-function getTechColor(tech: string): string {
-  if (LANGUAGES.has(tech)) return '#8a78e8'
-  if (FRAMEWORKS.has(tech)) return '#00D4FF'
-  if (TOOLS.has(tech)) return '#FF8C00'
-  return '#8899AA'
+const STATUS_COLOR: Record<string, string> = {
+  Live: '#4ade80',
+  'In Progress': '#fbbf24',
+  Complete: '#6b9470',
 }
 
 export const ProjectsPage = () => (
   <div style={{
-    maxWidth: '740px', margin: '0 auto', padding: '48px 32px 64px',
     fontFamily: 'Ubuntu, sans-serif',
-    backgroundColor: '#080d18', minHeight: '100%',
+    background: 'radial-gradient(ellipse 55% 35% at 0% 0%, rgba(34,197,94,0.07) 0%, transparent 55%), #040d06',
+    minHeight: '100%',
   }}>
-    <div style={{ marginBottom: '36px' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#E8F4F8', margin: '0 0 6px 0', letterSpacing: '-0.02em' }}>
-        Projects
-      </h1>
-      {/* Colored underline bar */}
-      <div style={{ width: '48px', height: '3px', background: 'linear-gradient(90deg, #00D4FF, #8a78e8)', borderRadius: '2px', marginBottom: '12px' }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <p style={{ color: '#8899AA', margin: 0, fontSize: '0.88rem' }}>
-          Things I've built, shipped, and learned from
-        </p>
-        <span style={{
-          backgroundColor: 'rgba(0,212,255,0.12)', color: '#00D4FF',
-          border: '1px solid rgba(0,212,255,0.28)',
-          fontSize: '0.7rem', fontFamily: '"JetBrains Mono", monospace',
-          padding: '2px 9px', borderRadius: '12px', fontWeight: 600,
-        }}>
-          4 projects
-        </span>
+    <div style={{ maxWidth: '740px', margin: '0 auto', padding: '64px 40px 80px' }}>
+      <p style={{
+        fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase',
+        color: '#4ade80', fontFamily: '"JetBrains Mono", monospace',
+        marginBottom: '14px', fontWeight: 600,
+      }}>Work</p>
+      <h1 style={{
+        fontSize: '2.4rem', fontWeight: 800, color: '#f0fdf4',
+        fontFamily: 'Ubuntu, sans-serif', letterSpacing: '-0.03em', margin: '0 0 8px',
+      }}>Things I've built.</h1>
+      <p style={{ color: '#3a5a3e', fontSize: '0.9rem', margin: '0 0 52px' }}>
+        Shipped, in progress, and done.
+      </p>
+
+      {PROJECTS.filter(p => p.featured).map(p => <FeaturedCard key={p.name} project={p} />)}
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+        {PROJECTS.filter(p => !p.featured).map(p => <ProjectCard key={p.name} project={p} />)}
       </div>
     </div>
-
-    {PROJECTS.map((project) => (
-      <ProjectCard key={project.name} project={project} />
-    ))}
   </div>
 )
 
-function ProjectCard({ project }: { project: Project }) {
+function FeaturedCard({ project: p }: { project: Project }) {
   const ref = useRef<HTMLDivElement>(null)
-  const s = STATUS_CONFIG[project.status]
-  const color = project.color
-
   return (
     <div
       ref={ref}
-      onMouseEnter={() => {
-        if (!ref.current) return
-        ref.current.style.borderColor = `${color}66`
-        ref.current.style.transform = 'translateY(-2px)'
-        ref.current.style.boxShadow = `0 10px 32px rgba(0,0,0,0.4), 0 0 16px ${color}18`
-      }}
-      onMouseLeave={() => {
-        if (!ref.current) return
-        ref.current.style.borderColor = `${color}22`
-        ref.current.style.transform = 'translateY(0)'
-        ref.current.style.boxShadow = 'none'
-      }}
+      onMouseEnter={() => { if (ref.current) ref.current.style.borderColor = '#22c55e55' }}
+      onMouseLeave={() => { if (ref.current) ref.current.style.borderColor = '#1c3a22' }}
       style={{
-        backgroundColor: '#0d1828',
-        background: `linear-gradient(135deg, ${color}0d 0%, #0d1828 40%)`,
-        border: `1px solid ${color}22`,
-        borderLeft: `3px solid ${color}`,
-        borderRadius: '10px',
-        padding: '22px 24px',
-        marginBottom: '14px',
-        transition: 'border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
+        marginBottom: '14px', backgroundColor: '#0c1f10',
+        border: '1px solid #1c3a22', borderRadius: '12px',
+        overflow: 'hidden', transition: 'border-color 0.18s',
       }}
     >
-      {/* Top row */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-        <span style={{ fontWeight: 700, color: '#E8F4F8', fontSize: '1.05rem', fontFamily: 'Ubuntu, sans-serif', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color, fontSize: '0.8rem' }}>●</span>
-          {project.name}
+      <div style={{
+        height: '72px',
+        background: 'linear-gradient(135deg, #0c2e14 0%, #061409 100%)',
+        borderBottom: '1px solid #1c3a22',
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+        padding: '0 24px 12px',
+      }}>
+        <span style={{ fontSize: '0.68rem', fontFamily: '"JetBrains Mono", monospace', color: '#4ade80', letterSpacing: '0.1em' }}>
+          ★ Featured
         </span>
         <span style={{
-          backgroundColor: s.bg, color: s.color,
-          border: `1px solid ${s.border}`,
-          fontSize: '0.72rem', padding: '4px 10px',
-          borderRadius: '5px', fontWeight: 600,
-          fontFamily: '"JetBrains Mono", monospace',
-          display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0,
-          boxShadow: project.status === 'Live' ? `0 0 8px ${color}66` : 'none',
+          fontSize: '0.68rem', fontFamily: '"JetBrains Mono", monospace', color: '#4ade80',
+          backgroundColor: '#22c55e18', border: '1px solid #22c55e33', padding: '2px 8px', borderRadius: '4px',
         }}>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: s.color, display: 'inline-block' }} />
-          {s.label}
+          ● {p.status}
         </span>
       </div>
-
-      {/* Description */}
-      <p style={{ color: '#8899AA', fontSize: '0.86rem', lineHeight: 1.7, margin: 0, marginBottom: '14px' }}>
-        {project.description}
-      </p>
-
-      {/* Tech pills */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
-        {project.tech.map((t) => {
-          const tc = getTechColor(t)
-          return (
+      <div style={{ padding: '22px 24px 24px' }}>
+        <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f0fdf4', fontFamily: 'Ubuntu, sans-serif', margin: '0 0 4px' }}>
+          {p.name}
+        </h2>
+        <p style={{ fontSize: '0.82rem', color: '#4ade80', margin: '0 0 12px', fontStyle: 'italic' }}>{p.tagline}</p>
+        <p style={{ fontSize: '0.88rem', color: '#6b9470', lineHeight: 1.75, margin: '0 0 18px' }}>{p.description}</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '18px' }}>
+          {p.tech.map(t => (
             <span key={t} style={{
-              backgroundColor: `${tc}15`, color: tc,
-              border: `1px solid ${tc}30`,
-              fontSize: '0.68rem', padding: '3px 9px',
-              borderRadius: '4px', fontFamily: '"JetBrains Mono", monospace',
-            }}>
-              {t}
-            </span>
-          )
-        })}
+              backgroundColor: '#070f08', border: '1px solid #1c3a22', color: '#3a5a3e',
+              fontSize: '0.72rem', padding: '3px 9px', borderRadius: '4px',
+              fontFamily: '"JetBrains Mono", monospace',
+            }}>{t}</span>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          {p.links.map(l => (
+            <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '0.82rem', color: '#4ade80', textDecoration: 'none', fontWeight: 600 }}
+              onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+              onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+            >{l.label} ↗</a>
+          ))}
+        </div>
       </div>
+    </div>
+  )
+}
 
-      {/* Links */}
-      <div style={{ display: 'flex', gap: '18px' }}>
-        {project.links.map((link) => (
-          <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer"
-            style={{ fontSize: '0.8rem', color, textDecoration: 'none', fontFamily: 'Ubuntu, sans-serif', fontWeight: 600 }}
-            onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-            onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
-          >
-            {link.label}
-          </a>
+function ProjectCard({ project: p }: { project: Project }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const sc = STATUS_COLOR[p.status]
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => { if (!ref.current) return; ref.current.style.borderColor = `${p.color}44`; ref.current.style.transform = 'translateY(-2px)' }}
+      onMouseLeave={() => { if (!ref.current) return; ref.current.style.borderColor = '#1c3a22'; ref.current.style.transform = 'none' }}
+      style={{
+        backgroundColor: '#0c1f10', border: '1px solid #1c3a22', borderLeft: `3px solid ${p.color}`,
+        borderRadius: '10px', padding: '20px', transition: 'border-color 0.18s, transform 0.18s',
+        display: 'flex', flexDirection: 'column',
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+          <h3 style={{ fontSize: '0.97rem', fontWeight: 700, color: '#f0fdf4', fontFamily: 'Ubuntu, sans-serif', margin: 0 }}>
+            {p.name}
+          </h3>
+          <span style={{ fontSize: '0.65rem', color: sc, fontFamily: '"JetBrains Mono", monospace', flexShrink: 0, marginLeft: '8px', marginTop: '2px' }}>
+            ● {p.status}
+          </span>
+        </div>
+        <p style={{ fontSize: '0.78rem', color: p.color, margin: '0 0 10px', fontStyle: 'italic' }}>{p.tagline}</p>
+        <p style={{ fontSize: '0.8rem', color: '#4a6e4e', lineHeight: 1.7, margin: '0 0 14px' }}>{p.description}</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '14px' }}>
+          {p.tech.map(t => (
+            <span key={t} style={{
+              backgroundColor: '#070f08', border: '1px solid #1c3a22', color: '#2d5e34',
+              fontSize: '0.68rem', padding: '2px 7px', borderRadius: '4px',
+              fontFamily: '"JetBrains Mono", monospace',
+            }}>{t}</span>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: '16px' }}>
+        {p.links.map(l => (
+          <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: '0.78rem', color: p.color, textDecoration: 'none', fontWeight: 600 }}
+            onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+            onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+          >{l.label} ↗</a>
         ))}
       </div>
     </div>

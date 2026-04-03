@@ -1,147 +1,189 @@
-const skillGroups = [
-  { title: 'Languages', skills: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#', 'Bash'], accent: '#8a78e8', bg: '#16103a' },
-  { title: 'Frameworks', skills: ['React', 'Next.js', 'Express.js', 'ASP.NET', 'Tailwind CSS'], accent: '#00D4FF', bg: '#0a1e30' },
-  { title: 'Tools', skills: ['Git', 'Docker', 'AWS', 'Azure', 'MongoDB', 'PostgreSQL'], accent: '#FF8C00', bg: '#1e1208' },
-  { title: 'Concepts', skills: ['OOP', 'Design Patterns', 'REST APIs', 'Data Structures', 'CI/CD'], accent: '#00FF88', bg: '#0a1e14' },
-]
+const STACK_NOW = ['TypeScript', 'React', 'Python', 'C#', 'ASP.NET', 'Zustand', 'Framer Motion']
+const STACK_ALSO = ['Java', 'Docker', 'AWS', 'Azure', 'MongoDB', 'PostgreSQL', 'Next.js']
 
-const BEYOND_PILLS = [
-  { label: 'Formula Student AI', color: '#FF8C00', bg: 'rgba(255,140,0,0.15)', border: 'rgba(255,140,0,0.3)' },
-  { label: 'CS Academic Society Founder', color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', border: 'rgba(167,139,250,0.3)' },
-  { label: 'AI & Machine Learning', color: '#00D4FF', bg: 'rgba(0,212,255,0.1)', border: 'rgba(0,212,255,0.28)' },
+const NOW = [
+  { label: 'DeanOS', detail: 'The OS you\'re inside right now.' },
+  { label: 'StudyBuddy', detail: 'AI study companion — Claude API + gamification.' },
+  { label: 'Formula Student AI', detail: 'YOLO cone detection for autonomous racing.' },
 ]
-
-const sectionLabelStyle: React.CSSProperties = {
-  fontSize: '0.7rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  color: '#00D4FF',
-  textTransform: 'uppercase',
-  borderLeft: '3px solid #00D4FF',
-  paddingLeft: '10px',
-  marginBottom: '18px',
-}
 
 export const AboutPage = () => (
   <div style={{
-    maxWidth: '680px', margin: '0 auto',
-    padding: '48px 32px 64px',
     fontFamily: 'Ubuntu, sans-serif',
-    color: '#d8e8f5',
-    backgroundColor: '#080d18',
+    background: `
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(34,197,94,0.06) 0%, transparent 55%),
+      #040d06
+    `,
     minHeight: '100%',
   }}>
+    <div style={{ maxWidth: '660px', margin: '0 auto', padding: '64px 40px 80px' }}>
 
-    {/* INTRO */}
-    <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
-      <div style={{
-        flexShrink: 0, width: 88, height: 88, borderRadius: '50%',
-        background: 'linear-gradient(145deg, #1e5ba0 0%, #2e1a80 100%)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '20px', fontWeight: 700, color: 'rgba(255,255,255,0.9)',
-        fontFamily: '"JetBrains Mono", monospace',
-        boxShadow: '0 0 0 3px #00D4FF, 0 0 24px rgba(0,212,255,0.4)',
-      }}>
-        DC
-      </div>
-      <div style={{ paddingTop: '6px' }}>
-        <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#E8F4F8', margin: 0, letterSpacing: '-0.01em' }}>
-          Dean Cimatu
-        </h1>
-        <p style={{ fontSize: '0.9rem', color: '#00D4FF', marginTop: '5px', fontWeight: 500 }}>
-          Software Engineering Student
-        </p>
-        <p style={{ fontSize: '0.82rem', color: '#8899AA', marginTop: '3px' }}>
-          Hampton Hill, London
-        </p>
+      {/* Opening statement */}
+      <div style={{ marginBottom: '56px' }}>
         <p style={{
-          fontSize: '0.9rem', color: '#a0b8d0', marginTop: '14px',
-          lineHeight: 1.8, maxWidth: '440px',
+          fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase',
+          color: '#4ade80', fontFamily: '"JetBrains Mono", monospace',
+          marginBottom: '20px', fontWeight: 600,
         }}>
-          Second-year BSc Computer Science student at Middlesex University London.
-          I build real software — from browser-based OS simulations to full-stack platforms.
-          Founder of the CS Academic Society and contributor to Formula Student AI.
+          About
         </p>
-      </div>
-    </div>
-
-    <hr style={{ border: 'none', borderTop: '1px solid #1a2535', margin: '36px 0' }} />
-
-    {/* SKILLS */}
-    <div>
-      <h2 style={sectionLabelStyle}>Skills</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-        {skillGroups.map(({ title, skills, accent, bg }) => (
-          <div key={title} style={{
-            backgroundColor: bg, borderRadius: '8px',
-            padding: '16px', border: `1px solid ${accent}30`,
+        <h1 style={{
+          fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.15,
+          color: '#f0fdf4', fontFamily: 'Ubuntu, sans-serif',
+          letterSpacing: '-0.03em', margin: '0 0 20px',
+        }}>
+          I build software
+          <br />
+          <span style={{
+            background: 'linear-gradient(90deg, #4ade80, #22c55e)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
           }}>
-            <p style={{
-              fontSize: '10px', fontWeight: 700, color: accent,
-              marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em',
-              margin: '0 0 12px 0',
-            }}>
-              {title}
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-              {skills.map(skill => (
-                <span key={skill} style={{
-                  backgroundColor: `${accent}20`,
-                  color: accent,
-                  border: `1px solid ${accent}40`,
-                  fontSize: '11px', padding: '3px 9px', borderRadius: '4px',
-                  fontFamily: '"JetBrains Mono", monospace',
-                }}>
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <hr style={{ border: 'none', borderTop: '1px solid #1a2535', margin: '36px 0' }} />
-
-    {/* EDUCATION */}
-    <div>
-      <h2 style={sectionLabelStyle}>Education</h2>
-      <div style={{
-        borderLeft: '3px solid #00D4FF',
-        backgroundColor: '#0d1c2e', borderRadius: '0 10px 10px 0',
-        padding: '18px 20px',
-      }}>
-        <p style={{ fontWeight: 600, color: '#E8F4F8', fontSize: '0.95rem', margin: '0 0 5px 0' }}>
-          Middlesex University London
-        </p>
-        <p style={{ fontSize: '0.85rem', color: '#00D4FF', margin: '0 0 5px 0' }}>
-          BSc Computer Science
-        </p>
-        <p style={{ fontSize: '0.78rem', color: '#c8894a', margin: 0 }}>
-          Jan 2025 – Jul 2027 · Expected 1st
-        </p>
-      </div>
-    </div>
-
-    <hr style={{ border: 'none', borderTop: '1px solid #1a2535', margin: '36px 0' }} />
-
-    {/* BEYOND CODE */}
-    <div>
-      <h2 style={sectionLabelStyle}>Beyond Code</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-        {BEYOND_PILLS.map(pill => (
-          <span key={pill.label} style={{
-            color: pill.color,
-            backgroundColor: pill.bg,
-            border: `1px solid ${pill.border}`,
-            fontSize: '0.83rem', padding: '7px 15px', borderRadius: '6px',
-            fontFamily: 'Ubuntu, sans-serif',
-          }}>
-            {pill.label}
+            that ships.
           </span>
-        ))}
+        </h1>
+        <p style={{
+          fontSize: '1rem', color: '#6b9470', lineHeight: 1.85,
+          maxWidth: '540px', margin: 0,
+        }}>
+          Second-year CS student at Middlesex University, London. I care about the craft —
+          writing code that's clean, intentional, and actually solves the problem.
+          I don't wait for permission to build things.
+        </p>
       </div>
-    </div>
 
+      {/* The story */}
+      <div style={{ marginBottom: '52px' }}>
+        <SectionLabel text="The story" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <p style={{ fontSize: '0.92rem', color: '#a3c9a8', lineHeight: 1.85, margin: 0 }}>
+            I started coding because I wanted to build things — not because someone told me to.
+            The first version of DeanOS was a weekend experiment that got out of hand in the best way possible.
+            That's how most of my projects start.
+          </p>
+          <p style={{ fontSize: '0.92rem', color: '#a3c9a8', lineHeight: 1.85, margin: 0 }}>
+            Outside of coursework, I founded the CS Academic Society at Middlesex — because there
+            wasn't one, and I thought there should be. I run workshops, organise hackathons,
+            and bring industry speakers in. I'm also part of the Formula Student team,
+            building computer vision systems for an autonomous racing car.
+          </p>
+          <p style={{ fontSize: '0.92rem', color: '#a3c9a8', lineHeight: 1.85, margin: 0 }}>
+            I'm looking for a placement where I can work on real problems with people who give a damn.
+            I'm not afraid of a codebase that bites back.
+          </p>
+        </div>
+      </div>
+
+      {/* What I'm building right now */}
+      <div style={{ marginBottom: '52px' }}>
+        <SectionLabel text="Right now" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {NOW.map(item => (
+            <div key={item.label} style={{
+              display: 'flex', alignItems: 'baseline', gap: '14px',
+              padding: '12px 16px',
+              backgroundColor: '#0c1f10',
+              border: '1px solid #1c3a22',
+              borderRadius: '8px',
+            }}>
+              <span style={{
+                color: '#4ade80', fontFamily: '"JetBrains Mono", monospace',
+                fontSize: '0.75rem', fontWeight: 700, flexShrink: 0,
+              }}>
+                ▸
+              </span>
+              <span style={{ color: '#f0fdf4', fontWeight: 600, fontSize: '0.9rem', flexShrink: 0 }}>
+                {item.label}
+              </span>
+              <span style={{ color: '#3a5a3e', fontSize: '0.82rem' }}>
+                {item.detail}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Stack */}
+      <div style={{ marginBottom: '52px' }}>
+        <SectionLabel text="Stack" />
+        <div style={{ marginBottom: '18px' }}>
+          <p style={{
+            fontSize: '0.68rem', color: '#2d5e34', fontFamily: '"JetBrains Mono", monospace',
+            letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px',
+          }}>
+            Day to day
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
+            {STACK_NOW.map(t => (
+              <span key={t} style={{
+                backgroundColor: '#0c1f10', border: '1px solid #22c55e44',
+                color: '#4ade80', fontSize: '0.78rem',
+                padding: '4px 11px', borderRadius: '6px',
+                fontFamily: '"JetBrains Mono", monospace',
+              }}>
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p style={{
+            fontSize: '0.68rem', color: '#2d5e34', fontFamily: '"JetBrains Mono", monospace',
+            letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px',
+          }}>
+            Also comfortable with
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
+            {STACK_ALSO.map(t => (
+              <span key={t} style={{
+                backgroundColor: '#070f08', border: '1px solid #1c3a22',
+                color: '#3a5a3e', fontSize: '0.78rem',
+                padding: '4px 11px', borderRadius: '6px',
+                fontFamily: '"JetBrains Mono", monospace',
+              }}>
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Education */}
+      <div>
+        <SectionLabel text="Education" />
+        <div style={{
+          borderLeft: '3px solid #22c55e',
+          backgroundColor: '#0c1f10', borderRadius: '0 10px 10px 0',
+          padding: '18px 22px',
+        }}>
+          <p style={{ fontWeight: 700, color: '#f0fdf4', fontSize: '0.95rem', margin: '0 0 4px' }}>
+            Middlesex University London
+          </p>
+          <p style={{ fontSize: '0.85rem', color: '#4ade80', margin: '0 0 4px' }}>
+            BSc Computer Science
+          </p>
+          <p style={{ fontSize: '0.78rem', color: '#6b9470', margin: 0 }}>
+            Jan 2025 – Jul 2027 · Targeting a 1st
+          </p>
+        </div>
+      </div>
+
+    </div>
   </div>
 )
+
+function SectionLabel({ text }: { text: string }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px',
+    }}>
+      <div style={{ width: '24px', height: '1px', backgroundColor: '#22c55e' }} />
+      <span style={{
+        fontSize: '0.68rem', color: '#4ade80',
+        fontFamily: '"JetBrains Mono", monospace',
+        letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600,
+      }}>
+        {text}
+      </span>
+    </div>
+  )
+}

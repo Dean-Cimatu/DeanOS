@@ -5,7 +5,6 @@ interface ContactLink {
   value: string
   href: string
   accent: string
-  gradientBg: string
   icon: React.ReactNode
 }
 
@@ -21,9 +20,7 @@ function EmailIcon({ color }: { color: string }) {
 function GitHubIcon({ color }: { color: string }) {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="10" cy="10" r="8" stroke={color} strokeWidth="1.5" fill="none" />
-      <circle cx="10" cy="10" r="2.5" fill={color} />
-      <line x1="12.5" y1="10" x2="17" y2="10" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M10 2C5.58 2 2 5.58 2 10c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0018 10c0-4.42-3.58-8-8-8z" fill={color} />
     </svg>
   )
 }
@@ -39,28 +36,25 @@ function LinkedInIcon({ color }: { color: string }) {
 
 const LINKS: ContactLink[] = [
   {
-    label: 'EMAIL',
+    label: 'Email',
     value: 'deancimatu@gmail.com',
     href: 'mailto:deancimatu@gmail.com',
-    accent: '#FF8C00',
-    gradientBg: 'linear-gradient(135deg, #1e120a 0%, #0d1828 100%)',
-    icon: <EmailIcon color="#FF8C00" />,
+    accent: '#4ade80',
+    icon: <EmailIcon color="#4ade80" />,
   },
   {
-    label: 'GITHUB',
+    label: 'GitHub',
     value: 'github.com/Dean-Cimatu',
     href: 'https://github.com/Dean-Cimatu',
-    accent: '#a78bfa',
-    gradientBg: 'linear-gradient(135deg, #0d1020 0%, #0d1828 100%)',
-    icon: <GitHubIcon color="#a78bfa" />,
+    accent: '#86efac',
+    icon: <GitHubIcon color="#86efac" />,
   },
   {
-    label: 'LINKEDIN',
+    label: 'LinkedIn',
     value: 'linkedin.com/in/deancimatu',
     href: 'https://linkedin.com/in/deancimatu',
-    accent: '#00D4FF',
-    gradientBg: 'linear-gradient(135deg, #071822 0%, #0d1828 100%)',
-    icon: <LinkedInIcon color="#00D4FF" />,
+    accent: '#22c55e',
+    icon: <LinkedInIcon color="#22c55e" />,
   },
 ]
 
@@ -75,28 +69,32 @@ function ContactCard({ link }: { link: ContactLink }) {
       rel="noopener noreferrer"
       onMouseEnter={() => {
         if (!ref.current) return
-        ref.current.style.borderColor = link.accent
-        ref.current.style.transform = 'translateY(-2px)'
-        ref.current.style.boxShadow = `0 8px 32px rgba(0,0,0,0.4)`
+        ref.current.style.backgroundColor = '#0c1f10'
+        ref.current.style.borderLeftColor = link.accent
+        ref.current.style.borderColor = '#1c3a22'
+        ref.current.style.borderLeftColor = link.accent
+        ref.current.style.paddingLeft = '28px'
       }}
       onMouseLeave={() => {
         if (!ref.current) return
-        ref.current.style.borderColor = `${link.accent}40`
-        ref.current.style.transform = 'translateY(0)'
-        ref.current.style.boxShadow = 'none'
+        ref.current.style.backgroundColor = 'transparent'
+        ref.current.style.borderColor = 'transparent'
+        ref.current.style.borderLeftColor = link.accent
+        ref.current.style.paddingLeft = '20px'
       }}
       style={{
         display: 'flex', alignItems: 'center', gap: '18px',
-        background: link.gradientBg,
-        border: `1px solid ${link.accent}40`,
+        padding: '16px 20px',
+        backgroundColor: 'transparent',
+        border: '1px solid transparent',
         borderLeft: `3px solid ${link.accent}`,
-        borderRadius: '10px', padding: '20px 24px', marginBottom: '12px',
+        borderRadius: '0 8px 8px 0',
         textDecoration: 'none', cursor: 'pointer',
-        transition: 'border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
+        transition: 'background-color 0.18s ease, border-color 0.18s ease, padding-left 0.18s ease',
       }}
     >
       <div style={{
-        width: 40, height: 40, borderRadius: '8px', flexShrink: 0,
+        width: 36, height: 36, borderRadius: '8px', flexShrink: 0,
         backgroundColor: `${link.accent}15`,
         border: `1px solid ${link.accent}30`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -105,68 +103,89 @@ function ContactCard({ link }: { link: ContactLink }) {
       </div>
       <div>
         <div style={{
-          fontSize: '0.65rem', color: link.accent, marginBottom: '4px',
-          textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700,
+          fontSize: '0.65rem', color: link.accent, marginBottom: '3px',
+          textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700,
           fontFamily: '"JetBrains Mono", monospace',
         }}>
           {link.label}
         </div>
         <div style={{
-          fontSize: '0.95rem', color: '#E8F4F8',
+          fontSize: '0.88rem', color: '#f0fdf4',
           fontFamily: '"JetBrains Mono", monospace',
-          fontWeight: 500,
         }}>
           {link.value}
         </div>
       </div>
+      <span style={{ marginLeft: 'auto', color: '#2d5e34', fontSize: '1rem' }}>›</span>
     </a>
   )
 }
 
 export const ContactPage = () => (
   <div style={{
-    maxWidth: '480px', margin: '0 auto',
-    padding: '64px 32px',
     fontFamily: 'Ubuntu, sans-serif',
-    backgroundColor: '#080d18',
+    background: `
+      radial-gradient(ellipse 55% 45% at 90% 100%, rgba(34,197,94,0.07) 0%, transparent 55%),
+      #040d06
+    `,
     minHeight: '100%',
   }}>
-    <h1 style={{
-      fontSize: '2rem', fontWeight: 800, margin: '0 0 10px 0',
-      letterSpacing: '-0.02em', color: '#E8F4F8',
-      lineHeight: 1.15,
-    }}>
-      Let's work{' '}
-      <span style={{
-        background: 'linear-gradient(90deg, #00D4FF, #a78bfa)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+    <div style={{ maxWidth: '560px', margin: '0 auto', padding: '64px 40px 80px' }}>
+
+      {/* Label */}
+      <p style={{
+        fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase',
+        color: '#4ade80', fontFamily: '"JetBrains Mono", monospace',
+        marginBottom: '20px', fontWeight: 600,
       }}>
-        together.
-      </span>
-    </h1>
-    <p style={{ color: '#8899AA', marginTop: '10px', marginBottom: '36px', fontSize: '0.9rem', lineHeight: 1.7 }}>
-      Whether it's a placement, a side project, or just a good conversation — I'm always open to new things.
-    </p>
-
-    <div>
-      {LINKS.map(link => (
-        <ContactCard key={link.label} link={link} />
-      ))}
-    </div>
-
-    <div style={{ marginTop: '28px' }}>
-      <p style={{ color: '#FFD700', fontSize: '0.78rem', margin: '0 0 8px 0', fontFamily: '"JetBrains Mono", monospace' }}>
-        ⚡ Usually within 24 hours
+        Contact
       </p>
-      <p style={{ color: '#4A5568', fontSize: '0.75rem', margin: 0, fontFamily: 'Ubuntu, sans-serif' }}>
-        Open to placement{' '}
-        <span style={{ color: '#2e4a6a' }}>·</span>{' '}
-        collaborations{' '}
-        <span style={{ color: '#2e4a6a' }}>·</span>{' '}
-        freelance
+
+      {/* Headline */}
+      <h1 style={{
+        fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.15,
+        color: '#f0fdf4', fontFamily: 'Ubuntu, sans-serif',
+        letterSpacing: '-0.03em', margin: '0 0 20px',
+      }}>
+        Let's make
+        <br />
+        <span style={{
+          background: 'linear-gradient(90deg, #4ade80, #22c55e)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+        }}>
+          something.
+        </span>
+      </h1>
+
+      <p style={{
+        fontSize: '1rem', color: '#6b9470', lineHeight: 1.85,
+        maxWidth: '440px', margin: '0 0 52px',
+      }}>
+        I'm actively looking for a placement for 2025/26.
+        If you're building something interesting and need someone who ships — let's talk.
       </p>
+
+      {/* Links */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '48px' }}>
+        {LINKS.map(link => (
+          <ContactCard key={link.label} link={link} />
+        ))}
+      </div>
+
+      {/* Footer note */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '12px',
+        borderTop: '1px solid #0f2212', paddingTop: '28px',
+      }}>
+        <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#4ade80', flexShrink: 0 }} />
+        <p style={{
+          fontSize: '0.78rem', color: '#3a5a3e',
+          fontFamily: '"JetBrains Mono", monospace', margin: 0,
+        }}>
+          Usually reply within 24 hours &mdash; Open to placement · freelance · collaboration
+        </p>
+      </div>
+
     </div>
   </div>
 )
