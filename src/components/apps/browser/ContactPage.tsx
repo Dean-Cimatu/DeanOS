@@ -52,7 +52,7 @@ const LINKS: ContactLink[] = [
   {
     label: 'LinkedIn',
     value: 'linkedin.com/in/deancimatu',
-    href: 'https://linkedin.com/in/deancimatu',
+    href: 'https://www.linkedin.com/in/dean-cimatu/',
     accent: '#22c55e',
     icon: <LinkedInIcon color="#22c55e" />,
   },
@@ -161,7 +161,7 @@ export const ContactPage = () => (
         fontSize: '1rem', color: '#6b9470', lineHeight: 1.85,
         maxWidth: '440px', margin: '0 0 52px',
       }}>
-        I'm actively looking for a placement for 2025/26.
+        I'm actively looking for a placement and internship oppurtunies.
         If you're building something interesting and need someone who ships — let's talk.
       </p>
 
