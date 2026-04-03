@@ -41,23 +41,7 @@ const PHOTOS: Photo[] = [
     date: 'Apr 2026',
     gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
     tags: ['Full-stack', 'Solo', 'Live'],
-  },
-  {
-    id: 'cs-soc',
-    title: 'CS Society',
-    subtitle: 'Founded and running workshops for the Middlesex CS cohort',
-    date: 'Feb 2025',
-    gradient: 'linear-gradient(135deg, #1a2e1a 0%, #2ecc71 60%, #f1c40f 100%)',
-    tags: ['Society', 'Founder', 'Community'],
-  },
-  {
-    id: 'freshers',
-    title: 'Freshers Week',
-    subtitle: 'First week at Middlesex — start of everything',
-    date: 'Jan 2025',
-    gradient: 'linear-gradient(135deg, #12100e 0%, #2c1654 50%, #a044ff 100%)',
-    tags: ['University', 'Middlesex'],
-  },
+  }
 ]
 
 export default function PhotoViewer() {
