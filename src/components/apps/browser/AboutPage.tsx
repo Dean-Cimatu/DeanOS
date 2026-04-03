@@ -56,19 +56,15 @@ export const AboutPage = () => (
         <SectionLabel text="The story" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <p style={{ fontSize: '0.92rem', color: '#a3c9a8', lineHeight: 1.85, margin: 0 }}>
-            I started coding because I wanted to build things — not because someone told me to.
-            The first version of DeanOS was a weekend experiment that got out of hand in the best way possible.
-            That's how most of my projects start.
+            Second-year CS student at Middlesex. I spend most of my time outside lectures building
+            things — DeanOS started as a weekend project and kind of spiralled from there.
           </p>
           <p style={{ fontSize: '0.92rem', color: '#a3c9a8', lineHeight: 1.85, margin: 0 }}>
-            Outside of coursework, I founded the CS Academic Society at Middlesex — because there
-            wasn't one, and I thought there should be. I run workshops, organise hackathons,
-            and bring industry speakers in. I'm also part of the Formula Student team,
-            building computer vision systems for an autonomous racing car.
+            I help run the CS Society and I'm on the Formula Student team working on computer vision.
+            Both are good excuses to learn things that aren't on the syllabus.
           </p>
           <p style={{ fontSize: '0.92rem', color: '#a3c9a8', lineHeight: 1.85, margin: 0 }}>
-            I'm looking for a placement where I can work on real problems with people who give a damn.
-            I'm not afraid of a codebase that bites back.
+            Looking for a placement where I can contribute to real work and pick things up fast.
           </p>
         </div>
       </div>
