@@ -114,6 +114,8 @@ and compete with others on the leaderboard.
 
 In active development. Not yet deployed.`,
 
+  'coming_soon.txt': `coming soon`,
+
   'DesignPatternCLI.md': `# DesignPatternCLI
 
 A Java CLI application demonstrating 6 Gang of Four design patterns

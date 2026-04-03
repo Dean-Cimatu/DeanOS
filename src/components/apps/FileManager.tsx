@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AppIcon } from '../os/AppIcon'
+import { useWindowStore } from '../../store/windowStore'
 
 type VDir = '/home' | '/home/projects' | '/home/about'
 
@@ -23,8 +24,7 @@ const FS: Record<VDir, VFile[]> = {
     { name: 'portfolio', isDir: true, modified: 'Today' },
   ],
   '/home/about': [
-    { name: 'bio.txt',    isDir: false, size: '0.4 KB', modified: 'Today' },
-    { name: 'skills.txt', isDir: false, size: '0.6 KB', modified: 'Today' },
+    { name: 'coming_soon.txt', isDir: false, size: '0.1 KB', modified: 'Today' },
   ],
 }
 
@@ -39,6 +39,7 @@ function dirAlias(d: VDir) {
 }
 
 export default function FileManager() {
+  const { openWindow, windows, focusWindow } = useWindowStore()
   const [dir, setDir]       = useState<VDir>('/home')
   const [history, setHistory] = useState<VDir[]>(['/home'])
   const [histIdx, setHistIdx] = useState(0)
@@ -78,7 +79,19 @@ export default function FileManager() {
     if (f.isDir) {
       const target = `${dir}/${f.name}` as VDir
       if (FS[target]) navigate(target)
+      return
     }
+    // Open file in FileViewer
+    const winId = `fileviewer-${f.name}`
+    if (windows[winId]) { focusWindow(winId); return }
+    openWindow({
+      id: winId,
+      title: f.name,
+      x: 220, y: 100, width: 600, height: 500,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 220, preMaxY: 100, preMaxWidth: 600, preMaxHeight: 500,
+      initialPage: f.name,
+    })
   }
 
   const btn = (active: boolean): React.CSSProperties => ({
