@@ -3,9 +3,21 @@ import { motion } from 'framer-motion'
 import { useSystemStore } from '../store/systemStore'
 import { playPostBeep } from '../lib/sounds'
 
+// ── ASCII art header ──────────────────────────────────────────────────────────
+
+const ASCII_ART = `\
+██████╗ ███████╗ █████╗ ███╗   ██╗ ██████╗ ███████╗
+██╔══██╗██╔════╝██╔══██╗████╗  ██║██╔═══██╗██╔════╝
+██║  ██║█████╗  ███████║██╔██╗ ██║██║   ██║███████╗
+██║  ██║██╔══╝  ██╔══██║██║╚██╗██║██║   ██║╚════██║
+██████╔╝███████╗██║  ██║██║ ╚████║╚██████╔╝███████║
+╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝`
+
+// ── POST scroll lines ─────────────────────────────────────────────────────────
+
 interface PostEntry {
   text: string
-  gap: number // ms to wait before showing this line
+  gap: number // ms before this line appears
 }
 
 const POST_LINES: PostEntry[] = [
@@ -66,7 +78,7 @@ const POST_LINES: PostEntry[] = [
   { text: 'DeanOS v2.1.0 — Kernel 6.1.0-deanos — All systems nominal.', gap: 105 },
 ]
 
-// ── Line renderer ─────────────────────────────────────────────────────────
+// ── Status token colouring ────────────────────────────────────────────────────
 
 const STATUS_COLORS: Record<string, string> = {
   OK: '#00FF88', PASS: '#00FF88', FAIL: '#FF4444', WARN: '#FFD700',
@@ -75,76 +87,69 @@ const STATUS_COLORS: Record<string, string> = {
 function renderPostLine(text: string) {
   if (!text) return null
 
-  // One or more [OK] / [PASS] / [FAIL] / [WARN] tokens anywhere in the line
   if (/\[(OK|PASS|FAIL|WARN)\]/.test(text)) {
     const parts = text.split(/(\[(?:OK|PASS|FAIL|WARN)\])/)
-    const isDimmed = text.trimStart() !== text // indented line
+    const isDimmed = text.trimStart() !== text
     return (
       <>
         {parts.map((part, i) => {
           const m = part.match(/^\[(OK|PASS|FAIL|WARN)\]$/)
           if (m) return <span key={i} style={{ color: STATUS_COLORS[m[1]] }}>{part}</span>
-          return <span key={i} style={{ color: isDimmed ? '#7A8FA8' : '#E8F4F8' }}>{part}</span>
+          return <span key={i} style={{ color: isDimmed ? '#7A8FA8' : '#C8D8E8' }}>{part}</span>
         })}
       </>
     )
   }
 
-  // Bare suffix: "... PASS", "  PASS", "... OK" etc.
   const suffix = text.match(/^(.*\S)(\s+)(OK|PASS|FAIL|WARN)$/)
   if (suffix) {
     return (
       <>
-        <span style={{ color: '#E8F4F8' }}>{suffix[1]}{suffix[2]}</span>
+        <span style={{ color: '#C8D8E8' }}>{suffix[1]}{suffix[2]}</span>
         <span style={{ color: STATUS_COLORS[suffix[3]] }}>{suffix[3]}</span>
       </>
     )
   }
 
-  // Header lines (no leading space, no status token) — slightly brighter
-  return <span style={{ color: '#E8F4F8' }}>{text}</span>
+  return <span style={{ color: '#C8D8E8' }}>{text}</span>
 }
 
-// ── Scroll constants ──────────────────────────────────────────────────────
+// ── Constants ─────────────────────────────────────────────────────────────────
 
-const LINE_H = 22       // px per line (12px font × 1.5 lh + margin)
-
+const LINE_H = 20 // px per line
+const HEADER_H = 140 // approx height of ASCII art + subtitle + divider
 const delay = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
 
-// ── Component ─────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Boot() {
-  const { bootPhase, bootProgress, setBootPhase, setBootComplete, setBootProgress } = useSystemStore()
+  const { bootPhase, setBootPhase, setBootComplete } = useSystemStore()
   const [visibleLines, setVisibleLines] = useState(0)
   const cancelledRef = useRef(false)
 
-  // Fill 80% of screen height with text lines
-  const MAX_LINES = Math.floor((window.innerHeight * 0.8) / LINE_H)
+  const MAX_LINES = Math.floor((window.innerHeight - HEADER_H - 40) / LINE_H)
 
-  // Main phase sequencer
+  // Phase sequencer: 1 = POST running, 5 = fade out, 6 = done
   useEffect(() => {
     cancelledRef.current = false
     const advance = async () => {
-      await delay(200)
-      if (cancelledRef.current) return
-      setBootPhase(1); await delay(2800)
+      await delay(150)
       if (cancelledRef.current) return
       playPostBeep()
-      setBootPhase(2); await delay(400)
+      setBootPhase(1)
+      await delay(3400)
       if (cancelledRef.current) return
-      setBootPhase(3); await delay(800)
+      setBootPhase(5)
+      await delay(700)
       if (cancelledRef.current) return
-      setBootPhase(4); await delay(200)
-      if (cancelledRef.current) return
-      setBootPhase(5); await delay(350)
-      if (cancelledRef.current) return
-      setBootPhase(6); setBootComplete(true)
+      setBootPhase(6)
+      setBootComplete(true)
     }
     advance()
     return () => { cancelledRef.current = true }
   }, [])
 
-  // Sequential POST line ticker — each line has its own gap
+  // Sequential line ticker
   useEffect(() => {
     if (bootPhase !== 1) return
     setVisibleLines(0)
@@ -161,142 +166,81 @@ export default function Boot() {
     return () => { stopped = true }
   }, [bootPhase])
 
-  // Progress bar ticker
-  useEffect(() => {
-    if (bootPhase !== 3) return
-    setBootProgress(0)
-    let progress = 0
-    const interval = setInterval(() => {
-      progress += 1
-      setBootProgress(progress)
-      if (progress >= 100) clearInterval(interval)
-    }, 8)
-    return () => clearInterval(interval)
-  }, [bootPhase])
-
   if (bootPhase === 6) return null
 
-  // How many lines have scrolled off the top
   const scrolledOff = Math.max(0, visibleLines - MAX_LINES)
   const translateY = -(scrolledOff * LINE_H)
 
   return (
     <motion.div
       animate={{ opacity: bootPhase === 5 ? 0 : 1 }}
-      transition={{ duration: 0.6, ease: 'easeInOut' }}
+      transition={{ duration: 0.7, ease: 'easeInOut' }}
       style={{
         position: 'fixed', inset: 0,
         backgroundColor: '#000',
         zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         fontFamily: '"JetBrains Mono", monospace',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '24px 5%',
       }}
     >
-      {/* ── Phase 1: POST text ── */}
-      {bootPhase === 1 && (
-        <div style={{
-          position: 'absolute',
-          top: '10%', left: '5%', right: '5%',
-          height: `${MAX_LINES * LINE_H}px`,
-          overflow: 'hidden',
+      {/* ── ASCII art header ── */}
+      <div style={{ flexShrink: 0 }}>
+        <pre style={{
+          color: '#00D4FF',
+          fontSize: '11px',
+          lineHeight: '15px',
+          margin: 0,
+          letterSpacing: '0.01em',
         }}>
-          <div style={{
-            transform: `translateY(${translateY}px)`,
-            transition: 'transform 120ms linear',
-          }}>
-            {POST_LINES.slice(0, visibleLines).map((entry, i) => (
-              <motion.p
-                key={i}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.06 }}
-                style={{
-                  fontSize: '12px',
-                  lineHeight: `${LINE_H}px`,
-                  margin: 0,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  color: '#E8F4F8',
-                }}
-              >
-                {renderPostLine(entry.text) ?? <>&nbsp;</>}
-              </motion.p>
-            ))}
-          </div>
+          {ASCII_ART}
+        </pre>
+        <div style={{
+          color: '#3a5070',
+          fontSize: '11px',
+          marginTop: '8px',
+          letterSpacing: '0.04em',
+        }}>
+          version 2.1.0 &nbsp;·&nbsp; kernel 6.1.0-deanos &nbsp;·&nbsp; x86_64
         </div>
-      )}
-
-      {/* ── Phase 2+: Logo, progress bar, loading text ── */}
-      {bootPhase >= 2 && bootPhase <= 5 && (
         <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          width: '100%', padding: '0 10%',
-        }}>
-          {/* Logo */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            style={{
-              color: '#00D4FF',
-              fontSize: 'clamp(48px, 10vw, 96px)',
-              fontWeight: 'bold',
-              letterSpacing: '0.12em',
-            }}
-          >
-            DeanOS
-          </motion.div>
+          borderBottom: '1px solid #1a2535',
+          marginTop: '12px',
+          marginBottom: '14px',
+        }} />
+      </div>
 
-          {/* Phase 3+: Progress bar */}
-          {bootPhase >= 3 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              style={{ width: '100%', maxWidth: '500px', marginTop: '36px' }}
-            >
-              <div style={{
-                width: '100%', height: '4px', borderRadius: '2px',
-                backgroundColor: '#1A2035', overflow: 'hidden',
-              }}>
-                <div style={{
-                  height: '100%',
-                  width: `${bootProgress}%`,
-                  backgroundColor: '#00D4FF',
-                  borderRadius: '2px',
-                  transition: 'width 20ms linear',
-                }} />
-              </div>
-              <p style={{
-                color: '#8899AA', fontSize: '12px', marginTop: '12px', textAlign: 'center',
-              }}>
-                {bootProgress}%
-              </p>
-            </motion.div>
-          )}
-
-          {/* Phase 4+: Loading text with staggered dots */}
-          {bootPhase >= 4 && (
+      {/* ── Scrolling POST area ── */}
+      {bootPhase >= 1 && bootPhase <= 4 && (
+        <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+          <div style={{
+            position: 'absolute', inset: 0, overflow: 'hidden',
+          }}>
             <div style={{
-              display: 'flex', alignItems: 'center', gap: '2px',
-              marginTop: '20px',
-              color: '#8899AA', fontSize: '12px',
+              transform: `translateY(${translateY}px)`,
+              transition: 'transform 100ms linear',
             }}>
-              <span>Loading desktop</span>
-              {[0, 1, 2].map(i => (
-                <motion.span
+              {POST_LINES.slice(0, visibleLines).map((entry, i) => (
+                <motion.p
                   key={i}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: i * 0.1, duration: 0.2 }}
+                  transition={{ duration: 0.05 }}
+                  style={{
+                    fontSize: '11px',
+                    lineHeight: `${LINE_H}px`,
+                    margin: 0,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
                 >
-                  .
-                </motion.span>
+                  {renderPostLine(entry.text) ?? <>&nbsp;</>}
+                </motion.p>
               ))}
             </div>
-          )}
+          </div>
         </div>
       )}
     </motion.div>

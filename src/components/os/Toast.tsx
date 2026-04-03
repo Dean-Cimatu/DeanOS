@@ -22,7 +22,7 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
   const color = ACCENT[type]
 
   useEffect(() => {
-    const t = setTimeout(onDismiss, 4000)
+    const t = setTimeout(onDismiss, 7000)
     return () => clearTimeout(t)
   }, [])
 
@@ -39,7 +39,7 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
       alignItems: 'flex-start',
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
       overflow: 'hidden',
-      fontFamily: '"JetBrains Mono", monospace',
+      fontFamily: 'Ubuntu, sans-serif',
     }}>
       {/* Colour dot */}
       <div style={{
@@ -50,10 +50,10 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
 
       {/* Text */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ color: '#E8F4F8', fontSize: '13px', fontWeight: 600, margin: 0 }}>
+        <p style={{ color: '#dce8f5', fontSize: '13px', fontWeight: 600, margin: 0, fontFamily: 'Ubuntu, sans-serif' }}>
           {title}
         </p>
-        <p style={{ color: '#8899AA', fontSize: '11px', margin: '3px 0 0' }}>
+        <p style={{ color: '#7d95af', fontSize: '12px', margin: '3px 0 0', fontFamily: 'Ubuntu, sans-serif' }}>
           {message}
         </p>
       </div>
@@ -76,7 +76,7 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
       <motion.div
         initial={{ width: '100%' }}
         animate={{ width: '0%' }}
-        transition={{ duration: 4, ease: 'linear' }}
+        transition={{ duration: 7, ease: 'linear' }}
         style={{
           position: 'absolute', bottom: 0, left: 0,
           height: '2px', backgroundColor: color, opacity: 0.5,

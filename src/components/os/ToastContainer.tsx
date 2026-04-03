@@ -6,7 +6,7 @@ export default function ToastContainer() {
   const notifications = useSystemStore(s => s.notifications)
   const dismissNotification = useSystemStore(s => s.dismissNotification)
 
-  const visible = notifications.slice(0, 5)
+  const visible = notifications.slice(0, 2)
 
   return (
     <div style={{

@@ -139,7 +139,7 @@ export const CVPage = () => {
           <h1 style={s.name}>Dean Cimatu</h1>
           <p style={s.tagline}>Software Engineering Student</p>
           <div style={s.contactRow}>
-            <a href="mailto:deancimatu@example.com" style={s.contactLink}>deancimatu@example.com</a>
+            <a href="mailto:deancimatu@gmail.com" style={s.contactLink}>deancimatu@example.com</a>
             <span style={s.divider}>·</span>
             <a href="https://github.com/Dean-Cimatu" target="_blank" rel="noopener noreferrer" style={s.contactLink}>github.com/deancimatu</a>
             <span style={s.divider}>·</span>

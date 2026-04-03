@@ -65,9 +65,9 @@ export default function Desktop() {
 
   useEffect(() => {
     if (!loggedIn) return
-    const t1 = setTimeout(() => addNotification({ type: 'info', title: 'Welcome back, dean.', message: 'DeanOS v2.0 loaded successfully.' }), 1000)
-    const t2 = setTimeout(() => addNotification({ type: 'success', title: 'Car Hire System', message: 'carhire.deancimatu.com is live.' }), 4000)
-    const t3 = setTimeout(() => addNotification({ type: 'info', title: 'Portfolio updated', message: '7 projects available in the Browser app.' }), 8000)
+    const t1 = setTimeout(() => addNotification({ type: 'info', title: 'Welcome back, dean.', message: 'DeanOS v2.1.0 loaded successfully.' }), 1200)
+    const t2 = setTimeout(() => addNotification({ type: 'success', title: 'Car Hire System', message: 'carhire.deancimatu.com is live.' }), 10000)
+    const t3 = setTimeout(() => addNotification({ type: 'info', title: 'Portfolio updated', message: '7 projects available in the Browser app.' }), 20000)
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
   }, [loggedIn])
 
