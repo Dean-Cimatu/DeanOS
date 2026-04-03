@@ -7,6 +7,8 @@ import Settings from './apps/Settings'
 import FileManager from './apps/FileManager'
 import FileViewer from './apps/FileViewer'
 import MusicPlayer from './apps/MusicPlayer'
+import PhotoViewer from './apps/PhotoViewer'
+import CodeRunner from './apps/CodeRunner'
 import ResizeHandle from './ResizeHandle'
 import type { ResizeDirection } from './ResizeHandle'
 
@@ -147,12 +149,14 @@ export default function Window({ id, windowData }: WindowProps) {
       <div style={{
         flex: 1, overflow: 'hidden',
         backgroundColor:
-          id.startsWith('browser')    ? '#121929' :
-          id.startsWith('terminal')   ? '#0A0F1E' :
-          id.startsWith('settings')   ? '#0D1828' :
-          id.startsWith('files')      ? '#0D1828' :
-          id.startsWith('fileviewer') ? '#0D1828' :
-          id.startsWith('music')      ? '#0A0F1E' :
+          id.startsWith('browser')     ? '#121929' :
+          id.startsWith('terminal')    ? '#0A0F1E' :
+          id.startsWith('settings')    ? '#0D1828' :
+          id.startsWith('files')       ? '#0D1828' :
+          id.startsWith('fileviewer')  ? '#0D1828' :
+          id.startsWith('music')       ? '#0A0F1E' :
+          id.startsWith('photos')      ? '#0A0F1E' :
+          id.startsWith('coderunner')  ? '#0A0F1E' :
           'white',
         display: 'flex',
       }}>
@@ -162,6 +166,8 @@ export default function Window({ id, windowData }: WindowProps) {
         {id.startsWith('files')       && <FileManager />}
         {id.startsWith('fileviewer')  && <FileViewer filename={windowData.initialPage ?? ''} />}
         {id.startsWith('music')       && <MusicPlayer />}
+        {id.startsWith('photos')      && <PhotoViewer />}
+        {id.startsWith('coderunner')  && <CodeRunner />}
       </div>
     </div>
   )

@@ -221,28 +221,6 @@ export default function Settings() {
               </div>
             </div>
 
-            {/* Summary card */}
-            <div style={{ ...card, padding: '16px 20px' }}>
-              <div style={{ fontSize: '11px', color: '#8899AA', marginBottom: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                Current theme
-              </div>
-              {[
-                ['Accent', accentColor],
-                ['Font size', fontSize],
-                ['Theme', 'Aurora Dark'],
-                ['Font family', 'Ubuntu + JetBrains Mono'],
-              ].map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', alignItems: 'center', padding: '5px 0' }}>
-                  <span style={{ fontSize: '12px', color: '#8899AA', width: 110, flexShrink: 0 }}>{k}</span>
-                  <span style={{ fontSize: '12px', color: '#E8F4F8', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    {k === 'Accent' && (
-                      <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: '50%', backgroundColor: v }} />
-                    )}
-                    {v}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
@@ -250,32 +228,82 @@ export default function Settings() {
         {section === 'wallpaper' && (
           <div>
             <div style={sectionTitle}>Wallpaper</div>
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-              {WALLPAPERS.map(w => (
-                <div
-                  key={w.id}
-                  onClick={() => { setWallpaper(w.id); notify('success', 'Wallpaper changed', `Now using ${w.label}.`) }}
-                  style={{
-                    cursor: 'pointer', borderRadius: '10px', overflow: 'hidden',
-                    border: wallpaper === w.id ? `2px solid ${accentColor}` : '2px solid #1E2D45',
-                    transition: 'border-color 0.15s',
-                    boxShadow: wallpaper === w.id ? `0 0 12px ${accentColor}44` : 'none',
-                  }}
-                >
-                  <div style={{ width: 120, height: 80, background: w.preview }} />
-                  <div style={{
-                    backgroundColor: '#1A2640', padding: '8px 12px',
-                    fontSize: '12px', fontFamily: 'Ubuntu, sans-serif',
-                    color: wallpaper === w.id ? accentColor : '#8899AA',
-                    textAlign: 'center',
-                  }}>
-                    {w.label}
+
+            {/* Gradient wallpapers */}
+            <div style={{ marginBottom: '28px' }}>
+              <span style={fieldLabel}>Gradient</span>
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                {WALLPAPERS.map(w => (
+                  <div
+                    key={w.id}
+                    onClick={() => { setWallpaper(w.id); notify('success', 'Wallpaper changed', `Now using ${w.label}.`) }}
+                    style={{
+                      cursor: 'pointer', borderRadius: '10px', overflow: 'hidden',
+                      border: wallpaper === w.id ? `2px solid ${accentColor}` : '2px solid #1E2D45',
+                      transition: 'border-color 0.15s',
+                      boxShadow: wallpaper === w.id ? `0 0 12px ${accentColor}44` : 'none',
+                    }}
+                  >
+                    <div style={{ width: 120, height: 80, background: w.preview }} />
+                    <div style={{
+                      backgroundColor: '#1A2640', padding: '8px 12px',
+                      fontSize: '12px', fontFamily: 'Ubuntu, sans-serif',
+                      color: wallpaper === w.id ? accentColor : '#8899AA',
+                      textAlign: 'center',
+                    }}>
+                      {w.label}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-            <div style={{ marginTop: '24px', fontSize: '12px', color: '#8899AA' }}>
-              Changes apply instantly to the desktop background.
+
+            {/* Photo wallpapers */}
+            <div>
+              <span style={fieldLabel}>Photos</span>
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                {[
+                  { label: 'London Skyline', preview: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #e94560 100%)', desc: 'Night over the Thames' },
+                  { label: 'Mountain Pass', preview: 'linear-gradient(180deg, #2c3e50 0%, #3d5a6b 30%, #6b8f71 65%, #a8c5a0 100%)', desc: 'Alpine morning light' },
+                  { label: 'Deep Ocean', preview: 'linear-gradient(180deg, #0d1b2a 0%, #1b4332 30%, #0077b6 65%, #00b4d8 100%)', desc: 'Pacific blue' },
+                  { label: 'Desert Dusk', preview: 'linear-gradient(180deg, #2d1b69 0%, #8e44ad 30%, #e67e22 65%, #f39c12 100%)', desc: 'Sahara at golden hour' },
+                ].map(w => (
+                  <div
+                    key={w.label}
+                    onClick={() => notify('info', 'Photos coming soon', 'Upload your own photos in a future update.')}
+                    style={{
+                      cursor: 'pointer', borderRadius: '10px', overflow: 'hidden',
+                      border: '2px solid #1E2D45',
+                      opacity: 0.75,
+                      transition: 'opacity 0.15s, border-color 0.15s',
+                      position: 'relative',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '1'; (e.currentTarget as HTMLElement).style.borderColor = '#2A3F5F' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '0.75'; (e.currentTarget as HTMLElement).style.borderColor = '#1E2D45' }}
+                  >
+                    <div style={{ width: 120, height: 80, background: w.preview, position: 'relative' }}>
+                      <div style={{
+                        position: 'absolute', inset: 0,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '11px', color: 'rgba(255,255,255,0.45)',
+                        fontFamily: 'Ubuntu, sans-serif',
+                      }}>
+                        {w.desc}
+                      </div>
+                    </div>
+                    <div style={{
+                      backgroundColor: '#1A2640', padding: '8px 12px',
+                      fontSize: '12px', fontFamily: 'Ubuntu, sans-serif',
+                      color: '#8899AA', textAlign: 'center',
+                    }}>
+                      {w.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: '12px', fontSize: '12px', color: '#4A6080' }}>
+                Photo wallpapers are placeholder previews — upload support coming soon.
+              </div>
             </div>
           </div>
         )}
@@ -372,25 +400,47 @@ export default function Settings() {
             </div>
 
             {/* System info */}
-            <div style={{ ...card, marginBottom: '24px' }}>
+            <div style={{ ...card, marginBottom: '20px' }}>
               {[
-                ['OS',        'DeanOS Linux x86_64'],
-                ['Kernel',    '6.1.0-deanos'],
-                ['Desktop',   'Dean-Compositor'],
-                ['CPU',       'DCPU @ 4.20 GHz (8C/16T)'],
-                ['RAM',       '16384 MB DDR5-6000'],
-                ['Shell',     'deanos-terminal'],
-                ['Framework', 'React 18.3 + TypeScript 5'],
-                ['Bundler',   'Vite 5'],
-                ['Styling',   'Tailwind CSS + Framer Motion'],
-                ['Author',    'Dean Cimatu'],
+                ['OS',         'DeanOS Linux x86_64'],
+                ['Kernel',     '6.1.0-deanos'],
+                ['Shell',      'deanos-terminal (bash-compatible)'],
+                ['Compositor', 'Dean-Compositor (Framer Motion)'],
+                ['Author',     'Dean Cimatu'],
               ].map(([k, v], i, arr) => (
                 <div key={k} style={{
                   display: 'flex', alignItems: 'center', padding: '11px 20px',
                   borderBottom: i < arr.length - 1 ? '1px solid #1E2D45' : 'none',
                 }}>
-                  <span style={{ fontSize: '12px', color: '#8899AA', width: 110, flexShrink: 0 }}>{k}</span>
+                  <span style={{ fontSize: '12px', color: '#8899AA', width: 120, flexShrink: 0 }}>{k}</span>
                   <span style={{ fontSize: '12px', color: '#E8F4F8', fontFamily: '"JetBrains Mono", monospace' }}>{v}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Tech stack */}
+            <div style={{ ...card, marginBottom: '20px' }}>
+              <div style={{ padding: '14px 20px 10px', fontSize: '11px', color: '#8899AA', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                Tech Stack
+              </div>
+              {[
+                { category: 'Runtime',    color: '#8a78e8', items: ['React 18.3', 'TypeScript 5.4', 'Vite 5'] },
+                { category: 'State',      color: '#00D4FF', items: ['Zustand 4 (window, system, settings stores)'] },
+                { category: 'Animation',  color: '#4dba8c', items: ['Framer Motion 11 (spring physics, AnimatePresence)'] },
+                { category: 'Styling',    color: '#c8894a', items: ['Tailwind CSS v3', 'Inline CSS-in-JS', 'Ubuntu + JetBrains Mono'] },
+                { category: 'APIs',       color: '#FF69B4', items: ['Open-Meteo (weather, no key required)', 'Web Audio API (sounds)'] },
+              ].map(({ category, color, items }, i, arr) => (
+                <div key={category} style={{
+                  padding: '10px 20px',
+                  borderBottom: i < arr.length - 1 ? '1px solid #1E2D45' : 'none',
+                  display: 'flex', gap: '12px',
+                }}>
+                  <span style={{ fontSize: '12px', color, width: 100, flexShrink: 0, fontWeight: 600 }}>{category}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {items.map(item => (
+                      <span key={item} style={{ fontSize: '12px', color: '#C8D8E8', fontFamily: '"JetBrains Mono", monospace' }}>{item}</span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

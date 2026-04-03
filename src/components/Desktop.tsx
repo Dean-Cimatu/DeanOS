@@ -12,6 +12,7 @@ import { BatteryWidget } from './os/tray/BatteryWidget'
 import { WiFiWidget } from './os/tray/WiFiWidget'
 import { VolumeWidget } from './os/tray/VolumeWidget'
 import { NotificationBell } from './os/tray/NotificationBell'
+import { WeatherWidget } from './os/tray/WeatherWidget'
 import { NotificationCentre } from './os/NotificationCentre'
 import ToastContainer from './os/ToastContainer'
 import { ContextMenu } from './os/ContextMenu'
@@ -39,7 +40,7 @@ export default function Desktop() {
   const screensaver = useSystemStore(s => s.screensaver)
   const { addNotification, lock, logout, shutdown, restart } = useSystemStore()
 
-  type TrayPanel = 'notif' | 'wifi' | 'volume' | 'battery' | 'clock' | null
+  type TrayPanel = 'notif' | 'weather' | 'wifi' | 'volume' | 'battery' | 'clock' | null
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeTray, setActiveTray] = useState<TrayPanel>(null)
   const toggleTray = (key: Exclude<TrayPanel, null>) =>
@@ -176,12 +177,13 @@ export default function Desktop() {
             cursor: 'pointer', transition: 'background-color 0.15s, color 0.15s',
           }}
         >
-          DeanOS
+          D
         </button>
 
         {/* Right: System Tray */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <NotificationBell open={activeTray === 'notif'} onToggle={() => toggleTray('notif')} />
+          <WeatherWidget open={activeTray === 'weather'} onToggle={() => toggleTray('weather')} />
           <WiFiWidget open={activeTray === 'wifi'} onToggle={() => toggleTray('wifi')} />
           <VolumeWidget open={activeTray === 'volume'} onToggle={() => toggleTray('volume')} />
           <BatteryWidget open={activeTray === 'battery'} onToggle={() => toggleTray('battery')} />

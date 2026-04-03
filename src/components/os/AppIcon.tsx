@@ -112,6 +112,28 @@ const configs: Record<string, IconConfig> = {
     ),
   },
 
+  photos: {
+    bg: 'linear-gradient(145deg, #e74c8b, #9b2d6f)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="4" width="20" height="16" rx="2" fill="rgba(255,255,255,0.15)" stroke="white" strokeWidth="1.5"/>
+        <circle cx="8.5" cy="9.5" r="2" fill="white" opacity="0.9"/>
+        <path d="M2 16l5-5 3 3 4-4 8 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="rgba(255,255,255,0.25)"/>
+      </svg>
+    ),
+  },
+
+  code: {
+    bg: 'linear-gradient(145deg, #1e293b, #0f172a)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <polyline points="16 18 22 12 16 6" stroke="#00D4FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <polyline points="8 6 2 12 8 18" stroke="#00D4FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="14" y1="4" x2="10" y2="20" stroke="#00FF88" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+
   document: {
     bg: 'linear-gradient(145deg, #E2E8F0, #CBD5E1)',
     path: (

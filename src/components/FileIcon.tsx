@@ -68,6 +68,28 @@ function openApp(file: DesktopFile) {
     return
   }
 
+  if (file.appId === 'photos') {
+    if (windows['photos']) { ws.focusWindow('photos'); return }
+    ws.openWindow({
+      id: 'photos', title: 'Photos',
+      x: 120, y: 60, width: 760, height: 520,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 120, preMaxY: 60, preMaxWidth: 760, preMaxHeight: 520,
+    })
+    return
+  }
+
+  if (file.appId === 'coderunner') {
+    if (windows['coderunner']) { ws.focusWindow('coderunner'); return }
+    ws.openWindow({
+      id: 'coderunner', title: file.name,
+      x: 180, y: 80, width: 720, height: 500,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 180, preMaxY: 80, preMaxWidth: 720, preMaxHeight: 500,
+    })
+    return
+  }
+
   if (file.appId === 'browser') {
     ws.openWindow({
       id: `browser-${(file.initialPage ?? '/').replace(/\//g, '') || 'home'}-${Date.now()}`,
