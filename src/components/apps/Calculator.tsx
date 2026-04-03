@@ -1,214 +1,252 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useReducer, useEffect } from 'react'
 
-type Operator = '+' | '−' | '×' | '÷' | null
+type Op = '+' | '−' | '×' | '÷'
 
 const MAX_LEN = 12
 
-function formatResult(n: number): string {
+// ── State ─────────────────────────────────────────────────────────────────────
+
+interface State {
+  display: string         // number shown on main line
+  expression: string      // dimmed top line, e.g. "12 +"
+  accumulator: number | null  // stored left-hand operand
+  pendingOp: Op | null    // operator waiting to be applied
+  resetOnNext: boolean    // next digit press starts a fresh number
+  repeatRhs: number | null   // rhs of last completed = (for repeated = presses)
+  repeatOp: Op | null        // op of last completed =
+}
+
+const INITIAL: State = {
+  display: '0',
+  expression: '',
+  accumulator: null,
+  pendingOp: null,
+  resetOnNext: false,
+  repeatRhs: null,
+  repeatOp: null,
+}
+
+// ── Pure helpers ──────────────────────────────────────────────────────────────
+
+function applyOp(a: number, op: Op, b: number): number {
+  switch (op) {
+    case '+': return a + b
+    case '−': return a - b
+    case '×': return a * b
+    case '÷': return b === 0 ? NaN : a / b
+  }
+}
+
+function fmt(n: number): string {
   if (!isFinite(n)) return 'Error'
   const s = String(n)
   if (s.length <= MAX_LEN) return s
-  // Try toPrecision to fit
-  const exp = n.toExponential(4)
-  return exp.length <= MAX_LEN ? exp : n.toExponential(2)
+  const e4 = n.toExponential(4)
+  return e4.length <= MAX_LEN ? e4 : n.toExponential(2)
 }
 
-export default function Calculator() {
-  const [display, setDisplay]                     = useState('0')
-  const [expression, setExpression]               = useState('')
-  const [prevValue, setPrevValue]                 = useState<number | null>(null)
-  const [operator, setOperator]                   = useState<Operator>(null)
-  const [waitingForOperand, setWaitingForOperand] = useState(false)
-  // For repeated = presses
-  const [lastOperand, setLastOperand]             = useState<number | null>(null)
-  const [lastOperator, setLastOperator]           = useState<Operator>(null)
+// ── Reducer ───────────────────────────────────────────────────────────────────
 
-  const isError = display === 'Error'
+type Action =
+  | { type: 'DIGIT'; digit: string }
+  | { type: 'DECIMAL' }
+  | { type: 'OPERATOR'; op: Op }
+  | { type: 'EQUALS' }
+  | { type: 'TOGGLE_SIGN' }
+  | { type: 'PERCENTAGE' }
+  | { type: 'BACKSPACE' }
+  | { type: 'CLEAR' }
 
-  const clear = useCallback(() => {
-    setDisplay('0')
-    setExpression('')
-    setPrevValue(null)
-    setOperator(null)
-    setWaitingForOperand(false)
-    setLastOperand(null)
-    setLastOperator(null)
-  }, [])
+function reducer(s: State, action: Action): State {
+  const isError = s.display === 'Error'
 
-  const inputDigit = useCallback((digit: string) => {
-    if (isError) { setDisplay(digit); setExpression(''); return }
-    setDisplay(prev => {
-      if (waitingForOperand) {
-        setWaitingForOperand(false)
-        return digit
+  switch (action.type) {
+
+    case 'DIGIT': {
+      if (isError) return { ...INITIAL, display: action.digit }
+      if (s.resetOnNext) {
+        return { ...s, display: action.digit === '0' ? '0' : action.digit, resetOnNext: false }
       }
-      if (prev === '0' && digit !== '.') return digit
-      if (prev.length >= MAX_LEN) return prev
-      return prev + digit
-    })
-  }, [isError, waitingForOperand])
-
-  const inputDecimal = useCallback(() => {
-    if (isError) { setDisplay('0.'); setExpression(''); return }
-    if (waitingForOperand) {
-      setDisplay('0.')
-      setWaitingForOperand(false)
-      return
+      if (s.display === '0' && action.digit !== '0') {
+        return { ...s, display: action.digit }
+      }
+      if (s.display.length >= MAX_LEN) return s
+      return { ...s, display: s.display + action.digit }
     }
-    setDisplay(prev => prev.includes('.') ? prev : prev + '.')
-  }, [isError, waitingForOperand])
 
-  const backspace = useCallback(() => {
-    if (isError || waitingForOperand) return
-    setDisplay(prev => prev.length > 1 ? prev.slice(0, -1) : '0')
-  }, [isError, waitingForOperand])
-
-  const applyOp = (a: number, op: Operator, b: number): number => {
-    switch (op) {
-      case '+': return a + b
-      case '−': return a - b
-      case '×': return a * b
-      case '÷': return b === 0 ? NaN : a / b
-      default:  return b
+    case 'DECIMAL': {
+      if (isError) return { ...INITIAL, display: '0.' }
+      if (s.resetOnNext) return { ...s, display: '0.', resetOnNext: false }
+      if (s.display.includes('.')) return s
+      return { ...s, display: s.display + '.' }
     }
+
+    case 'OPERATOR': {
+      if (isError) return s
+      const { op } = action
+      const current = parseFloat(s.display)
+
+      // Operator pressed immediately after another operator — just swap it
+      if (s.resetOnNext && s.accumulator !== null) {
+        return { ...s, pendingOp: op, expression: `${s.display} ${op}` }
+      }
+
+      // Operator pressed after a result or at start — use display as left operand
+      if (s.accumulator === null) {
+        return {
+          ...s,
+          accumulator: current,
+          pendingOp: op,
+          expression: `${s.display} ${op}`,
+          resetOnNext: true,
+          repeatRhs: null,
+          repeatOp: null,
+        }
+      }
+
+      // Operator pressed after typing a right operand — chain: compute first, then queue new op
+      const result = applyOp(s.accumulator, s.pendingOp!, current)
+      const displayed = fmt(result)
+      return {
+        ...s,
+        display: displayed,
+        expression: `${displayed} ${op}`,
+        accumulator: isFinite(result) ? result : null,
+        pendingOp: op,
+        resetOnNext: true,
+        repeatRhs: null,
+        repeatOp: null,
+      }
+    }
+
+    case 'EQUALS': {
+      if (isError) return s
+      const current = parseFloat(s.display)
+
+      // Normal calculation: there's a pending operator and left operand
+      if (s.accumulator !== null && s.pendingOp !== null) {
+        const rhs = current
+        const result = applyOp(s.accumulator, s.pendingOp, rhs)
+        const displayed = fmt(result)
+        return {
+          ...s,
+          display: displayed,
+          expression: `${s.accumulator} ${s.pendingOp} ${rhs} =`,
+          accumulator: null,
+          pendingOp: null,
+          resetOnNext: true,
+          repeatRhs: rhs,
+          repeatOp: s.pendingOp,
+        }
+      }
+
+      // Repeated = press: replay last op+rhs against current display
+      if (s.repeatOp !== null && s.repeatRhs !== null) {
+        const result = applyOp(current, s.repeatOp, s.repeatRhs)
+        const displayed = fmt(result)
+        return {
+          ...s,
+          display: displayed,
+          expression: `${current} ${s.repeatOp} ${s.repeatRhs} =`,
+          accumulator: null,
+          pendingOp: null,
+          resetOnNext: true,
+          // repeatRhs and repeatOp stay the same for further repeats
+        }
+      }
+
+      // Nothing to compute
+      return { ...s, expression: `${s.display} =`, resetOnNext: true }
+    }
+
+    case 'TOGGLE_SIGN': {
+      if (isError) return s
+      const n = parseFloat(s.display)
+      return { ...s, display: fmt(-n) }
+    }
+
+    case 'PERCENTAGE': {
+      if (isError) return s
+      const n = parseFloat(s.display)
+      return { ...s, display: fmt(n / 100) }
+    }
+
+    case 'BACKSPACE': {
+      if (isError || s.resetOnNext) return s
+      const next = s.display.length > 1 ? s.display.slice(0, -1) : '0'
+      return { ...s, display: next }
+    }
+
+    case 'CLEAR':
+      return { ...INITIAL }
   }
+}
 
-  const handleOperator = useCallback((op: Operator) => {
-    if (isError) return
-    const current = parseFloat(display)
-    if (prevValue !== null && !waitingForOperand) {
-      const result = applyOp(prevValue, operator, current)
-      const formatted = formatResult(result)
-      setDisplay(formatted)
-      setExpression(`${formatted} ${op}`)
-      setPrevValue(isFinite(result) ? result : null)
-    } else {
-      setExpression(`${display} ${op}`)
-      setPrevValue(current)
-    }
-    setOperator(op)
-    setWaitingForOperand(true)
-    setLastOperand(null)
-    setLastOperator(null)
-  }, [isError, display, prevValue, operator, waitingForOperand])
+// ── Button grid spec ──────────────────────────────────────────────────────────
 
-  const calculate = useCallback(() => {
-    if (isError) return
-    const current = parseFloat(display)
+type Variant = 'number' | 'operator' | 'function'
 
-    // Repeated = : replay last operation
-    if (waitingForOperand && lastOperand !== null && lastOperator !== null) {
-      const result = applyOp(parseFloat(display), lastOperator, lastOperand)
-      const formatted = formatResult(result)
-      setDisplay(formatted)
-      setExpression(`${display} ${lastOperator} ${lastOperand} =`)
-      setPrevValue(null)
-      setOperator(null)
-      setWaitingForOperand(false)
-      return
-    }
+interface Btn {
+  label: string
+  variant: Variant
+  colSpan?: number
+  action: Action
+}
 
-    if (prevValue === null || operator === null) {
-      setExpression(`${display} =`)
-      setWaitingForOperand(false)
-      return
-    }
+const BUTTONS: Btn[] = [
+  { label: 'AC',  variant: 'function',  action: { type: 'CLEAR' } },
+  { label: '+/−', variant: 'function',  action: { type: 'TOGGLE_SIGN' } },
+  { label: '%',   variant: 'function',  action: { type: 'PERCENTAGE' } },
+  { label: '÷',   variant: 'operator',  action: { type: 'OPERATOR', op: '÷' } },
 
-    const result = applyOp(prevValue, operator, current)
-    const formatted = formatResult(result)
-    setExpression(`${prevValue} ${operator} ${current} =`)
-    setDisplay(formatted)
-    setLastOperand(current)
-    setLastOperator(operator)
-    setPrevValue(null)
-    setOperator(null)
-    setWaitingForOperand(false)
-  }, [isError, display, prevValue, operator, waitingForOperand, lastOperand, lastOperator])
+  { label: '7',   variant: 'number',    action: { type: 'DIGIT', digit: '7' } },
+  { label: '8',   variant: 'number',    action: { type: 'DIGIT', digit: '8' } },
+  { label: '9',   variant: 'number',    action: { type: 'DIGIT', digit: '9' } },
+  { label: '×',   variant: 'operator',  action: { type: 'OPERATOR', op: '×' } },
 
-  const toggleSign = useCallback(() => {
-    if (isError) return
-    setDisplay(prev => {
-      const n = parseFloat(prev)
-      return formatResult(-n)
-    })
-  }, [isError])
+  { label: '4',   variant: 'number',    action: { type: 'DIGIT', digit: '4' } },
+  { label: '5',   variant: 'number',    action: { type: 'DIGIT', digit: '5' } },
+  { label: '6',   variant: 'number',    action: { type: 'DIGIT', digit: '6' } },
+  { label: '−',   variant: 'operator',  action: { type: 'OPERATOR', op: '−' } },
 
-  const percentage = useCallback(() => {
-    if (isError) return
-    setDisplay(prev => formatResult(parseFloat(prev) / 100))
-  }, [isError])
+  { label: '1',   variant: 'number',    action: { type: 'DIGIT', digit: '1' } },
+  { label: '2',   variant: 'number',    action: { type: 'DIGIT', digit: '2' } },
+  { label: '3',   variant: 'number',    action: { type: 'DIGIT', digit: '3' } },
+  { label: '+',   variant: 'operator',  action: { type: 'OPERATOR', op: '+' } },
 
-  // Keyboard support
+  { label: '0',   variant: 'number',    colSpan: 2, action: { type: 'DIGIT', digit: '0' } },
+  { label: '.',   variant: 'number',    action: { type: 'DECIMAL' } },
+  { label: '=',   variant: 'operator',  action: { type: 'EQUALS' } },
+]
+
+const BG: Record<Variant, string>       = { number: '#1E2D45', operator: '#00D4FF', function: '#2A3F5F' }
+const BG_HOVER: Record<Variant, string> = { number: '#243355', operator: '#00BBEE', function: '#344F73' }
+const FG: Record<Variant, string>       = { number: '#E8F4F8', operator: '#0A0F1E', function: '#E8F4F8' }
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
+export default function Calculator() {
+  const [s, dispatch] = useReducer(reducer, INITIAL)
+  const isError = s.display === 'Error'
+
+  // Keyboard handler — dispatch directly, no stale closures possible
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
-      if ('0123456789'.includes(e.key))  { e.preventDefault(); inputDigit(e.key); return }
-      if (e.key === '.')                  { e.preventDefault(); inputDecimal(); return }
-      if (e.key === '+')                  { e.preventDefault(); handleOperator('+'); return }
-      if (e.key === '-')                  { e.preventDefault(); handleOperator('−'); return }
-      if (e.key === '*')                  { e.preventDefault(); handleOperator('×'); return }
-      if (e.key === '/')                  { e.preventDefault(); handleOperator('÷'); return }
-      if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return }
-      if (e.key === 'Backspace')          { e.preventDefault(); backspace(); return }
-      if (e.key === 'Escape')             { e.preventDefault(); clear(); return }
-      if (e.key === '%')                  { e.preventDefault(); percentage(); return }
+      if ('0123456789'.includes(e.key)) { e.preventDefault(); dispatch({ type: 'DIGIT', digit: e.key }); return }
+      if (e.key === '.')                 { e.preventDefault(); dispatch({ type: 'DECIMAL' }); return }
+      if (e.key === '+')                 { e.preventDefault(); dispatch({ type: 'OPERATOR', op: '+' }); return }
+      if (e.key === '-')                 { e.preventDefault(); dispatch({ type: 'OPERATOR', op: '−' }); return }
+      if (e.key === '*')                 { e.preventDefault(); dispatch({ type: 'OPERATOR', op: '×' }); return }
+      if (e.key === '/')                 { e.preventDefault(); dispatch({ type: 'OPERATOR', op: '÷' }); return }
+      if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); dispatch({ type: 'EQUALS' }); return }
+      if (e.key === 'Backspace')         { e.preventDefault(); dispatch({ type: 'BACKSPACE' }); return }
+      if (e.key === 'Escape')            { e.preventDefault(); dispatch({ type: 'CLEAR' }); return }
+      if (e.key === '%')                 { e.preventDefault(); dispatch({ type: 'PERCENTAGE' }); return }
     }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [inputDigit, inputDecimal, handleOperator, calculate, backspace, clear, percentage])
-
-  // ── Button definitions ─────────────────────────────────────────────────────
-
-  type BtnVariant = 'number' | 'operator' | 'function'
-
-  interface Btn {
-    label: string
-    variant: BtnVariant
-    colSpan?: number
-    action: () => void
-  }
-
-  const buttons: Btn[] = [
-    { label: 'AC',  variant: 'function',  action: clear },
-    { label: '+/−', variant: 'function',  action: toggleSign },
-    { label: '%',   variant: 'function',  action: percentage },
-    { label: '÷',   variant: 'operator',  action: () => handleOperator('÷') },
-
-    { label: '7',   variant: 'number',    action: () => inputDigit('7') },
-    { label: '8',   variant: 'number',    action: () => inputDigit('8') },
-    { label: '9',   variant: 'number',    action: () => inputDigit('9') },
-    { label: '×',   variant: 'operator',  action: () => handleOperator('×') },
-
-    { label: '4',   variant: 'number',    action: () => inputDigit('4') },
-    { label: '5',   variant: 'number',    action: () => inputDigit('5') },
-    { label: '6',   variant: 'number',    action: () => inputDigit('6') },
-    { label: '−',   variant: 'operator',  action: () => handleOperator('−') },
-
-    { label: '1',   variant: 'number',    action: () => inputDigit('1') },
-    { label: '2',   variant: 'number',    action: () => inputDigit('2') },
-    { label: '3',   variant: 'number',    action: () => inputDigit('3') },
-    { label: '+',   variant: 'operator',  action: () => handleOperator('+') },
-
-    { label: '0',   variant: 'number',    colSpan: 2, action: () => inputDigit('0') },
-    { label: '.',   variant: 'number',    action: inputDecimal },
-    { label: '=',   variant: 'operator',  action: calculate },
-  ]
-
-  const bgMap: Record<BtnVariant, string> = {
-    number:   '#1E2D45',
-    operator: '#00D4FF',
-    function: '#2A3F5F',
-  }
-  const bgHoverMap: Record<BtnVariant, string> = {
-    number:   '#243355',
-    operator: '#00BBEE',
-    function: '#344F73',
-  }
-  const colorMap: Record<BtnVariant, string> = {
-    number:   '#E8F4F8',
-    operator: '#0A0F1E',
-    function: '#E8F4F8',
-  }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, []) // no deps — dispatch is stable, reducer always sees fresh state
 
   return (
     <div style={{
@@ -220,25 +258,25 @@ export default function Calculator() {
     }}>
       {/* Display */}
       <div style={{ flexShrink: 0, padding: '16px 16px 8px' }}>
-        {/* Expression line */}
+        {/* Expression line — muted, right-aligned, truncates on left if long */}
         <div style={{
           textAlign: 'right', color: '#8899AA', fontSize: '13px',
           minHeight: '20px', overflow: 'hidden', whiteSpace: 'nowrap',
-          direction: 'rtl', textOverflow: 'ellipsis',
+          textOverflow: 'ellipsis',
         }}>
-          {expression || '\u00A0'}
+          {s.expression || '\u00A0'}
         </div>
-        {/* Main display */}
+        {/* Main display — left-to-right, right-aligned, shrinks font for long numbers */}
         <div style={{
           textAlign: 'right',
-          fontSize: display.length > 9 ? '28px' : '40px',
-          fontWeight: 300, lineHeight: 1.1, marginTop: '4px',
+          fontSize: s.display.length > 9 ? '26px' : s.display.length > 6 ? '32px' : '40px',
+          fontWeight: 300, lineHeight: 1.15, marginTop: '4px',
           overflow: 'hidden', whiteSpace: 'nowrap',
-          direction: 'rtl', textOverflow: 'ellipsis',
+          textOverflow: 'clip',
           color: isError ? '#FF4444' : '#E8F4F8',
-          transition: 'font-size 0.1s',
+          transition: 'font-size 0.08s',
         }}>
-          {display}
+          {s.display}
         </div>
       </div>
 
@@ -249,23 +287,24 @@ export default function Calculator() {
         gridTemplateRows: 'repeat(5, 1fr)',
         gap: '6px', padding: '8px 10px 10px',
       }}>
-        {buttons.map((btn) => (
+        {BUTTONS.map(btn => (
           <button
             key={btn.label}
-            onClick={btn.action}
+            onClick={() => dispatch(btn.action)}
             style={{
               gridColumn: btn.colSpan ? `span ${btn.colSpan}` : undefined,
-              backgroundColor: bgMap[btn.variant],
-              color: colorMap[btn.variant],
+              backgroundColor: BG[btn.variant],
+              color: FG[btn.variant],
               border: 'none', borderRadius: '12px',
-              fontSize: '20px', fontWeight: btn.variant === 'number' ? 500 : 600,
+              fontSize: '20px',
+              fontWeight: btn.variant === 'number' ? 500 : 600,
               fontFamily: '"JetBrains Mono", monospace',
               cursor: 'pointer',
               transition: 'background-color 80ms, transform 80ms',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = bgHoverMap[btn.variant])}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = bgMap[btn.variant])}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = BG_HOVER[btn.variant])}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = BG[btn.variant])}
             onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.95)' }}
             onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)' }}
           >
