@@ -66,18 +66,15 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
           <div
             key={n.id}
             style={{
-              padding: '12px 16px 12px 12px', borderBottom: '1px solid #2A3F5F',
-              backgroundColor: n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}0d`,
+              padding: '12px 16px 12px 0', borderBottom: '1px solid #2A3F5F',
+              borderLeft: `3px solid ${TYPE_COLOR[n.type] ?? '#8899AA'}`,
+              backgroundColor: n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}18`,
               display: 'flex', gap: '10px', position: 'relative', transition: 'background-color 0.1s',
+              paddingLeft: '12px',
             }}
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#243355')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}0d`)}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}18`)}
           >
-            <div style={{
-              width: 8, height: 8, borderRadius: '50%',
-              backgroundColor: TYPE_COLOR[n.type] ?? '#8899AA',
-              flexShrink: 0, marginTop: '4px',
-            }} />
             <div style={{ flex: 1, paddingRight: '16px' }}>
               <div style={{ color: TYPE_COLOR[n.type] ?? '#E8F4F8', fontSize: '12px', fontWeight: 600 }}>{n.title}</div>
               <div style={{ color: '#8899AA', fontSize: '11px', marginTop: '2px' }}>{n.message}</div>

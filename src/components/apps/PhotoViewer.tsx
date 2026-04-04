@@ -166,15 +166,6 @@ export default function PhotoViewer() {
                   {photo.date}
                 </div>
               </div>
-              {/* Caption */}
-              <div style={{ backgroundColor: '#111E30', padding: '10px 12px' }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#dce8f5', marginBottom: '3px' }}>
-                  {photo.title}
-                </div>
-                <div style={{ fontSize: '11px', color: '#5A6F88', lineHeight: 1.4 }}>
-                  {photo.subtitle}
-                </div>
-              </div>
             </div>
           ))}
         </div>
