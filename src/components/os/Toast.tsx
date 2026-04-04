@@ -1,25 +1,17 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-
-type ToastType = 'info' | 'success' | 'warning' | 'error'
+import { useSettingsStore } from '../../store/settingsStore'
 
 interface ToastProps {
   id: string
-  type: ToastType
+  type: string
   title: string
   message: string
   onDismiss: () => void
 }
 
-const ACCENT: Record<ToastType, string> = {
-  info:    '#00D4FF',
-  success: '#00FF88',
-  warning: '#FFD700',
-  error:   '#FF4444',
-}
-
-export default function Toast({ type, title, message, onDismiss }: ToastProps) {
-  const color = ACCENT[type]
+export default function Toast({ title, message, onDismiss }: ToastProps) {
+  const accent = useSettingsStore(s => s.accentColor)
 
   useEffect(() => {
     const t = setTimeout(onDismiss, 7000)
@@ -31,7 +23,7 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
       position: 'relative',
       width: '288px',
       backgroundColor: '#1E2D45',
-      borderLeft: `4px solid ${color}`,
+      borderLeft: `4px solid ${accent}`,
       borderRadius: '8px',
       padding: '12px 14px',
       display: 'flex',
@@ -44,7 +36,7 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
       {/* Colour dot */}
       <div style={{
         width: 8, height: 8, borderRadius: '50%',
-        backgroundColor: color,
+        backgroundColor: accent,
         flexShrink: 0, marginTop: 3,
       }} />
 
@@ -79,7 +71,7 @@ export default function Toast({ type, title, message, onDismiss }: ToastProps) {
         transition={{ duration: 7, ease: 'linear' }}
         style={{
           position: 'absolute', bottom: 0, left: 0,
-          height: '2px', backgroundColor: color, opacity: 0.5,
+          height: '2px', backgroundColor: accent, opacity: 0.5,
         }}
       />
     </div>

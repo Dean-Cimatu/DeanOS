@@ -2,16 +2,10 @@ import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { useSystemStore } from '../../store/systemStore'
+import { useSettingsStore } from '../../store/settingsStore'
 
 interface NotificationCentreProps {
   onClose: () => void
-}
-
-const TYPE_COLOR: Record<string, string> = {
-  info: '#00D4FF',
-  success: '#00FF88',
-  warning: '#FFD700',
-  error: '#FF4444',
 }
 
 export function NotificationCentre({ onClose }: NotificationCentreProps) {
@@ -20,6 +14,7 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
   const notifications = useSystemStore(s => s.notifications)
   const dismissNotification = useSystemStore(s => s.dismissNotification)
   const clearNotifications = useSystemStore(s => s.clearNotifications)
+  const accent = useSettingsStore(s => s.accentColor)
 
   return (
     <motion.div
@@ -66,17 +61,17 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
           <div
             key={n.id}
             style={{
-              padding: '12px 16px 12px 0', borderBottom: '1px solid #2A3F5F',
-              borderLeft: `3px solid ${TYPE_COLOR[n.type] ?? '#8899AA'}`,
-              backgroundColor: n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}18`,
+              padding: '12px 12px 12px 0', borderBottom: '1px solid #2A3F5F',
+              borderLeft: `3px solid ${accent}`,
+              backgroundColor: n.read ? 'transparent' : `${accent}18`,
               display: 'flex', gap: '10px', position: 'relative', transition: 'background-color 0.1s',
               paddingLeft: '12px',
             }}
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#243355')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : `${TYPE_COLOR[n.type] ?? '#8899AA'}18`)}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : `${accent}18`)}
           >
             <div style={{ flex: 1, paddingRight: '16px' }}>
-              <div style={{ color: TYPE_COLOR[n.type] ?? '#E8F4F8', fontSize: '12px', fontWeight: 600 }}>{n.title}</div>
+              <div style={{ color: accent, fontSize: '12px', fontWeight: 600 }}>{n.title}</div>
               <div style={{ color: '#8899AA', fontSize: '11px', marginTop: '2px' }}>{n.message}</div>
               <div style={{ color: '#556677', fontSize: '10px', marginTop: '4px' }}>
                 {n.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -89,7 +84,7 @@ export function NotificationCentre({ onClose }: NotificationCentreProps) {
                 background: 'none', border: 'none', color: '#8899AA', fontSize: '15px',
                 cursor: 'pointer', lineHeight: 1, padding: '2px 4px', borderRadius: '3px',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#FF4444')}
+              onMouseEnter={e => (e.currentTarget.style.color = '#E8F4F8')}
               onMouseLeave={e => (e.currentTarget.style.color = '#8899AA')}
             >
               ×

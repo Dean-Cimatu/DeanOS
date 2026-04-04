@@ -18,7 +18,6 @@ export const desktopFiles: DesktopFile[] = [
   { id: 'di-calculator',  name: 'Calculator',  type: 'app',  iconId: 'calculator',   appId: 'calculator' },
   { id: 'di-games',       name: 'Games',       type: 'folder', iconId: 'games',      appId: 'gamelibrary' },
   { id: 'di-helloworld',name: 'hello_world.js',        type: 'file', iconId: 'code',     appId: 'coderunner' },
-  { id: 'di-resume',    name: 'resume.txt',            type: 'file', iconId: 'resume',   appId: 'fileviewer',  initialPage: 'resume.txt' },
   { id: 'di-deanos',    name: 'DeanOS.md',             type: 'file', iconId: 'document', appId: 'fileviewer',  initialPage: 'DeanOS.md' },
   { id: 'di-studybuddy',name: 'StudyBuddy.md',         type: 'file', iconId: 'document', appId: 'fileviewer',  initialPage: 'StudyBuddy.md' },
   { id: 'di-dpcli',     name: 'DesignPatternCLI.md',   type: 'file', iconId: 'document', appId: 'fileviewer',  initialPage: 'DesignPatternCLI.md' },

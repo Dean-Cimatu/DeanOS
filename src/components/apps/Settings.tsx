@@ -174,7 +174,7 @@ export default function Settings() {
                   <div
                     key={hex}
                     title={name}
-                    onClick={() => { setAccentColor(hex); notify('success', 'Accent updated', `Now using ${name}.`) }}
+                    onClick={() => { setAccentColor(hex); notify('info', 'Accent updated', `Now using ${name}.`) }}
                     style={{
                       width: 32, height: 32, borderRadius: '50%',
                       backgroundColor: hex, cursor: 'pointer',
