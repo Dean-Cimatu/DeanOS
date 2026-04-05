@@ -71,7 +71,7 @@ export const MobileLockScreen = () => {
       <motion.div
         style={{
           position: 'fixed',
-          inset: 0,
+          top: 0, right: 0, bottom: 0, left: 0,
           zIndex: 9000,
           overflow: 'hidden',
           userSelect: 'none',
@@ -86,30 +86,30 @@ export const MobileLockScreen = () => {
         onMouseUp={onMouseUp}
       >
         {/* Wallpaper */}
-        <div style={{ position: 'absolute', inset: 0, background: '#0A0F1E' }}>
+        <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: '#0A0F1E' }}>
           <div style={{
-            position: 'absolute', inset: 0, opacity: 0.6,
+            position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.6,
             background: 'radial-gradient(ellipse 70% 60% at 30% 40%, #00D4FF22 0%, transparent 70%)',
             animation: 'aurora1 12s ease-in-out infinite',
           }} />
           <div style={{
-            position: 'absolute', inset: 0, opacity: 0.5,
+            position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.5,
             background: 'radial-gradient(ellipse 60% 70% at 75% 60%, #1E2D4588 0%, #00D4FF11 40%, transparent 70%)',
             animation: 'aurora2 16s ease-in-out infinite',
           }} />
           <div style={{
-            position: 'absolute', inset: 0, opacity: 0.4,
+            position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.4,
             background: 'radial-gradient(ellipse 80% 50% at 50% 80%, #121929CC 0%, #00D4FF0A 50%, transparent 75%)',
             animation: 'aurora3 20s ease-in-out infinite',
           }} />
         </div>
 
         {/* Overlay */}
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.25)' }} />
+        <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: 'rgba(0,0,0,0.25)' }} />
 
         {/* Time + Date */}
         <div style={{
-          position: 'absolute', inset: 0,
+          position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
           paddingTop: '15vh',
         }}>
