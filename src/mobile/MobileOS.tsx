@@ -3,7 +3,7 @@ import { useMobileDevice } from '../hooks/useMobileDevice'
 import { useMobileStore } from './store/mobileStore'
 import { MobileBootScreen } from './components/MobileBootScreen'
 import { MobileLockScreen } from './components/MobileLockScreen'
-import { MobileStatusBar } from './components/MobileStatusBar'
+import { MobileHomeScreen } from './components/MobileHomeScreen'
 
 export const MobileOS = () => {
   const { isTouch } = useMobileDevice()
@@ -19,20 +19,17 @@ export const MobileOS = () => {
       top: 0, right: 0, bottom: 0, left: 0,
       background: '#0A0F1E',
       overflow: 'hidden',
-      touchAction: 'none',
+      // No global touchAction here — each screen manages its own.
+      // MobileLockScreen sets touchAction: none for swipe detection.
+      // MobileHomeScreen sets touchAction: pan-y on the scroll container.
       userSelect: 'none',
     }}>
-      {phase === 'boot' && <MobileBootScreen />}
-      {phase === 'lock' && <MobileLockScreen />}
-      {phase !== 'boot' && phase !== 'lock' && (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <MobileStatusBar />
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#00D4FF', fontFamily: '"JetBrains Mono", monospace', fontSize: '14px' }}>
-              DeanOS Mobile
-            </span>
-          </div>
-        </div>
+      {phase === 'boot'                    && <MobileBootScreen />}
+      {phase === 'lock'                    && <MobileLockScreen />}
+      {(phase === 'home' || phase === 'drawer') && <MobileHomeScreen />}
+      {(phase === 'app')                   && (
+        // App shell placeholder — M6 will replace this
+        <MobileHomeScreen />
       )}
     </div>
   )
