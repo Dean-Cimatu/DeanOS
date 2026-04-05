@@ -5,7 +5,7 @@ import { useMobileStore } from './store/mobileStore'
 import { MobileBootScreen } from './components/MobileBootScreen'
 import { MobileLockScreen } from './components/MobileLockScreen'
 import { MobileHomeScreen } from './components/MobileHomeScreen'
-import { MobileAppShell } from './components/MobileAppShell'
+import { MobileAppView } from './components/MobileAppView'
 import { MobileAppDrawer } from './components/MobileAppDrawer'
 
 export const MobileOS = () => {
@@ -100,7 +100,7 @@ export const MobileOS = () => {
       {phase === 'boot'                         && <MobileBootScreen />}
       {phase === 'lock'                         && <MobileLockScreen />}
       {(phase === 'home' || phase === 'drawer') && <MobileHomeScreen />}
-      {phase === 'app'                          && <MobileAppShell />}
+      <MobileAppView />
 
       {/* Drawer always in tree so AnimatePresence animates its exit */}
       <MobileAppDrawer />
