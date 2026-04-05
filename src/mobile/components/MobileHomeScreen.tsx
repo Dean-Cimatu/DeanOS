@@ -1,5 +1,6 @@
 import { MobileStatusBar } from './MobileStatusBar'
 import { MobileAppIcon } from './MobileAppIcon'
+import { MobileNavBar } from './MobileNavBar'
 import { mobileApps, dockApps } from '../data/mobileAppRegistry'
 import { useMobileStore } from '../store/mobileStore'
 
@@ -73,11 +74,7 @@ export const MobileHomeScreen = () => {
       </div>
 
       {/* Dock */}
-      <div style={{
-        position: 'relative', zIndex: 10,
-        margin: '0 16px',
-        paddingBottom: 'env(safe-area-inset-bottom, 8px)',
-      }}>
+      <div style={{ position: 'relative', zIndex: 10, margin: '0 16px 8px' }}>
         <div style={{
           background: 'rgba(255,255,255,0.1)',
           backdropFilter: 'blur(12px)',
@@ -99,8 +96,10 @@ export const MobileHomeScreen = () => {
         </div>
       </div>
 
-      {/* Bottom safe area gap above home indicator */}
-      <div style={{ height: 8, position: 'relative', zIndex: 10 }} />
+      {/* Nav bar — Back / Home / Drawer */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <MobileNavBar />
+      </div>
     </div>
   )
 }
