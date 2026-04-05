@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import { useMobileDevice } from '../hooks/useMobileDevice'
 import { useMobileStore } from './store/mobileStore'
+import { MobileBootScreen } from './components/MobileBootScreen'
 
 export const MobileOS = () => {
   const { isTouch } = useMobileDevice()
+  const phase = useMobileStore(s => s.phase)
 
   useEffect(() => {
     useMobileStore.getState().setIsTouch(isTouch)
@@ -11,10 +13,15 @@ export const MobileOS = () => {
 
   return (
     <div
-      className="fixed inset-0 bg-[#0A0F1E] flex items-center justify-center overflow-hidden"
+      className="fixed inset-0 bg-[#0A0F1E] overflow-hidden"
       style={{ touchAction: 'none', userSelect: 'none' }}
     >
-      <span className="text-[#00D4FF] font-mono text-sm">DeanOS Mobile</span>
+      {phase === 'boot' && <MobileBootScreen />}
+      {phase !== 'boot' && (
+        <div className="flex items-center justify-center h-full">
+          <span className="text-[#00D4FF] font-mono text-sm">DeanOS Mobile</span>
+        </div>
+      )}
     </div>
   )
 }
