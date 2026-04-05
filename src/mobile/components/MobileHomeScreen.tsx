@@ -1,6 +1,7 @@
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MobileStatusBar } from './MobileStatusBar'
 import { MobileAppIcon } from './MobileAppIcon'
-import { MobileNavBar } from './MobileNavBar'
 import { mobileApps, dockApps } from '../data/mobileAppRegistry'
 import { useMobileStore } from '../store/mobileStore'
 
@@ -8,6 +9,19 @@ export const MobileHomeScreen = () => {
   const dockAppList = dockApps
     .map(id => mobileApps.find(a => a.id === id))
     .filter(Boolean) as typeof mobileApps
+
+  // Show once on first visit, then never again
+  const [showHint, setShowHint] = useState(() => !localStorage.getItem('drawerHintSeen'))
+
+  useEffect(() => {
+    if (showHint) {
+      const id = setTimeout(() => {
+        setShowHint(false)
+        localStorage.setItem('drawerHintSeen', 'true')
+      }, 3000)
+      return () => clearTimeout(id)
+    }
+  }, [showHint])
 
   return (
     <div style={{
@@ -27,15 +41,14 @@ export const MobileHomeScreen = () => {
         ].join(', '),
       }} />
 
-      {/* Status bar — spacer on notched devices, full bar on others */}
+      {/* Status bar spacer */}
       <div style={{ position: 'relative', zIndex: 10 }}>
         <MobileStatusBar />
       </div>
 
       {/* Lock button */}
       <button
-        onClick={() => useMobileStore.getState().setPhase('lock')}
-        onTouchEnd={(e) => { e.preventDefault(); useMobileStore.getState().setPhase('lock') }}
+        onPointerUp={() => useMobileStore.getState().setPhase('lock')}
         style={{
           position: 'absolute',
           top: 60, right: 16, zIndex: 20,
@@ -59,8 +72,7 @@ export const MobileHomeScreen = () => {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          columnGap: 8,
-          rowGap: 24,
+          columnGap: 8, rowGap: 24,
           justifyItems: 'center',
         }}>
           {mobileApps.map(app => (
@@ -73,8 +85,8 @@ export const MobileHomeScreen = () => {
         </div>
       </div>
 
-      {/* Dock */}
-      <div style={{ position: 'relative', zIndex: 10, margin: '0 16px 8px' }}>
+      {/* Dock — leave 32px at bottom for the home indicator pill */}
+      <div style={{ position: 'relative', zIndex: 10, margin: '0 16px 36px' }}>
         <div style={{
           background: 'rgba(255,255,255,0.1)',
           backdropFilter: 'blur(12px)',
@@ -82,8 +94,7 @@ export const MobileHomeScreen = () => {
           borderRadius: 24,
           border: '1px solid rgba(255,255,255,0.15)',
           padding: '12px 16px',
-          display: 'flex', justifyContent: 'space-around',
-          alignItems: 'center',
+          display: 'flex', justifyContent: 'space-around', alignItems: 'center',
         }}>
           {dockAppList.map(app => (
             <MobileAppIcon
@@ -96,10 +107,31 @@ export const MobileHomeScreen = () => {
         </div>
       </div>
 
-      {/* Nav bar — Back / Home / Drawer */}
-      <div style={{ position: 'relative', zIndex: 10 }}>
-        <MobileNavBar />
-      </div>
+      {/* Drawer hint — shows once on first load */}
+      <AnimatePresence>
+        {showHint && (
+          <motion.div
+            style={{
+              position: 'fixed',
+              bottom: 32, left: 0, right: 0,
+              display: 'flex', justifyContent: 'center',
+              zIndex: 99,
+              pointerEvents: 'none',
+            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+          >
+            <span style={{
+              color: 'rgba(255,255,255,0.4)',
+              fontSize: 12,
+              fontFamily: 'Inter, -apple-system, sans-serif',
+            }}>
+              ↑ Swipe up for all apps
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

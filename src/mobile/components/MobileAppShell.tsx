@@ -1,37 +1,25 @@
 import { motion } from 'framer-motion'
 import { useMobileStore } from '../store/mobileStore'
 import { mobileApps } from '../data/mobileAppRegistry'
-import { MobileNavBar } from './MobileNavBar'
+import { MobileSettings } from './MobileSettings'
 
-// Desktop app components — all render correctly with width/height 100%
 import BrowserApp from '../../components/apps/BrowserApp'
 import MusicPlayer from '../../components/apps/MusicPlayer'
 import Calculator from '../../components/apps/Calculator'
-import Terminal from '../../components/Terminal'
-import Settings from '../../components/apps/Settings'
-import PicoRacer from '../../components/apps/PicoRacer'
-import RogueSurvivor from '../../components/apps/RogueSurvivor'
 
 function AppContent({ id }: { id: string }) {
   switch (id) {
     case 'browser':    return <BrowserApp initialPage="/" />
     case 'music':      return <MusicPlayer />
     case 'calculator': return <Calculator />
-    case 'terminal':   return <Terminal />
-    case 'settings':   return <Settings />
-    case 'pico-racer': return <PicoRacer />
-    case 'rogue':      return <RogueSurvivor />
-    // Portfolio pages open in the browser app at the relevant route
-    case 'projects':   return <BrowserApp initialPage="/projects" />
-    case 'cv':         return <BrowserApp initialPage="/cv" />
-    case 'contact':    return <BrowserApp initialPage="/contact" />
+    case 'settings':   return <MobileSettings />
     default:
       return (
         <div style={{
           flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#8899AA', fontFamily: 'JetBrains Mono, monospace', fontSize: 14,
+          color: '#8899AA', fontFamily: '"JetBrains Mono", monospace', fontSize: 14,
         }}>
-          App not found: {id}
+          Unknown app: {id}
         </div>
       )
   }
@@ -64,48 +52,43 @@ export const MobileAppShell = () => {
       <div style={{
         height: 44, flexShrink: 0,
         display: 'flex', alignItems: 'center',
-        paddingLeft: 16, paddingRight: 16,
+        paddingLeft: 8, paddingRight: 16,
         background: 'rgba(10,15,30,0.95)',
         borderBottom: '1px solid #2A3F5F',
       }}>
-        {/* Close / back */}
+        {/* Back button — spec style */}
         <button
-          onClick={() => useMobileStore.getState().closeApp()}
-          onTouchEnd={(e) => { e.preventDefault(); useMobileStore.getState().closeApp() }}
+          onPointerUp={() => useMobileStore.getState().closeApp()}
           style={{
             background: 'none', border: 'none', cursor: 'pointer',
-            color: '#00D4FF', fontSize: '1rem',
-            fontFamily: 'Inter, -apple-system, sans-serif',
-            padding: '8px 8px 8px 0',
+            color: '#8899AA', fontSize: '1.5rem',
+            padding: '4px 8px 4px 4px',
             WebkitTapHighlightColor: 'transparent',
-            display: 'flex', alignItems: 'center', gap: 4,
+            lineHeight: 1,
+            marginLeft: -4,
           }}
         >
-          ‹ Home
+          ‹
         </button>
 
-        {/* App name — centred */}
+        {/* App name centred */}
         <div style={{ flex: 1, textAlign: 'center' }}>
           <span style={{
-            color: '#E8F4F8',
-            fontSize: '0.9375rem', fontWeight: 600,
+            color: '#E8F4F8', fontSize: '0.9375rem', fontWeight: 600,
             fontFamily: 'Inter, -apple-system, sans-serif',
           }}>
             {app?.icon} {app?.name}
           </span>
         </div>
 
-        {/* Right spacer matches left button width for centred title */}
-        <div style={{ width: 72 }} />
+        {/* Right spacer balances the back button */}
+        <div style={{ width: 40 }} />
       </div>
 
-      {/* App content — fills remaining space */}
-      <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+      {/* App content — leaves room at bottom for the home indicator pill */}
+      <div style={{ flex: 1, overflow: 'hidden', position: 'relative', marginBottom: 20 }}>
         <AppContent id={activeAppId} />
       </div>
-
-      {/* Nav bar */}
-      <MobileNavBar />
     </motion.div>
   )
 }
