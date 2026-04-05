@@ -1,18 +1,13 @@
 import { DesktopOS } from './components/DesktopOS'
 import { MobileOS } from './mobile/MobileOS'
+import { useMobileDevice } from './hooks/useMobileDevice'
 
 export default function App() {
-  return (
-    <>
-      {/* Desktop — hidden below md breakpoint (768px) */}
-      <div className="hidden md:block h-screen">
-        <DesktopOS />
-      </div>
+  // getIsMobile() runs synchronously via lazy useState — correct on first render,
+  // no flicker. Also prevents both trees from mounting simultaneously, which
+  // caused DesktopOS to advance systemStore state and fixed-position mobile
+  // elements to escape their display:none parent on iOS Safari.
+  const { isMobile } = useMobileDevice()
 
-      {/* Mobile — hidden above md breakpoint */}
-      <div className="block md:hidden h-screen">
-        <MobileOS />
-      </div>
-    </>
-  )
+  return isMobile ? <MobileOS /> : <DesktopOS />
 }
