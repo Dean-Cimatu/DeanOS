@@ -10,3 +10,11 @@ html, body {
   overflow: hidden;
   font-family: 'Ubuntu', sans-serif;
 }
+
+@media (max-width: 767px) {
+  html, body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}

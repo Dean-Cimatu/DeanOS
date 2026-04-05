@@ -1,21 +1,18 @@
-import Boot from './components/Boot'
-import Login from './components/Login'
-import LockScreen from './components/LockScreen'
-import Desktop from './components/Desktop'
-import PowerScreen from './components/PowerScreen'
-import { useSystemStore } from './store/systemStore'
+import { DesktopOS } from './components/DesktopOS'
+import { MobileOS } from './mobile/MobileOS'
 
 export default function App() {
-  const bootComplete  = useSystemStore(s => s.bootComplete)
-  const loggedIn      = useSystemStore(s => s.loggedIn)
-  const locked        = useSystemStore(s => s.locked)
-  const systemAction  = useSystemStore(s => s.systemAction)
+  return (
+    <>
+      {/* Desktop — hidden below md breakpoint (768px) */}
+      <div className="hidden md:block h-screen">
+        <DesktopOS />
+      </div>
 
-  // Power screens override everything
-  if (systemAction) return <PowerScreen />
-
-  if (!bootComplete)           return <Boot />
-  if (!loggedIn)               return <Login />
-  if (locked)                  return <LockScreen />
-  return <Desktop />
+      {/* Mobile — hidden above md breakpoint */}
+      <div className="block md:hidden h-screen">
+        <MobileOS />
+      </div>
+    </>
+  )
 }
