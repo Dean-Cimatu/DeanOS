@@ -3,6 +3,7 @@ import { useMobileDevice } from '../hooks/useMobileDevice'
 import { useMobileStore } from './store/mobileStore'
 import { MobileBootScreen } from './components/MobileBootScreen'
 import { MobileLockScreen } from './components/MobileLockScreen'
+import { MobileStatusBar } from './components/MobileStatusBar'
 
 export const MobileOS = () => {
   const { isTouch } = useMobileDevice()
@@ -20,8 +21,11 @@ export const MobileOS = () => {
       {phase === 'boot' && <MobileBootScreen />}
       {phase === 'lock' && <MobileLockScreen />}
       {phase !== 'boot' && phase !== 'lock' && (
-        <div className="flex items-center justify-center h-full">
-          <span className="text-[#00D4FF] font-mono text-sm">DeanOS Mobile</span>
+        <div className="flex flex-col h-full">
+          <MobileStatusBar />
+          <div className="flex-1 flex items-center justify-center">
+            <span className="text-[#00D4FF] font-mono text-sm">DeanOS Mobile</span>
+          </div>
         </div>
       )}
     </div>
