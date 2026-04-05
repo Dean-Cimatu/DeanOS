@@ -58,7 +58,8 @@ export const MobileAppShell = () => {
       }}>
         {/* Back button — spec style */}
         <button
-          onPointerUp={() => useMobileStore.getState().closeApp()}
+          onPointerDown={e => e.stopPropagation()}
+          onPointerUp={e => { e.stopPropagation(); useMobileStore.getState().closeApp() }}
           style={{
             background: 'none', border: 'none', cursor: 'pointer',
             color: '#8899AA', fontSize: '1.5rem',
