@@ -2,14 +2,10 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MobileStatusBar } from './MobileStatusBar'
 import { MobileAppIcon } from './MobileAppIcon'
-import { mobileApps, dockApps } from '../data/mobileAppRegistry'
+import { mobileApps } from '../data/mobileAppRegistry'
 import { useMobileStore } from '../store/mobileStore'
 
 export const MobileHomeScreen = () => {
-  const dockAppList = dockApps
-    .map(id => mobileApps.find(a => a.id === id))
-    .filter(Boolean) as typeof mobileApps
-
   // Show once on first visit, then never again
   const [showHint, setShowHint] = useState(() => !localStorage.getItem('drawerHintSeen'))
 
@@ -46,22 +42,6 @@ export const MobileHomeScreen = () => {
         <MobileStatusBar />
       </div>
 
-      {/* Lock button */}
-      <button
-        onPointerUp={() => useMobileStore.getState().setPhase('lock')}
-        style={{
-          position: 'absolute',
-          top: 60, right: 16, zIndex: 20,
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: 'rgba(255,255,255,0.6)',
-          fontSize: '1.25rem',
-          padding: 8,
-          WebkitTapHighlightColor: 'transparent',
-        }}
-      >
-        🔒
-      </button>
-
       {/* App icon grid */}
       <div style={{
         position: 'relative', zIndex: 10,
@@ -79,28 +59,6 @@ export const MobileHomeScreen = () => {
             <MobileAppIcon
               key={app.id}
               {...app}
-              onTap={() => useMobileStore.getState().openApp(app.id)}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Dock — leave 32px at bottom for the home indicator pill */}
-      <div style={{ position: 'relative', zIndex: 10, margin: '0 16px 36px' }}>
-        <div style={{
-          background: 'rgba(255,255,255,0.1)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderRadius: 24,
-          border: '1px solid rgba(255,255,255,0.15)',
-          padding: '12px 16px',
-          display: 'flex', justifyContent: 'space-around', alignItems: 'center',
-        }}>
-          {dockAppList.map(app => (
-            <MobileAppIcon
-              key={app.id}
-              {...app}
-              size="large"
               onTap={() => useMobileStore.getState().openApp(app.id)}
             />
           ))}
