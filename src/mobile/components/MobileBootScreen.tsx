@@ -19,7 +19,16 @@ export const MobileBootScreen = () => {
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'black',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+      }}
       animate={{ opacity: localPhase === 3 ? 0 : 1 }}
       transition={{ duration: 0.4 }}
     >
@@ -29,17 +38,45 @@ export const MobileBootScreen = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="w-20 h-20 bg-white rounded-[22px] flex items-center justify-center shadow-2xl"
+            style={{
+              width: 80,
+              height: 80,
+              background: 'white',
+              borderRadius: 22,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+            }}
           >
-            <span className="text-[#0A0F1E] text-4xl font-bold font-['Inter']">D</span>
+            <span style={{
+              color: '#0A0F1E',
+              fontSize: '2.25rem',
+              fontWeight: 700,
+              fontFamily: 'Inter, sans-serif',
+            }}>
+              D
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
 
       {localPhase >= 2 && (
-        <div className="absolute bottom-12 w-[120px] h-1 bg-[#333333] rounded-full overflow-hidden">
+        <div style={{
+          position: 'absolute',
+          bottom: 48,
+          width: 120,
+          height: 4,
+          background: '#333333',
+          borderRadius: 9999,
+          overflow: 'hidden',
+        }}>
           <motion.div
-            className="h-full bg-white rounded-full"
+            style={{
+              height: '100%',
+              background: 'white',
+              borderRadius: 9999,
+            }}
             initial={{ width: '0%' }}
             animate={{ width: '100%' }}
             transition={{ duration: 1.4, ease: 'linear' }}

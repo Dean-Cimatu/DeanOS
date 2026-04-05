@@ -23,21 +23,21 @@ const BatteryIcon = ({ level }: { level: number }) => {
   const fillWidth = Math.round((level / 100) * 20)
 
   return (
-    <div className="flex items-center gap-1">
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       {level <= 20 && (
-        <span
-          className="text-[10px] font-semibold font-['Inter'] tabular-nums"
-          style={{ color: fillColor }}
-        >
+        <span style={{
+          fontSize: '10px',
+          fontWeight: 600,
+          fontFamily: 'Inter, -apple-system, sans-serif',
+          color: fillColor,
+          fontVariantNumeric: 'tabular-nums',
+        }}>
           {level}%
         </span>
       )}
       <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
-        {/* Outline */}
         <rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="white" strokeOpacity="0.6" />
-        {/* Terminal nub */}
         <path d="M23 4.5 C24.5 4.5 25 5.2 25 6.5 C25 7.8 24.5 8.5 23 8.5" stroke="white" strokeOpacity="0.6" strokeWidth="1" fill="none" />
-        {/* Fill */}
         <rect x="2" y="2" width={fillWidth} height="9" rx="1.5" fill={fillColor} />
       </svg>
     </div>
@@ -55,25 +55,34 @@ export const MobileStatusBar = () => {
     hour12: false,
   })
 
-  const bgClass = phase === 'app'
-    ? 'bg-black/50 backdrop-blur-sm'
-    : 'bg-transparent'
-
   return (
-    <div
-      className={`flex flex-row items-center px-5 h-[44px] ${bgClass} transition-colors duration-300`}
-      style={{ paddingTop: 'env(safe-area-inset-top)' }}
-    >
-      {/* Left: time */}
-      <span className="text-white text-sm font-semibold font-['Inter'] tabular-nums">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingLeft: 20,
+      paddingRight: 20,
+      paddingTop: 'env(safe-area-inset-top)',
+      minHeight: 44,
+      background: phase === 'app' ? 'rgba(0,0,0,0.5)' : 'transparent',
+      backdropFilter: phase === 'app' ? 'blur(4px)' : 'none',
+      WebkitBackdropFilter: phase === 'app' ? 'blur(4px)' : 'none',
+      transition: 'background 0.3s',
+      flexShrink: 0,
+    }}>
+      <span style={{
+        color: 'white',
+        fontSize: '0.875rem',
+        fontWeight: 600,
+        fontFamily: 'Inter, -apple-system, sans-serif',
+        fontVariantNumeric: 'tabular-nums',
+      }}>
         {timeStr}
       </span>
 
-      {/* Centre: spacer */}
-      <div className="flex-1" />
+      <div style={{ flex: 1 }} />
 
-      {/* Right: signal, wifi, battery */}
-      <div className="flex flex-row items-center gap-1.5">
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <SignalIcon />
         <WifiIcon />
         <BatteryIcon level={batteryLevel} />

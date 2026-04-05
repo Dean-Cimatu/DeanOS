@@ -14,17 +14,23 @@ export const MobileOS = () => {
   }, [isTouch])
 
   return (
-    <div
-      className="fixed inset-0 bg-[#0A0F1E] overflow-hidden"
-      style={{ touchAction: 'none', userSelect: 'none' }}
-    >
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      background: '#0A0F1E',
+      overflow: 'hidden',
+      touchAction: 'none',
+      userSelect: 'none',
+    }}>
       {phase === 'boot' && <MobileBootScreen />}
       {phase === 'lock' && <MobileLockScreen />}
       {phase !== 'boot' && phase !== 'lock' && (
-        <div className="flex flex-col h-full">
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <MobileStatusBar />
-          <div className="flex-1 flex items-center justify-center">
-            <span className="text-[#00D4FF] font-mono text-sm">DeanOS Mobile</span>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: '#00D4FF', fontFamily: '"JetBrains Mono", monospace', fontSize: '14px' }}>
+              DeanOS Mobile
+            </span>
           </div>
         </div>
       )}
