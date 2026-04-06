@@ -7,6 +7,8 @@ interface MobileState {
   isTouch: boolean
   drawerOpen: boolean
   notificationCentreOpen: boolean
+  musicActive: boolean
+  musicPlaying: boolean
   recentApps: string[]
   homePageIndex: number
 
@@ -18,6 +20,8 @@ interface MobileState {
   closeDrawer: () => void
   openNotificationCentre: () => void
   closeNotificationCentre: () => void
+  setMusicActive: (val: boolean) => void
+  toggleMusicPlaying: () => void
   setIsTouch: (isTouch: boolean) => void
   addRecentApp: (id: string) => void
 }
@@ -28,6 +32,8 @@ export const useMobileStore = create<MobileState>((set, get) => ({
   isTouch: false,
   drawerOpen: false,
   notificationCentreOpen: false,
+  musicActive: false,
+  musicPlaying: false,
   recentApps: [],
   homePageIndex: 0,
 
@@ -35,7 +41,13 @@ export const useMobileStore = create<MobileState>((set, get) => ({
 
   openApp: (id) => {
     const recentApps = [id, ...get().recentApps.filter(r => r !== id)].slice(0, 10)
-    set({ activeAppId: id, phase: 'app', recentApps, drawerOpen: false })
+    set({
+      activeAppId: id,
+      phase: 'app',
+      recentApps,
+      drawerOpen: false,
+      ...(id === 'music' ? { musicActive: true } : {}),
+    })
     useSystemStore.getState().markAppNotificationsRead(id)
   },
 
@@ -53,6 +65,10 @@ export const useMobileStore = create<MobileState>((set, get) => ({
   },
 
   closeNotificationCentre: () => set({ notificationCentreOpen: false }),
+
+  setMusicActive: (val) => set({ musicActive: val }),
+
+  toggleMusicPlaying: () => set(s => ({ musicPlaying: !s.musicPlaying })),
 
   setIsTouch: (isTouch) => set({ isTouch }),
 

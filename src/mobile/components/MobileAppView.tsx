@@ -24,9 +24,7 @@ export const MobileAppView = () => {
             background: '#0A0F1E',
           }}
         >
-          {/* Safe area top */}
-          <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
-
+          {/* Header — extends up behind the transparent status bar via paddingTop */}
           <MobileAppHeader appId={activeAppId} />
 
           {/* App content — leave room for the home indicator pill */}

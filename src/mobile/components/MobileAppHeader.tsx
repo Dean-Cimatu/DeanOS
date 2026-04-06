@@ -12,14 +12,14 @@ export const MobileAppHeader = ({ appId }: { appId: string }) => {
   return (
     <div
       style={{
-        height: 52, flexShrink: 0,
-        display: 'flex', alignItems: 'center',
-        paddingLeft: 12, paddingRight: 12,
-        gap: 10,
+        flexShrink: 0,
         background: '#121929',
         borderBottom: '1px solid #2A3F5F',
         cursor: 'grab',
         touchAction: 'none',
+        /* Safe-area padding pushes the visible row below the status bar
+           while keeping #121929 continuous behind it */
+        paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
       onPointerDown={e => { dragStart.current = e.clientY }}
       onPointerUp={e => {
@@ -28,6 +28,13 @@ export const MobileAppHeader = ({ appId }: { appId: string }) => {
       }}
       onPointerCancel={() => { dragStart.current = null }}
     >
+      {/* Actual header row */}
+      <div style={{
+        height: 52,
+        display: 'flex', alignItems: 'center',
+        paddingLeft: 12, paddingRight: 12,
+        gap: 10,
+      }}>
       {/* App icon */}
       <AppIcon iconId={appId} size={32} />
 
@@ -57,6 +64,7 @@ export const MobileAppHeader = ({ appId }: { appId: string }) => {
       >
         ✕
       </button>
+      </div>
     </div>
   )
 }

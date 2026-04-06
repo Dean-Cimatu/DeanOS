@@ -16,5 +16,14 @@ html, body {
     overflow: hidden;
     overscroll-behavior: none;
     -webkit-tap-highlight-color: transparent;
+    /* Ensure the page fills the full physical screen including notch/home bar areas */
+    min-height: 100dvh;
+  }
+
+  /* Prevent iOS rubber-band scroll on the root */
+  #root {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
   }
 }

@@ -2,14 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#0A0F1E" />
+
+    <!-- Full-screen viewport — viewport-fit=cover extends content under the notch/home bar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- PWA manifest — display:standalone removes the browser chrome when added to Home Screen -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- iOS PWA — makes "Add to Home Screen" launch as a full-screen app -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- black-translucent: status bar is transparent, content renders behind it (safe-area-inset handles spacing) -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="DeanOS" />
+
+    <!-- Theme colour shown in Safari tab bar and Android task switcher -->
+    <meta name="theme-color" content="#0A0F1E" />
+
+    <!-- iOS home screen icon (used when user taps "Add to Home Screen") -->
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
     <title>DeanOS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

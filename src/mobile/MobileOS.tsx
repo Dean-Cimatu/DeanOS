@@ -8,10 +8,13 @@ import { MobileHomeScreen } from './components/MobileHomeScreen'
 import { MobileAppView } from './components/MobileAppView'
 import { MobileAppDrawer } from './components/MobileAppDrawer'
 import { MobileNotificationCentre } from './components/MobileNotificationCentre'
+import { MobileMiniPlayer } from './components/MobileMiniPlayer'
 
 export const MobileOS = () => {
   const { isTouch } = useMobileDevice()
-  const phase = useMobileStore(s => s.phase)
+  const phase        = useMobileStore(s => s.phase)
+  const musicActive  = useMobileStore(s => s.musicActive)
+  const showMiniPlayer = musicActive && phase !== 'boot' && phase !== 'lock' && phase !== 'app'
 
   useEffect(() => {
     useMobileStore.getState().setIsTouch(isTouch)
@@ -133,6 +136,9 @@ export const MobileOS = () => {
         </>
       )}
 
+      {/* ── Mini player ── */}
+      <MobileMiniPlayer />
+
       {/* ── Notification centre — overlays everything except boot/lock ── */}
       <MobileNotificationCentre />
 
@@ -146,16 +152,18 @@ export const MobileOS = () => {
             exit={{ opacity: 0 }}
             style={{
               position: 'fixed',
-              bottom: 0, left: 0, right: 0,
+              bottom: showMiniPlayer ? 68 : 0,
+              left: 0, right: 0,
               zIndex: 600,
               height: 'calc(env(safe-area-inset-bottom, 0px) + 40px)',
               minHeight: 40,
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'flex-end',
-              paddingBottom: 'max(10px, env(safe-area-inset-bottom, 10px))',
+              paddingBottom: showMiniPlayer ? 10 : 'max(10px, env(safe-area-inset-bottom, 10px))',
               touchAction: 'none',
               cursor: 'pointer',
+              transition: 'bottom 0.3s ease',
             }}
             onPointerDown={onPillPointerDown}
             onPointerUp={onPillPointerUp}

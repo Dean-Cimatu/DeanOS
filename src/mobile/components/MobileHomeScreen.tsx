@@ -36,6 +36,17 @@ export const MobileHomeScreen = () => {
         ].join(', '),
       }} />
 
+      {/* Top scrim — keeps iOS status bar text (time, battery, signal) legible
+          over the wallpaper gradient. Fades to transparent after ~12% of height. */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0,
+        height: '12%',
+        zIndex: 1,
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 100%)',
+        pointerEvents: 'none',
+      }} />
+
       {/* Status bar spacer */}
       <div style={{ position: 'relative', zIndex: 10 }}>
         <MobileStatusBar />
