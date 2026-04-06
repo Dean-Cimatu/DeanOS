@@ -8,6 +8,7 @@ import { MobileBrowserWrapper } from './MobileBrowserWrapper'
 import { MobileTerminalWrapper } from './MobileTerminalWrapper'
 import { MobilePhotos } from './MobilePhotos'
 import { MobileExternalApp } from './MobileExternalApp'
+import { MobileFileBrowser } from './apps/MobileFileBrowser'
 
 const mobileAppMap: Record<string, React.FC> = {
   browser:    () => <MobileBrowserWrapper initialPage="/" />,
@@ -21,6 +22,7 @@ const mobileAppMap: Record<string, React.FC> = {
   cv:         () => <MobileBrowserWrapper initialPage="/cv" />,
   contact:    () => <MobileBrowserWrapper initialPage="/contact" />,
   photos:     MobilePhotos,
+  files:      MobileFileBrowser,
   linkedin:   () => (
     <MobileExternalApp
       iconId="linkedin"
