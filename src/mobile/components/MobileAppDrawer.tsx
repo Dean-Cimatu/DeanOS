@@ -6,6 +6,7 @@ import { MobileAppIcon } from './MobileAppIcon'
 
 const CATEGORY_LABELS: Record<string, string> = {
   portfolio: 'Portfolio',
+  social:    'Social',
   media:     'Media',
   utilities: 'Utilities',
   games:     'Games',

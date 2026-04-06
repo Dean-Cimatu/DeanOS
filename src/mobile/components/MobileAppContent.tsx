@@ -6,6 +6,8 @@ import RogueSurvivor from '../../components/apps/RogueSurvivor'
 import { MobileSettings } from './MobileSettings'
 import { MobileBrowserWrapper } from './MobileBrowserWrapper'
 import { MobileTerminalWrapper } from './MobileTerminalWrapper'
+import { MobilePhotos } from './MobilePhotos'
+import { MobileExternalApp } from './MobileExternalApp'
 
 const mobileAppMap: Record<string, React.FC> = {
   browser:    () => <MobileBrowserWrapper initialPage="/" />,
@@ -18,6 +20,32 @@ const mobileAppMap: Record<string, React.FC> = {
   projects:   () => <MobileBrowserWrapper initialPage="/projects" />,
   cv:         () => <MobileBrowserWrapper initialPage="/cv" />,
   contact:    () => <MobileBrowserWrapper initialPage="/contact" />,
+  photos:     MobilePhotos,
+  linkedin:   () => (
+    <MobileExternalApp
+      iconId="linkedin"
+      label="LinkedIn"
+      url="https://linkedin.com/in/dean-cimatu"
+      hint="linkedin.com/in/dean-cimatu"
+    />
+  ),
+  github:     () => (
+    <MobileExternalApp
+      iconId="github"
+      label="GitHub"
+      url="https://github.com/Dean-Cimatu"
+      hint="github.com/Dean-Cimatu"
+    />
+  ),
+  mail:       () => (
+    <MobileExternalApp
+      iconId="mail"
+      label="Mail"
+      url="mailto:hello@deancimatu.com"
+      buttonLabel="Compose Email"
+      hint="hello@deancimatu.com"
+    />
+  ),
 }
 
 const Fallback = () => (

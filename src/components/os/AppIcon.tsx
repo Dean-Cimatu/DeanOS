@@ -202,6 +202,48 @@ const configs: Record<string, IconConfig> = {
       </svg>
     ),
   },
+
+  linkedin: {
+    bg: 'linear-gradient(145deg, #0A66C2, #004182)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.08)"/>
+        <rect x="5.5" y="9.5" width="3" height="9" rx="0.5" fill="white"/>
+        <circle cx="7" cy="7" r="1.6" fill="white"/>
+        <path d="M12 9.5v9M12 12.5c0-1.7 1.1-3 3-3s3 1.3 3 3v5.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+
+  github: {
+    bg: 'linear-gradient(145deg, #24292E, #0d1117)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.7C6.73 19.91 6.14 18 6.14 18c-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z" fill="white"/>
+      </svg>
+    ),
+  },
+
+  mail: {
+    bg: 'linear-gradient(145deg, #2563EB, #1E40AF)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="4" width="20" height="16" rx="3" fill="rgba(255,255,255,0.1)" stroke="white" strokeWidth="1.5"/>
+        <path d="M2 7l10 7 10-7" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+
+  photos: {
+    bg: 'linear-gradient(145deg, #e74c8b, #9b2d6f)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="4" width="20" height="16" rx="2.5" fill="rgba(255,255,255,0.12)" stroke="white" strokeWidth="1.5"/>
+        <circle cx="8" cy="9.5" r="2" fill="white" opacity="0.9"/>
+        <path d="M2 16.5l5.5-5 3.5 3.5 4-5 7 6.5" fill="rgba(255,255,255,0.3)" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
 }
 
 export function AppIcon({ iconId, size = 48 }: AppIconProps) {

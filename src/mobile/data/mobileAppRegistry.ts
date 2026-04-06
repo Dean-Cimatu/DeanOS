@@ -2,7 +2,7 @@ export interface MobileApp {
   id: string
   name: string
   icon: string
-  category: 'portfolio' | 'media' | 'utilities' | 'games'
+  category: 'portfolio' | 'social' | 'media' | 'utilities' | 'games'
 }
 
 export const mobileApps: MobileApp[] = [
@@ -11,7 +11,12 @@ export const mobileApps: MobileApp[] = [
   { id: 'projects',   name: 'Projects',   icon: '💻', category: 'portfolio' },
   { id: 'cv',         name: 'CV',         icon: '📄', category: 'portfolio' },
   { id: 'contact',    name: 'Contact',    icon: '✉️',  category: 'portfolio' },
+  // Social
+  { id: 'linkedin',   name: 'LinkedIn',   icon: 'in', category: 'social'    },
+  { id: 'github',     name: 'GitHub',     icon: '',   category: 'social'    },
+  { id: 'mail',       name: 'Mail',       icon: '✉️',  category: 'social'    },
   // Media
+  { id: 'photos',     name: 'Photos',     icon: '🖼️', category: 'media'     },
   { id: 'music',      name: 'Music',      icon: '🎵', category: 'media'     },
   // Utilities
   { id: 'calculator', name: 'Calculator', icon: '🧮', category: 'utilities' },

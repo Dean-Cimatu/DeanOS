@@ -12,13 +12,20 @@ export const MobileOS = () => {
   const { isTouch } = useMobileDevice()
   const phase = useMobileStore(s => s.phase)
 
+  // Sync touch capability into store
   useEffect(() => {
     useMobileStore.getState().setIsTouch(isTouch)
   }, [isTouch])
 
+  // Pin theme-color to DeanOS navy on mobile mount
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) meta.setAttribute('content', '#0A0F1E')
+  }, [])
+
   // ── Back gesture ────────────────────────────────────────────────────────────
-  // Only activates when the pointer starts within 20px of the left edge.
-  // Root div handles ONLY this — nothing else.
+  // Only activates when pointer starts within 20px of the left edge.
+  // Fires closeApp / closeDrawer on a rightward swipe of ≥60px.
   const backStart = useRef<{ x: number; y: number } | null>(null)
 
   const onRootPointerDown = (e: React.PointerEvent) => {
@@ -32,7 +39,7 @@ export const MobileOS = () => {
     const dx = e.clientX - backStart.current.x
     const dy = e.clientY - backStart.current.y
     backStart.current = null
-    // Must be primarily horizontal and travel at least 60px right
+    // Must be primarily horizontal and travel ≥60px right
     if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       const p = useMobileStore.getState().phase
       if (p === 'app')    useMobileStore.getState().closeApp()
@@ -43,11 +50,10 @@ export const MobileOS = () => {
   const onRootPointerCancel = () => { backStart.current = null }
 
   // ── Home pill ───────────────────────────────────────────────────────────────
-  // Owns all home / drawer input. setPointerCapture means we keep receiving
-  // events even if the finger travels outside the element.
-  // Tap (move < 15px total)  → go home
-  // Swipe up > 80px          → open drawer
-  // Anything else            → go home (safe default)
+  // Full-width tap zone at the bottom. setPointerCapture keeps events even
+  // when finger travels off the element. stopPropagation keeps root out.
+  // Tap (dist < 20px) or short swipe → goHome
+  // Clear upswipe > 80px            → openDrawer
   const pillStart = useRef<{ x: number; y: number } | null>(null)
   const [pillPressed, setPillPressed] = useState(false)
 
@@ -65,14 +71,10 @@ export const MobileOS = () => {
     const dx = e.clientX - pillStart.current.x
     const dy = e.clientY - pillStart.current.y
     pillStart.current = null
-
     const dist = Math.sqrt(dx * dx + dy * dy)
-
     if (dy < -80) {
-      // Clear upswipe → drawer
       useMobileStore.getState().openDrawer()
     } else if (dist < 20 || dy >= -80) {
-      // Tap or short/ambiguous swipe → home
       useMobileStore.getState().goHome()
     }
   }
@@ -82,7 +84,7 @@ export const MobileOS = () => {
     setPillPressed(false)
   }
 
-  const showPill = phase === 'home' || phase === 'app'
+  const showPill = phase === 'home' || phase === 'app' || phase === 'drawer'
 
   return (
     <div
@@ -97,28 +99,43 @@ export const MobileOS = () => {
       onPointerUp={onRootPointerUp}
       onPointerCancel={onRootPointerCancel}
     >
-      {phase === 'boot'                         && <MobileBootScreen />}
-      {phase === 'lock'                         && <MobileLockScreen />}
-      {(phase === 'home' || phase === 'drawer') && <MobileHomeScreen />}
-      <MobileAppView />
+      {/* ── Boot — AnimatePresence lets it fade out before unmounting ── */}
+      <AnimatePresence>
+        {phase === 'boot' && <MobileBootScreen key="boot" />}
+      </AnimatePresence>
 
-      {/* Drawer always in tree so AnimatePresence animates its exit */}
-      <MobileAppDrawer />
+      {/* ── Post-boot UI ── */}
+      {phase !== 'boot' && (
+        <>
+          {/* Lock screen */}
+          <AnimatePresence>
+            {phase === 'lock' && <MobileLockScreen key="lock" />}
+          </AnimatePresence>
 
-      {/* Home indicator pill
-          The ENTIRE bottom strip is the touch target — the visual pill is
-          just the affordance. Full-width, ~50px tall invisible zone. */}
+          {/* Home / app / drawer layers — always mounted once unlocked
+              so home screen doesn't re-render every time user closes an app */}
+          {phase !== 'lock' && (
+            <>
+              <MobileHomeScreen />
+              <MobileAppView />
+              <MobileAppDrawer />
+            </>
+          )}
+        </>
+      )}
+
+      {/* ── Home indicator pill ── */}
       <AnimatePresence>
         {showPill && (
           <motion.div
+            key="pill"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             style={{
               position: 'fixed',
               bottom: 0, left: 0, right: 0,
-              zIndex: 300,
-              // Full-width touch area — height = safe-area + 40px padding above pill
+              zIndex: 600,
               height: 'calc(env(safe-area-inset-bottom, 0px) + 40px)',
               minHeight: 40,
               display: 'flex',
