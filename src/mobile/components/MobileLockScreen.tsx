@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useMobileStore } from '../store/mobileStore'
+import { useWeather, describeCode } from '../../hooks/useWeather'
 
 export const MobileLockScreen = () => {
   const [now, setNow] = useState(new Date())
   const [unlocking, setUnlocking] = useState(false)
+  const { data: weather, loading: weatherLoading } = useWeather()
   const [labelVisible, setLabelVisible] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
   const startY = useRef<number | null>(null)
@@ -65,6 +67,10 @@ export const MobileLockScreen = () => {
           0%, 100% { transform: translate(0%, 0%) scale(1); }
           33% { transform: translate(6%, 10%) scale(1.1); }
           66% { transform: translate(-8%, -6%) scale(1.18); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.15; }
         }
       `}</style>
 
@@ -131,6 +137,60 @@ export const MobileLockScreen = () => {
           }}>
             {dateStr}
           </span>
+
+          {/* Weather row */}
+          {weatherLoading && (
+            <div style={{
+              marginTop: 16,
+              width: 128, height: 28,
+              borderRadius: 9999,
+              background: 'rgba(255,255,255,0.1)',
+              animation: 'pulse 1.5s ease-in-out infinite',
+            }} />
+          )}
+          {!weatherLoading && weather && (() => {
+            const { label, emoji } = describeCode(weather.current.code)
+            return (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    marginTop: 16,
+                  }}
+                >
+                  <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>{emoji}</span>
+                  <span style={{
+                    color: 'white', fontSize: '1.5rem', fontWeight: 300,
+                    fontFamily: 'Inter, -apple-system, sans-serif',
+                  }}>
+                    {weather.current.temp}°C
+                  </span>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '1.25rem' }}>·</span>
+                  <span style={{
+                    color: 'rgba(255,255,255,0.7)', fontSize: '1rem',
+                    fontFamily: 'Inter, -apple-system, sans-serif',
+                  }}>
+                    {label}
+                  </span>
+                </motion.div>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.4 }}
+                  style={{
+                    color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem',
+                    fontFamily: 'Inter, -apple-system, sans-serif',
+                    marginTop: 4,
+                  }}
+                >
+                  📍 London, UK
+                </motion.span>
+              </>
+            )
+          })()}
         </div>
 
         {/* Bottom: chevron + label */}
