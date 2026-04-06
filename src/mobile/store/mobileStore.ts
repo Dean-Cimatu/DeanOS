@@ -6,6 +6,7 @@ interface MobileState {
   activeAppId: string | null
   isTouch: boolean
   drawerOpen: boolean
+  notificationCentreOpen: boolean
   recentApps: string[]
   homePageIndex: number
 
@@ -15,6 +16,8 @@ interface MobileState {
   goHome: () => void
   openDrawer: () => void
   closeDrawer: () => void
+  openNotificationCentre: () => void
+  closeNotificationCentre: () => void
   setIsTouch: (isTouch: boolean) => void
   addRecentApp: (id: string) => void
 }
@@ -24,6 +27,7 @@ export const useMobileStore = create<MobileState>((set, get) => ({
   activeAppId: null,
   isTouch: false,
   drawerOpen: false,
+  notificationCentreOpen: false,
   recentApps: [],
   homePageIndex: 0,
 
@@ -42,6 +46,13 @@ export const useMobileStore = create<MobileState>((set, get) => ({
   openDrawer: () => set({ drawerOpen: true, phase: 'drawer' }),
 
   closeDrawer: () => set({ drawerOpen: false, phase: 'home' }),
+
+  openNotificationCentre: () => {
+    set({ notificationCentreOpen: true })
+    useSystemStore.getState().markAllRead()
+  },
+
+  closeNotificationCentre: () => set({ notificationCentreOpen: false }),
 
   setIsTouch: (isTouch) => set({ isTouch }),
 

@@ -9,7 +9,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   social:    'Social',
   media:     'Media',
   utilities: 'Utilities',
-  games:     'Games',
 }
 
 export const MobileAppDrawer = () => {

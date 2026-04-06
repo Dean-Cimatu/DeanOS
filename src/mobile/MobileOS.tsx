@@ -7,53 +7,65 @@ import { MobileLockScreen } from './components/MobileLockScreen'
 import { MobileHomeScreen } from './components/MobileHomeScreen'
 import { MobileAppView } from './components/MobileAppView'
 import { MobileAppDrawer } from './components/MobileAppDrawer'
+import { MobileNotificationCentre } from './components/MobileNotificationCentre'
 
 export const MobileOS = () => {
   const { isTouch } = useMobileDevice()
   const phase = useMobileStore(s => s.phase)
 
-  // Sync touch capability into store
   useEffect(() => {
     useMobileStore.getState().setIsTouch(isTouch)
   }, [isTouch])
 
-  // Pin theme-color to DeanOS navy on mobile mount
   useEffect(() => {
     const meta = document.querySelector('meta[name="theme-color"]')
     if (meta) meta.setAttribute('content', '#0A0F1E')
   }, [])
 
-  // ── Back gesture ────────────────────────────────────────────────────────────
-  // Only activates when pointer starts within 20px of the left edge.
-  // Fires closeApp / closeDrawer on a rightward swipe of ≥60px.
-  const backStart = useRef<{ x: number; y: number } | null>(null)
+  // ── Unified root pointer tracking ───────────────────────────────────────────
+  // One ref tracks every gesture that starts in the root div.
+  // Each gesture zone is checked on pointerup.
+  //
+  //  Left edge  (x < 20)   → back swipe (rightward ≥60px, primarily horizontal)
+  //  Top strip  (y < 60)   → notification centre (downward ≥80px, primarily vertical)
+  //
+  // The home pill has its own handlers with stopPropagation, so it never reaches here.
+  const rootStart = useRef<{ x: number; y: number } | null>(null)
 
   const onRootPointerDown = (e: React.PointerEvent) => {
-    if (e.clientX < 20) {
-      backStart.current = { x: e.clientX, y: e.clientY }
+    // Record start for any gesture that could originate here
+    if (e.clientX < 20 || e.clientY < 60) {
+      rootStart.current = { x: e.clientX, y: e.clientY }
     }
   }
 
   const onRootPointerUp = (e: React.PointerEvent) => {
-    if (!backStart.current) return
-    const dx = e.clientX - backStart.current.x
-    const dy = e.clientY - backStart.current.y
-    backStart.current = null
-    // Must be primarily horizontal and travel ≥60px right
-    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      const p = useMobileStore.getState().phase
+    if (!rootStart.current) return
+    const start = rootStart.current
+    rootStart.current = null
+
+    const dx = e.clientX - start.x
+    const dy = e.clientY - start.y
+    const isHorizontal = Math.abs(dx) > Math.abs(dy) * 1.5
+    const isVertical   = Math.abs(dy) > Math.abs(dx) * 1.5
+    const p = useMobileStore.getState().phase
+
+    // ── Back gesture: left edge, swipe right ──
+    if (start.x < 20 && dx > 60 && isHorizontal) {
       if (p === 'app')    useMobileStore.getState().closeApp()
       if (p === 'drawer') useMobileStore.getState().closeDrawer()
+      return
+    }
+
+    // ── Notification centre: top strip, swipe down ──
+    if (start.y < 60 && dy > 80 && isVertical && p !== 'boot' && p !== 'lock') {
+      useMobileStore.getState().openNotificationCentre()
     }
   }
 
-  const onRootPointerCancel = () => { backStart.current = null }
+  const onRootPointerCancel = () => { rootStart.current = null }
 
   // ── Home pill ───────────────────────────────────────────────────────────────
-  // Full-width tap zone at the bottom. setPointerCapture keeps events even
-  // when finger travels off the element. stopPropagation keeps root out.
-  // Tap (dist < 20px) or short swipe → goHome
-  // Clear upswipe > 80px            → openDrawer
   const pillStart = useRef<{ x: number; y: number } | null>(null)
   const [pillPressed, setPillPressed] = useState(false)
 
@@ -99,7 +111,7 @@ export const MobileOS = () => {
       onPointerUp={onRootPointerUp}
       onPointerCancel={onRootPointerCancel}
     >
-      {/* ── Boot — AnimatePresence lets it fade out before unmounting ── */}
+      {/* ── Boot ── */}
       <AnimatePresence>
         {phase === 'boot' && <MobileBootScreen key="boot" />}
       </AnimatePresence>
@@ -107,13 +119,10 @@ export const MobileOS = () => {
       {/* ── Post-boot UI ── */}
       {phase !== 'boot' && (
         <>
-          {/* Lock screen */}
           <AnimatePresence>
             {phase === 'lock' && <MobileLockScreen key="lock" />}
           </AnimatePresence>
 
-          {/* Home / app / drawer layers — always mounted once unlocked
-              so home screen doesn't re-render every time user closes an app */}
           {phase !== 'lock' && (
             <>
               <MobileHomeScreen />
@@ -123,6 +132,9 @@ export const MobileOS = () => {
           )}
         </>
       )}
+
+      {/* ── Notification centre — overlays everything except boot/lock ── */}
+      <MobileNotificationCentre />
 
       {/* ── Home indicator pill ── */}
       <AnimatePresence>
