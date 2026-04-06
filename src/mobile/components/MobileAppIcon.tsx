@@ -2,27 +2,48 @@ import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AppIcon } from '../../components/os/AppIcon'
 import { useAppBadge } from '../hooks/useAppBadge'
+import { useMobileStore } from '../store/mobileStore'
 
 interface MobileAppIconProps {
   id: string
   name: string
-  icon: string   // kept for title-bar usage in MobileAppShell
-  onTap: () => void
+  icon: string   // kept for title-bar usage in MobileAppHeader
+  onTap?: () => void  // optional fallback; position-aware open takes priority
   size?: 'normal' | 'large'
 }
 
 export const MobileAppIcon = ({ id, name, onTap, size = 'normal' }: MobileAppIconProps) => {
   const iconPx = size === 'large' ? 62 : 54
   const touchFired = useRef(false)
+  const iconRef = useRef<HTMLDivElement>(null)
   const [ripple, setRipple] = useState(false)
+  const [flashing, setFlashing] = useState(false)
   const badgeCount = useAppBadge(id)
 
   const handleTap = () => {
+    // Flash feedback
+    setFlashing(true)
+    setTimeout(() => setFlashing(false), 150)
+
+    // Dock ripple
     if (size === 'large') {
       setRipple(true)
       setTimeout(() => setRipple(false), 400)
     }
-    onTap()
+
+    // Capture icon rect and open with position-aware animation
+    if (iconRef.current) {
+      const rect = iconRef.current.getBoundingClientRect()
+      useMobileStore.getState().openAppFromIcon(id, {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height,
+      })
+    } else {
+      // Fallback: no position data
+      onTap ? onTap() : useMobileStore.getState().openApp(id)
+    }
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -48,13 +69,16 @@ export const MobileAppIcon = ({ id, name, onTap, size = 'normal' }: MobileAppIco
         cursor: 'pointer',
       }}
     >
-      {/* Icon + badge wrapper */}
+      {/* Icon + badge wrapper — ref here for getBoundingClientRect */}
       <motion.div
-        whileTap={{
-          scale: 0.82,
-          boxShadow: '0 0 0 6px rgba(0,212,255,0.15)',
-        }}
+        ref={iconRef}
+        whileTap={{ scale: 0.82, boxShadow: '0 0 0 6px rgba(0,212,255,0.15)' }}
         transition={{ type: 'spring', stiffness: 600, damping: 20 }}
+        animate={{
+          backgroundColor: flashing
+            ? 'rgba(255,255,255,0.25)'
+            : 'rgba(255,255,255,0)',
+        }}
         style={{
           flexShrink: 0,
           position: 'relative',
