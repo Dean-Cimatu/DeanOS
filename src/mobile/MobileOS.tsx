@@ -153,16 +153,22 @@ export const MobileOS = () => {
               style={{
                 width: 40, height: 4,
                 borderRadius: 9999,
-                backgroundColor: 'rgba(255,255,255,0.35)',
                 originX: 0.5,
               }}
-              animate={{
-                backgroundColor: pillPressed
-                  ? 'rgba(255,255,255,0.85)'
-                  : 'rgba(255,255,255,0.35)',
-                scaleX: pillPressed ? 1.3 : 1,
-              }}
-              transition={{ duration: 0.1 }}
+              animate={
+                pillPressed
+                  ? { scaleX: 1.3, backgroundColor: 'rgba(0,212,255,0.8)', opacity: 1 }
+                  : phase === 'home'
+                    ? { scaleX: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4], backgroundColor: 'rgba(255,255,255,0.4)' }
+                    : { scaleX: 1, opacity: 0.35, backgroundColor: 'rgba(255,255,255,0.35)' }
+              }
+              transition={
+                pillPressed
+                  ? { duration: 0.1 }
+                  : phase === 'home'
+                    ? { duration: 3, repeat: Infinity, ease: 'easeInOut' }
+                    : { duration: 0.3 }
+              }
             />
           </motion.div>
         )}

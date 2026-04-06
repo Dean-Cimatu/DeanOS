@@ -6,7 +6,6 @@ import { mobileApps } from '../data/mobileAppRegistry'
 import { useMobileStore } from '../store/mobileStore'
 
 export const MobileHomeScreen = () => {
-  // Show once on first visit, then never again
   const [showHint, setShowHint] = useState(() => !localStorage.getItem('drawerHintSeen'))
 
   useEffect(() => {
@@ -42,27 +41,43 @@ export const MobileHomeScreen = () => {
         <MobileStatusBar />
       </div>
 
-      {/* App icon grid */}
+      {/* App icon grid — compresses in on mount, icons stagger upward */}
       <div style={{
         position: 'relative', zIndex: 10,
         flex: 1, overflowY: 'auto',
         padding: '16px 16px 8px 16px',
         touchAction: 'pan-y',
       }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          columnGap: 8, rowGap: 24,
-          justifyItems: 'center',
-        }}>
-          {mobileApps.map(app => (
-            <MobileAppIcon
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            columnGap: 8, rowGap: 24,
+            justifyItems: 'center',
+          }}
+        >
+          {mobileApps.map((app, index) => (
+            <motion.div
               key={app.id}
-              {...app}
-              onTap={() => useMobileStore.getState().openApp(app.id)}
-            />
+              initial={{ opacity: 0, y: 16, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                type: 'spring',
+                stiffness: 350,
+                damping: 25,
+                delay: Math.min(index, 10) * 0.04,
+              }}
+            >
+              <MobileAppIcon
+                {...app}
+                onTap={() => useMobileStore.getState().openApp(app.id)}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Drawer hint — shows once on first load */}
