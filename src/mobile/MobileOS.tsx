@@ -7,6 +7,7 @@ import { MobileLockScreen } from './components/MobileLockScreen'
 import { MobileHomeScreen } from './components/MobileHomeScreen'
 import { MobileAppView } from './components/MobileAppView'
 import { MobileAppDrawer } from './components/MobileAppDrawer'
+import { MobileAppSwitcher } from './components/MobileAppSwitcher'
 import { MobileNotificationCentre } from './components/MobileNotificationCentre'
 import { MobileMiniPlayer } from './components/MobileMiniPlayer'
 
@@ -26,17 +27,9 @@ export const MobileOS = () => {
   }, [])
 
   // ── Unified root pointer tracking ───────────────────────────────────────────
-  // One ref tracks every gesture that starts in the root div.
-  // Each gesture zone is checked on pointerup.
-  //
-  //  Left edge  (x < 20)   → back swipe (rightward ≥60px, primarily horizontal)
-  //  Top strip  (y < 60)   → notification centre (downward ≥80px, primarily vertical)
-  //
-  // The home pill has its own handlers with stopPropagation, so it never reaches here.
   const rootStart = useRef<{ x: number; y: number } | null>(null)
 
   const onRootPointerDown = (e: React.PointerEvent) => {
-    // Record start for any gesture that could originate here
     if (e.clientX < 20 || e.clientY < 60) {
       rootStart.current = { x: e.clientX, y: e.clientY }
     }
@@ -53,14 +46,12 @@ export const MobileOS = () => {
     const isVertical   = Math.abs(dy) > Math.abs(dx) * 1.5
     const p = useMobileStore.getState().phase
 
-    // ── Back gesture: left edge, swipe right ──
     if (start.x < 20 && dx > 60 && isHorizontal) {
       if (p === 'app')    useMobileStore.getState().closeApp()
       if (p === 'drawer') useMobileStore.getState().closeDrawer()
       return
     }
 
-    // ── Notification centre: top strip, swipe down ──
     if (start.y < 60 && dy > 80 && isVertical && p !== 'boot' && p !== 'lock') {
       useMobileStore.getState().openNotificationCentre()
     }
@@ -69,13 +60,18 @@ export const MobileOS = () => {
   const onRootPointerCancel = () => { rootStart.current = null }
 
   // ── Home pill ───────────────────────────────────────────────────────────────
-  const pillStart = useRef<{ x: number; y: number } | null>(null)
+  // Fast upswipe (< 350ms) → app drawer
+  // Slow upswipe (≥ 350ms) → app switcher
+  // Tap or tiny movement   → go home
+  const pillStart    = useRef<{ x: number; y: number } | null>(null)
+  const pillDownTime = useRef<number>(0)
   const [pillPressed, setPillPressed] = useState(false)
 
   const onPillPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation()
     e.currentTarget.setPointerCapture(e.pointerId)
     pillStart.current = { x: e.clientX, y: e.clientY }
+    pillDownTime.current = Date.now()
     setPillPressed(true)
   }
 
@@ -85,11 +81,20 @@ export const MobileOS = () => {
     if (!pillStart.current) return
     const dx = e.clientX - pillStart.current.x
     const dy = e.clientY - pillStart.current.y
+    const duration = Date.now() - pillDownTime.current
     pillStart.current = null
+
     const dist = Math.sqrt(dx * dx + dy * dy)
+
     if (dy < -80) {
-      useMobileStore.getState().openDrawer()
-    } else if (dist < 20 || dy >= -80) {
+      if (duration >= 350) {
+        // Slow deliberate upswipe → app switcher
+        useMobileStore.getState().setPhase('switcher')
+      } else {
+        // Quick upswipe → drawer
+        useMobileStore.getState().openDrawer()
+      }
+    } else if (dist < 20 || (dy < 0 && dy >= -80)) {
       useMobileStore.getState().goHome()
     }
   }
@@ -99,7 +104,7 @@ export const MobileOS = () => {
     setPillPressed(false)
   }
 
-  const showPill = phase === 'home' || phase === 'app' || phase === 'drawer'
+  const showPill = phase === 'home' || phase === 'app' || phase === 'drawer' || phase === 'switcher'
 
   return (
     <div
@@ -131,6 +136,7 @@ export const MobileOS = () => {
               <MobileHomeScreen />
               <MobileAppView />
               <MobileAppDrawer />
+              <MobileAppSwitcher />
             </>
           )}
         </>
@@ -139,7 +145,7 @@ export const MobileOS = () => {
       {/* ── Mini player ── */}
       <MobileMiniPlayer />
 
-      {/* ── Notification centre — overlays everything except boot/lock ── */}
+      {/* ── Notification centre ── */}
       <MobileNotificationCentre />
 
       {/* ── Home indicator pill ── */}
@@ -154,7 +160,7 @@ export const MobileOS = () => {
               position: 'fixed',
               bottom: showMiniPlayer ? 68 : 0,
               left: 0, right: 0,
-              zIndex: 600,
+              zIndex: 800,
               height: 'calc(env(safe-area-inset-bottom, 0px) + 40px)',
               minHeight: 40,
               display: 'flex',

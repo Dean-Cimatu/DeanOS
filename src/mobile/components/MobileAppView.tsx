@@ -6,7 +6,7 @@ import { MobileAppContent } from './MobileAppContent'
 type Origin = { x: number; y: number; width: number; height: number }
 
 function getInitial(origin: Origin | null) {
-  if (!origin) return { x: '100%' as unknown as number, opacity: 0, scale: 1, borderRadius: 0 }
+  if (!origin) return { scale: 0.92, opacity: 0, x: 0, y: 0, borderRadius: 20 }
 
   const scaleX = origin.width  / window.innerWidth
   const scaleY = origin.height / window.innerHeight
@@ -20,7 +20,7 @@ function getInitial(origin: Origin | null) {
 }
 
 function getExit(origin: Origin | null) {
-  if (!origin) return { x: '100%' as unknown as number, opacity: 0, scale: 1, borderRadius: 0 }
+  if (!origin) return { scale: 0.92, opacity: 0, x: 0, y: 0, borderRadius: 20 }
 
   const scale = Math.max(
     origin.width  / window.innerWidth,
