@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { useSystemStore } from '../../store/systemStore'
 
 interface MobileState {
   phase: 'boot' | 'lock' | 'home' | 'app' | 'drawer'
@@ -30,7 +31,8 @@ export const useMobileStore = create<MobileState>((set, get) => ({
 
   openApp: (id) => {
     const recentApps = [id, ...get().recentApps.filter(r => r !== id)].slice(0, 10)
-    set({ activeAppId: id, phase: 'app', recentApps })
+    set({ activeAppId: id, phase: 'app', recentApps, drawerOpen: false })
+    useSystemStore.getState().markAppNotificationsRead(id)
   },
 
   closeApp: () => set({ activeAppId: null, phase: 'home' }),

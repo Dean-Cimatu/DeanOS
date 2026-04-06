@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AppIcon } from '../../components/os/AppIcon'
+import { useAppBadge } from '../hooks/useAppBadge'
 
 interface MobileAppIconProps {
   id: string
@@ -14,6 +15,7 @@ export const MobileAppIcon = ({ id, name, onTap, size = 'normal' }: MobileAppIco
   const iconPx = size === 'large' ? 62 : 54
   const touchFired = useRef(false)
   const [ripple, setRipple] = useState(false)
+  const badgeCount = useAppBadge(id)
 
   const handleTap = () => {
     if (size === 'large') {
@@ -46,6 +48,7 @@ export const MobileAppIcon = ({ id, name, onTap, size = 'normal' }: MobileAppIco
         cursor: 'pointer',
       }}
     >
+      {/* Icon + badge wrapper */}
       <motion.div
         whileTap={{
           scale: 0.82,
@@ -59,6 +62,37 @@ export const MobileAppIcon = ({ id, name, onTap, size = 'normal' }: MobileAppIco
         }}
       >
         <AppIcon iconId={id} size={iconPx} />
+
+        {/* Notification badge */}
+        <AnimatePresence>
+          {badgeCount > 0 && (
+            <motion.div
+              key="badge"
+              initial={{ scale: 0 }}
+              animate={{ scale: [0, 1.3, 1] }}
+              exit={{ scale: 0, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.3, times: [0, 0.6, 1] }}
+              style={{
+                position: 'absolute',
+                top: -5, right: -5,
+                minWidth: 18, height: 18,
+                background: '#FF3B30',
+                borderRadius: 9999,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '0 4px',
+                border: '1.5px solid #0A0F1E',
+                zIndex: 10,
+              }}
+            >
+              <span style={{
+                color: 'white', fontSize: 10, fontWeight: 700, lineHeight: 1,
+                fontFamily: 'Inter, -apple-system, sans-serif',
+              }}>
+                {badgeCount > 99 ? '99+' : badgeCount}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Dock ripple — only for large (dock) icons */}
         <AnimatePresence>

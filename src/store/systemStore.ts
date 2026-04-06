@@ -7,6 +7,7 @@ interface Notification {
   message: string
   timestamp: Date
   read: boolean
+  appId?: string   // which mobile app icon this badge belongs to
 }
 
 interface SystemState {
@@ -50,6 +51,7 @@ interface SystemState {
   addRecentApp: (appId: string) => void
   addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void
   markAllRead: () => void
+  markAppNotificationsRead: (appId: string) => void
   clearNotifications: () => void
   dismissNotification: (id: string) => void
   drainBattery: () => void
@@ -112,6 +114,18 @@ export const useSystemStore = create<SystemState>((set) => ({
       notifications: state.notifications.map((n) => ({ ...n, read: true })),
       unreadCount: 0,
     })),
+  markAppNotificationsRead: (appId) => set((state) => {
+    const toRead = state.notifications.filter(
+      n => !n.read && (n.appId === appId || (!n.appId && appId === 'terminal'))
+    )
+    if (toRead.length === 0) return {}
+    return {
+      notifications: state.notifications.map(n =>
+        toRead.some(r => r.id === n.id) ? { ...n, read: true } : n
+      ),
+      unreadCount: Math.max(0, state.unreadCount - toRead.length),
+    }
+  }),
   clearNotifications: () => set({ notifications: [], unreadCount: 0 }),
   drainBattery: () => set((state) => {
     const newLevel = Math.max(0, state.batteryLevel - 1)
