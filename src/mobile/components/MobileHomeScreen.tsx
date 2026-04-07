@@ -2,10 +2,14 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MobileStatusBar } from './MobileStatusBar'
 import { MobileAppIcon } from './MobileAppIcon'
-import { mobileApps } from '../data/mobileAppRegistry'
+import { mobileApps, dockApps } from '../data/mobileAppRegistry'
 import { useMobileStore } from '../store/mobileStore'
 
 export const MobileHomeScreen = () => {
+  const dockAppList = dockApps
+    .map(id => mobileApps.find(a => a.id === id))
+    .filter(Boolean) as typeof mobileApps
+
   const [showHint, setShowHint] = useState(() => !localStorage.getItem('drawerHintSeen'))
 
   useEffect(() => {
@@ -89,6 +93,27 @@ export const MobileHomeScreen = () => {
             </motion.div>
           ))}
         </motion.div>
+      </div>
+
+      {/* Dock — leave 36px at bottom for the home indicator pill */}
+      <div style={{ position: 'relative', zIndex: 10, margin: '0 16px 36px' }}>
+        <div style={{
+          background: 'rgba(255,255,255,0.1)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderRadius: 24,
+          border: '1px solid rgba(255,255,255,0.15)',
+          padding: '12px 16px',
+          display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+        }}>
+          {dockAppList.map(app => (
+            <MobileAppIcon
+              key={app.id}
+              {...app}
+              size="large"
+            />
+          ))}
+        </div>
       </div>
 
       {/* Drawer hint — shows once on first load */}
