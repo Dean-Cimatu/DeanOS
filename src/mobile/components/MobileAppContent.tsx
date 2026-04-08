@@ -19,8 +19,6 @@ const mobileAppMap: Record<string, React.FC> = {
   'pico-racer': PicoRacer,
   rogue:      RogueSurvivor,
   projects:   () => <MobileBrowserWrapper initialPage="/projects" />,
-  cv:         () => <MobileBrowserWrapper initialPage="/cv" />,
-  contact:    () => <MobileBrowserWrapper initialPage="/contact" />,
   photos:     MobilePhotos,
   files:      MobileFileBrowser,
   linkedin:   () => (

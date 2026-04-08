@@ -22,18 +22,6 @@ const NAV_ITEMS = [
     sub: 'The story behind the work',
     path: '/about',
   },
-  {
-    num: '03',
-    title: 'CV',
-    sub: 'The formal version',
-    path: '/cv',
-  },
-  {
-    num: '04',
-    title: 'Contact',
-    sub: "Let's talk",
-    path: '/contact',
-  },
 ]
 
 export const HomePage = ({ onNavigate }: HomePageProps) => {
@@ -71,7 +59,7 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
         #040d06
       `,
     }}>
-      <div style={{ flex: 1, padding: '72px 56px 40px' }}>
+      <div style={{ flex: 1, padding: 'clamp(32px, 8vw, 72px) clamp(20px, 6vw, 56px) 40px' }}>
 
         {/* Name */}
         <div style={{ marginBottom: '6px' }}>
@@ -84,7 +72,7 @@ export const HomePage = ({ onNavigate }: HomePageProps) => {
         </div>
 
         <h1 style={{
-          fontSize: '4.2rem', fontWeight: 800, lineHeight: 1.0,
+          fontSize: 'clamp(2.2rem, 10vw, 4.2rem)', fontWeight: 800, lineHeight: 1.0,
           fontFamily: 'Ubuntu, sans-serif', margin: '0 0 4px',
           letterSpacing: '-0.04em', color: '#f0fdf4',
           minHeight: '1.1em',
