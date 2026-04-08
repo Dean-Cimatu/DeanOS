@@ -134,6 +134,17 @@ function openApp(file: DesktopFile) {
     return
   }
 
+  if (file.appId === 'weather') {
+    if (windows['weather']) { ws.focusWindow('weather'); return }
+    ws.openWindow({
+      id: 'weather', title: 'Weather',
+      x: 240, y: 60, width: 360, height: 560,
+      zIndex: 1, minimised: false, maximised: false,
+      preMaxX: 240, preMaxY: 60, preMaxWidth: 360, preMaxHeight: 560,
+    })
+    return
+  }
+
   if (file.appId === 'browser') {
     ws.openWindow({
       id: `browser-${(file.initialPage ?? '/').replace(/\//g, '') || 'home'}-${Date.now()}`,

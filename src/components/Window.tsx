@@ -13,6 +13,7 @@ import Calculator from './apps/Calculator'
 import GameLibrary from './apps/GameLibrary'
 import PicoRacer from './apps/PicoRacer'
 import RogueSurvivor from './apps/RogueSurvivor'
+import { MobileWeather as WeatherApp } from '../mobile/components/MobileWeather'
 import ResizeHandle from './ResizeHandle'
 import type { ResizeDirection } from './ResizeHandle'
 
@@ -162,6 +163,7 @@ export default function Window({ id, windowData }: WindowProps) {
           id.startsWith('photos')      ? '#0A0F1E' :
           id.startsWith('coderunner')   ? '#0A0F1E' :
           id.startsWith('calculator')    ? '#0A0F1E' :
+          id.startsWith('weather')       ? '#0a1628' :
           id.startsWith('gamelibrary')   ? '#0D1828' :
           id.startsWith('picoracer')     ? '#0A0F1E' :
           id.startsWith('roguesurvivor') ? '#0A0F1E' :
@@ -177,6 +179,7 @@ export default function Window({ id, windowData }: WindowProps) {
         {id.startsWith('photos')        && <PhotoViewer />}
         {id.startsWith('coderunner')    && <CodeRunner />}
         {id.startsWith('calculator')    && <Calculator />}
+        {id.startsWith('weather')       && <WeatherApp />}
         {id.startsWith('gamelibrary')   && <GameLibrary />}
         {id.startsWith('picoracer')     && <PicoRacer />}
         {id.startsWith('roguesurvivor') && <RogueSurvivor />}
