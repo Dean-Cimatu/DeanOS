@@ -203,6 +203,17 @@ const configs: Record<string, IconConfig> = {
     ),
   },
 
+  weather: {
+    bg: 'linear-gradient(145deg, #1a6fb5, #0a3d6b)',
+    path: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="10" r="3.5" fill="white" opacity="0.95"/>
+        <path d="M12 3v1.5M12 15.5V17M5.5 10H4M20 10h-1.5M7.4 6.4L6.3 5.3M17.6 14.7l-1.1-1.1M7.4 13.6l-1.1 1.1M16.6 5.4l1 1" stroke="white" strokeWidth="1.6" strokeLinecap="round"/>
+        <path d="M5 17.5a3 3 0 0 1 3-3h8a3 3 0 0 1 0 6H8a3 3 0 0 1-3-3z" fill="white" opacity="0.85"/>
+      </svg>
+    ),
+  },
+
   linkedin: {
     bg: 'linear-gradient(145deg, #0A66C2, #004182)',
     path: (

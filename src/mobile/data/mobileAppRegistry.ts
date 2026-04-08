@@ -16,6 +16,7 @@ export const mobileApps: MobileApp[] = [
   { id: 'photos',     name: 'Photos',     icon: '🖼️', category: 'media'     },
   { id: 'music',      name: 'Music',      icon: '🎵', category: 'media'     },
   // Utilities
+  { id: 'weather',    name: 'Weather',    icon: '🌤️', category: 'utilities' },
   { id: 'files',      name: 'Files',      icon: '📁', category: 'utilities' },
   { id: 'calculator', name: 'Calculator', icon: '🧮', category: 'utilities' },
   { id: 'settings',   name: 'Settings',   icon: '⚙️', category: 'utilities' },

@@ -1,26 +1,21 @@
 import { Suspense } from 'react'
 import Calculator from '../../components/apps/Calculator'
 import MusicPlayer from '../../components/apps/MusicPlayer'
-import PicoRacer from '../../components/apps/PicoRacer'
-import RogueSurvivor from '../../components/apps/RogueSurvivor'
 import { MobileSettings } from './MobileSettings'
 import { MobileBrowserWrapper } from './MobileBrowserWrapper'
-import { MobileTerminalWrapper } from './MobileTerminalWrapper'
 import { MobilePhotos } from './MobilePhotos'
 import { MobileExternalApp } from './MobileExternalApp'
 import { MobileFileBrowser } from './apps/MobileFileBrowser'
+import { MobileWeather } from './MobileWeather'
 
 const mobileAppMap: Record<string, React.FC> = {
   browser:    () => <MobileBrowserWrapper initialPage="/" />,
   calculator: Calculator,
   music:      MusicPlayer,
-  terminal:   MobileTerminalWrapper,
   settings:   MobileSettings,
-  'pico-racer': PicoRacer,
-  rogue:      RogueSurvivor,
-  projects:   () => <MobileBrowserWrapper initialPage="/projects" />,
   photos:     MobilePhotos,
   files:      MobileFileBrowser,
+  weather:    MobileWeather,
   linkedin:   () => (
     <MobileExternalApp
       iconId="linkedin"
